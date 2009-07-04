@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="alto" default="jar">
+  <tstamp/>
+  <property name="compiler.source" value="1.6"/>
+  <property name="compiler.target" value="1.6"/>
+  <property name="compiler.optimize" value="false"/>
+  <property name="compiler.debug" value="true"/>
+  <property name="compiler.deprecation" value="false"/>
+
+  <property name="src" value="src"/>
+  <property name="ver" value="ver"/>
+  <property name="bin" value="bin"/>
+  <property name="lib" value="lib"/>
+  <property name="doc" value="doc"/>
+
+  <path id="lib.path">
+    <fileset dir="${lib}">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <import file="build.in.java.xml"/>
+  <import file="build.in.version.xml"/>
+
+
+  <target name="clean" description="Delete products 'bin', 'jar', etc..">
+    <clean bin="${bin}" this="."/>
+  </target>
+
+  <target name="jar" depends="compile,version" description="Produce 'alto-V*.jar' and 'alto-V*.jar.md5'.  See 'version'.">
+
+    <archive.cleanly/>
+
+    <property name="jar.file.name" value="${ant.project.name}-${this.version}.jar"/>
+
+    <archive target="${jar.file.name}" bin="${bin}" src="${src}" man.main="" man.lib="">
+      <pack/>
+    </archive>
+
+    <flush dir="${bin}" type="class"/>
+
+  </target>
+
+  <target name="compile" depends="version" description="Dependecy of 'jar' to compile code from 'src' to 'bin'.">
+
+    <compile src="${src}" ver="${ver}" bin="${bin}" classpath.id="lib.path"/>
+
+  </target>
+
+  <target name="doc" depends="version" description="Package javadocs.">
+    <mkdir dir="${doc}"/>
+
+    <javadoc packagenames="ps.*" destdir="${doc}" author="true" version="true" use="true">
+
+      <classpath refid="lib.path"/>
+
+      <packageset dir="${src}" includes="**/*"/>
+    </javadoc>
+
+    <zip destfile="${ant.project.name}-${this.version}-doc.zip" basedir="doc"/>
+  </target>
+
+  <target name="version" description="Report current version.">
+    <version/>
+  </target>
+
+  <target name="build" description="Increment version build number and report result.">
+    <version-build/>
+    <version/>
+  </target>
+
+  <target name="major" description="Increment version major number and report result.">
+    <version-major/>
+    <version/>
+  </target>
+
+  <target name="minor" description="Increment version minor number and report result.">
+    <version-minor/>
+    <version/>
+  </target>
+
+  <target name="sign" depends="jar" description="Calls 'jar' then signs it to produce 'alto-sx-X.Y.Z.jar.asc'.">
+    <exec executable="gpg">
+      <arg line=" --armor --output ${jar.file.name}.asc --detach-sig ${jar.file.name} "/>
+    </exec>
+  </target>
+
+
+  <target name="release" depends="version" description="Upload 'jar' to Downloads.  Use 'featured', 'beta' or 'alpha'.">
+
+    <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="ant/ant-googlecode.jar" name="gcupload"/>
+
+    <property file="build.credentials" />
+    <fail unless="build.username" message="Missing property 'build.username' from file 'build.credentials'."/>
+    <fail unless="build.password" message="Missing property 'build.password' from file 'build.credentials'."/>
+
+    <property name="release.labels.jar" value="Type-Package, OpSys-All, Featured"/>
+    <property name="release.labels.hash" value="Type-Hash, OpSys-All"/>
+
+    <gcupload 
+            username="${build.username}" 
+            password="${build.password}" 
+         projectname="${ant.project.name}" 
+            filename="${jar.file.name}" 
+      targetfilename="${jar.file.name}"
+             summary="Version ${this.version} of ${ant.project.name}"
+              labels="${release.labels.jar}" />
+    <gcupload 
+            username="${build.username}" 
+            password="${build.password}" 
+         projectname="${ant.project.name}" 
+            filename="${jar.file.name}.md5" 
+      targetfilename="${jar.file.name}.md5"
+             summary="Version ${this.version} of ${ant.project.name}"
+              labels="${release.labels.hash}" />
+  </target>
+  <target name="featured" description="Define labels for a Featured release, call 'release'.">
+    <property name="release.labels.jar" value="Featured, Type-Package, OpSys-All"/>
+    <antcall target="release"/>
+  </target>
+  <target name="alpha" description="Define labels for an Alpha release, call 'release'.">
+    <property name="release.labels.jar" value="Alpha, Type-Package, OpSys-All"/>
+    <antcall target="release"/>
+  </target>
+  <target name="beta" description="Define labels for a Beta release, call 'release'.">
+    <property name="release.labels.jar" value="Beta, Type-Package, OpSys-All"/>
+    <antcall target="release"/>
+  </target>
+
+</project>
