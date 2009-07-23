@@ -1,0 +1,11 @@
+
+ Welcome to 'alto', the abstraction layer of 'syntelos' and 'syntelos-sx'.
+
+  This package separates the essential working models and interfaces
+  of the syntelos web service engine from their systemic
+  implementations.
+
+  For more information, refer to the 'alto' wiki and the
+  implementation of 'alto' in the 'syntelos' and 'syntelos-sx'
+  packages.
+
