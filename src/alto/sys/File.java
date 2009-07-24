@@ -43,8 +43,8 @@ import alto.lang.Socket;
  * 
  * <h3>Usage</h3>
  * 
- * <p> Most users employ {@link alto.sys.Reference}.  {@link
- * Reference} employs {@link FileManager}. </p>
+ * <p> Application code employs {@link alto.sys.Reference}.  Only the
+ * system code employs this class.  </p>
  * 
  * 
  * @author jdp

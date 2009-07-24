@@ -71,7 +71,6 @@ public final class Tools
     private final static String[] Classes = {
         "alto.lang.Type$Tools",
         "alto.sec.Keys$Tools",
-        "alto.sec.Keys$System",
         "alto.sys.Reference$Tools",
     };
 
