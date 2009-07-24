@@ -70,6 +70,10 @@ import alto.lang.Type;
 public interface FileTransaction
     extends java.lang.Runnable
 {
+    /**
+     * Begin countdown on transaction lock timeout.
+     */
+    public void start();
 
     /**
      * @return Has file output stream.  Otherwise released.

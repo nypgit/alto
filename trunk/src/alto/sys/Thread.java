@@ -23,7 +23,7 @@ import alto.io.Check;
 import alto.io.Principal;
 
 /**
- * All threads extend from this one, for a default group.
+ * All threads extend from this one.
  * 
  * @author jdp
  * @since 1.1

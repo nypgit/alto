@@ -344,8 +344,40 @@ public abstract class Reference
         }
         return url;
     }
-    public abstract File toStorage();
-
+    public alto.sys.File toStorage(){
+        alto.sys.File file = this.storage;
+        if (null == file){
+            this.url = null;
+            return this.getStorage();
+        }
+        return file;
+    }
+    public alto.sys.File getStorage(){
+        alto.sys.File storage = this.storage;
+        if (null == storage){
+            Address address = this.getAddress();
+            if (null != address){
+                FileManager fm = FileManager.Instance();
+                if (null != fm){
+                    storage = fm.getStorage(address);
+                    this.storage = storage;
+                }
+            }
+        }
+        return this.storage;
+    }
+    public alto.sys.File dropStorage(){
+        alto.sys.File storage = this.storage;
+        this.storage = null;
+        Address address = this.getAddress();
+        if (null != address){
+            FileManager fm = FileManager.Instance();
+            if (null != fm){
+                storage = fm.dropStorage(address);
+            }
+        }
+        return storage;
+    }
     public boolean hasAddress(){
         return (null != this.address);
     }
@@ -358,8 +390,12 @@ public abstract class Reference
     public void setAddress(Address address){
         this.address = address;
     }
-    public abstract Reference toAddressRelation(Component.Relation relation);
-
+    public Reference toAddressRelation(Component.Relation relation){
+        if (this.inAddressRelation(relation))
+            return this;
+        else
+            return Reference.Tools.Create(this.getAddress().toRelation(relation));
+    }
     public Component getAddressRelation(){
         Address address = this.getAddress();
         if (null != address)
@@ -395,8 +431,12 @@ public abstract class Reference
         else
             return null;
     }
-    public abstract Reference toAddressClass(Component.Type type);
-
+    public Reference toAddressClass(Component.Type type){
+        if (this.inAddressClass(type))
+            return this;
+        else
+            return Reference.Tools.Create(this.getAddress().toAddressClass(type));
+    }
     public Component getAddressPath(){
         Address address = this.getAddress();
         if (null != address)
@@ -740,8 +780,6 @@ public abstract class Reference
         else
             return null;
     }
-    public abstract File getStorage();
-
     public Object getStorageContent()
         throws java.io.IOException
     {
@@ -763,8 +801,6 @@ public abstract class Reference
         else
             return null;
     }
-    public abstract File dropStorage();
-
     public Object dropStorageContent()
         throws java.io.IOException
     {

@@ -39,18 +39,13 @@ import alto.sys.Reference;
 import java.util.Set;
 
 /**
- * A {@link Principal} is obtained for an identifier (in hostname
- * scope) from {@link Keys}.  See {@link
- * Keys#ReferenceTo(java.lang.String)} which uses the {@link
- * alto.lang.FileManager} scope, and {@link
- * Keys#ReferenceTo(java.lang.String,java.lang.String)} for a named
- * scope.
+ * A {@link alto.io.Principal} is obtained for an identifier in host
+ * scope from {@link Keys}.
  * 
- * The {@link Keys} are {@link alto.sys.PSioFile} objects in
- * {@link alto.lang.Sio} format.
- * 
- * Instances of {@link Keys} have the filename extension "keys" under
- * path "/s/" <i>+ identifier</i> in user space.
+ * The {@link Keys} are {@link alto.sys.PSioFile} objects in {@link
+ * alto.lang.Sio} format.  Instances of {@link Keys} have the filename
+ * extension "keys" under path "/s/" <i>+ identifier</i> in user
+ * space.
  * 
  * @author jdp
  */
@@ -61,7 +56,7 @@ public class Keys
                alto.io.Principal.Actual
 {
 
-    public abstract static class System {
+    public final static class System {
         public final static alto.io.Role ROLE = alto.io.Role.SYSTEM;
         public final static String NAME = ROLE.name();
         public final static String PATH = Keys.Tools.PathTo(NAME);
@@ -74,30 +69,13 @@ public class Keys
             return Keys.System.ReferenceTo().enterThreadContextTry();
         }
         public final static Reference ReferenceTo(){
-            if (null != Instance)
-                return Instance.referenceTo();
-            else
-                throw new alto.sys.Error.Bug();
-        }
-
-        protected static System Instance;
-
-        /**
-         * @see alto.io.Tools
-         */
-        public final static void SInit(System instance){
-            if (null == Instance){
-                Instance = instance;
-                if (instance instanceof alto.sys.Init){
-                    ((alto.sys.Init)instance).init();
-                }
+            try {
+                return Keys.Tools.ReferenceTo(NAME);
             }
-            else
-                throw new alto.sys.Error.State();
+            catch (java.io.IOException exc){
+                throw new alto.sys.Error.State(NAME,exc);
+            }
         }
-
-        public abstract Reference referenceTo();
-
     }
 
     public abstract static class Tools {
@@ -118,6 +96,14 @@ public class Keys
             else
                 throw new alto.sys.Error.Bug();
         }
+        public final static Keys Dereference(Reference ref, X500Name dn)
+            throws java.io.IOException
+        {
+            if (null != Instance)
+                return Instance.dereference(ref,dn);
+            else
+                throw new alto.sys.Error.Bug();
+        }
         public final static Reference ReferenceTo(String identifier)
             throws java.io.IOException
         {
@@ -133,6 +119,23 @@ public class Keys
                 return Instance.referenceTo(host,identifier);
             else
                 throw new alto.sys.Error.Bug();
+        }
+        public final static Reference ReferenceTo(Component.Host host, String identifier)
+            throws java.io.IOException
+        {
+            if (null != Instance)
+                return Instance.referenceTo(host,identifier);
+            else
+                throw new alto.sys.Error.Bug();
+        }
+        public final static Reference ReferenceTo(FileManager fm)
+            throws java.io.IOException
+        {
+            if (fm.isDefault())
+                return Keys.System.ReferenceTo();
+            else {
+                return ReferenceTo(fm.getComponentDN(),fm.getDN());
+            }
         }
         public final static Keys GetCreate(java.lang.String identifier, X500Name name)
             throws java.io.IOException
@@ -186,19 +189,22 @@ public class Keys
                         path = path.substring(0,(path.length()-".keys".length()));
                         return path;
                     }
+                    else
+                        return null;
                 }
+                else if (path.endsWith(".keys")){
+                    path = path.substring(0,(path.length()-".keys".length()));
+                    return path;
+                }
+                else
+                    return path;//(path is identifier)
             }
-            return null;
+            else
+                return null;
         }
         public final static String PathTo(Reference reference){
-            if (null != reference){
-                String path = reference.getPath();
-
-                if ((!path.startsWith("/s/"))||(!path.endsWith(".keys")))
-                    return PathTo(IdentifierFrom(path));
-                else
-                    return path;
-            }
+            if (null != reference)
+                return PathTo(IdentifierFrom(reference.getPath()));
             else 
                 throw new alto.sys.Error.Argument();
         }
@@ -241,10 +247,17 @@ public class Keys
         public abstract Keys dereference(Reference ref)
             throws java.io.IOException;
 
+        public abstract Keys dereference(Reference ref, X500Name dn)
+            throws java.io.IOException;
+
         public abstract Reference referenceTo(String identifier);
 
         public abstract Reference referenceTo(String host, String identifier);
+
+        public abstract Reference referenceTo(Component.Host host, String identifier);
     }
+
+
     public final static Keys Application()
         throws java.io.IOException
     {
@@ -283,28 +296,29 @@ public class Keys
     }
 
 
-    private Key[] list;
+    protected Key[] list;
 
-    private Role[] roles;
+    protected Role[] roles;
 
-    private Auth[] auths;
+    protected Auth[] auths;
 
-    private boolean protectorInit;
+    protected boolean protectorInit;
 
-    private Keys protector;
+    protected Keys protector;
 
-    private X500Name name;
+    protected X500Name name;
 
-    private Authentication scopeAuthentication;
+    protected Authentication scopeAuthentication;
     /**
      * If not null, this instance is a copy that can be popped and
      * destroyed.  The destruction of the copy has no effect on its
      * precursor (i.e., key list is released, not destroyed).
      */
-    private Principal.Actual scopePrincipal;
+    protected Principal.Actual scopePrincipal;
 
 
     /**
+     * 
      */
     public Keys(Reference reference)
         throws java.io.IOException

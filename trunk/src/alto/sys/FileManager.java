@@ -403,6 +403,9 @@ public abstract class FileManager
     public abstract File getStorage(Address address);
 
     @Code(Check.Locking)
+    public abstract File dropStorage(Address address);
+
+    @Code(Check.Locking)
     public abstract Reference[] listLocationOf(Address[] items, String path, boolean recurse)
         throws java.io.IOException;
 
