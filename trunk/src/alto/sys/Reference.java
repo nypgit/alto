@@ -31,6 +31,8 @@ import alto.lang.Value;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
+
 import javax.lang.model.element.NestingKind;
 import javax.lang.model.element.Modifier;
 import static javax.tools.JavaFileObject.Kind;
@@ -63,6 +65,8 @@ public abstract class Reference
                IO.FileObject,
                alto.io.Uri
 {
+    public final static Charset UTF8 = Charset.forName("UTF-8");
+
 
     public abstract static class List {
 
@@ -326,6 +330,12 @@ public abstract class Reference
         this.address = address;
         this.string = address.getAddressReference();
         this.parser = address.getUri();
+    }
+    protected Reference(String string, Address address){
+        super();
+        this.string = string;
+        this.address = address;
+        this.parser = new alto.io.u.Uri(string);
     }
 
 
@@ -730,6 +740,106 @@ public abstract class Reference
             }
         }
     }
+
+    public java.nio.channels.ReadableByteChannel openChannelReadable()
+        throws java.io.IOException
+    {
+        return null;
+    }
+    public java.nio.channels.ReadableByteChannel getChannelReadable(){
+        return null;
+    }
+    public java.io.InputStream getInputStream()
+        throws java.io.IOException
+    {
+        return null;
+    }
+    public alto.io.Input getInput()
+        throws java.io.IOException
+    {
+        return null;
+    }
+    public java.io.InputStream openInputStream()
+        throws java.io.IOException
+    {
+        return (java.io.InputStream)this.openInput();
+    }
+    public alto.io.Input openInput()
+        throws java.io.IOException
+    {
+        URL url = this.url;
+        if (null != url){
+            URLConnection connection = url.openConnection();
+            if (connection instanceof alto.net.Connection){
+                ((alto.net.Connection)connection).setReference(this);
+            }
+            return new ReferenceInputStream(this,connection);
+        }
+
+        HttpMessage meta = this.read();
+        if (null != meta)
+            return new ReferenceInputStream(this,meta);
+        else
+            return null;
+    }
+    public java.nio.channels.WritableByteChannel openChannelWritable()
+        throws java.io.IOException
+    {
+        return null;
+    }
+    public java.nio.channels.WritableByteChannel getChannelWritable(){
+        return null;
+    }
+    public java.io.OutputStream getOutputStream()
+        throws java.io.IOException
+    {
+        return null;
+    }
+    public alto.io.Output getOutput()
+        throws java.io.IOException
+    {
+        return null;
+    }
+    public java.io.OutputStream openOutputStream()
+        throws java.io.IOException
+    {
+        return (java.io.OutputStream)this.openOutput();
+    }
+    public alto.io.Output openOutput()
+        throws java.io.IOException
+    {
+        URL url = this.url;
+        if (null != url){
+            URLConnection connection = url.openConnection();
+            connection.setDoOutput(true);
+            if (connection instanceof alto.net.Connection){
+                ((alto.net.Connection)connection).setReference(this);
+            }
+            return new ReferenceOutputStream(this,connection);
+        }
+
+        HttpMessage meta = this.write();
+        return new ReferenceOutputStream(this,meta);
+    }
+    public java.io.Reader openReader(boolean ignoreEncodingErrors) 
+        throws java.io.IOException
+    {
+        java.io.InputStream in = this.openInputStream();
+        if (null != in)
+            return new java.io.InputStreamReader(in,UTF8);
+        else
+            throw new java.io.IOException("Not found");
+    }
+    public java.io.Writer openWriter() 
+        throws java.io.IOException
+    {
+        java.io.OutputStream out = this.openOutputStream();
+        if (null != out)
+            return new java.io.OutputStreamWriter(out,UTF8);
+        else
+            throw new java.io.IOException("Not found");
+    }
+
     public Uri getUri(){
         return this;
     }
