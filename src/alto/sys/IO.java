@@ -118,9 +118,9 @@ public interface IO {
             /**
              * 
              */
-            public interface Headers 
+            public interface H 
                 extends Parameters,
-                        IO.Headers
+                        IO.H
             {}
 
             public java.lang.String getParameter(java.lang.String key);
@@ -257,14 +257,14 @@ public interface IO {
     /**
      * An {@link IO$Source} may implement this interface
      */
-    public interface Headers 
+    public interface H 
         extends IO
     {
         /**
          * An {@link IO$Target} may implement this interface
          */
         public interface Target 
-            extends Headers
+            extends H
         {
             public void setHeader(java.lang.String name, java.lang.String value);
             public void setHeader(java.lang.String name, java.lang.String[] value);

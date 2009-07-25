@@ -40,7 +40,7 @@ import java.net.URL;
  */
 public interface Headers
     extends alto.sys.Xml,
-            alto.sys.IO.Headers
+            alto.sys.IO.H
 {
 
     public void writeHeaders(alto.io.Output out)

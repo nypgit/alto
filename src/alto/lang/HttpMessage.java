@@ -34,7 +34,7 @@ import alto.io.u.Chbuf;
  * parsed and recognized.  
  */
 public interface HttpMessage
-    extends Headers,
+    extends alto.lang.Headers,
             alto.io.Message,
             alto.sys.IO.Context,
             alto.sys.IO.Edge
@@ -331,7 +331,7 @@ public interface HttpMessage
 
     public void maySetHost();
 
-    public void setHost(Headers headers);
+    public void setHost(alto.lang.Headers headers);
 
     public boolean hasConnection();
 
@@ -507,7 +507,7 @@ public interface HttpMessage
 
     public void setLocation(java.lang.String url);
 
-    public void setLocation(Headers headers);
+    public void setLocation(alto.lang.Headers headers);
 
     public void setLocation(alto.sys.Reference reference);
 
@@ -525,7 +525,7 @@ public interface HttpMessage
 
     public void setDestination(java.lang.String url);
 
-    public void setDestination(Headers headers);
+    public void setDestination(alto.lang.Headers headers);
 
     public boolean hasVersionTag();
 
@@ -537,11 +537,11 @@ public interface HttpMessage
 
     public void setVersionTag(java.lang.String url);
 
-    public void setVersionTag(Headers headers);
+    public void setVersionTag(alto.lang.Headers headers);
 
     public void addVersionTag(java.lang.String url);
 
-    public void addVersionTag(Headers headers);
+    public void addVersionTag(alto.lang.Headers headers);
 
     public void setPersistent(boolean keepalive);
 
