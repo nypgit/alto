@@ -26,7 +26,9 @@ package alto.io;
  * @see alto.sys.PHeaders
  * @see alto.sys.PSioFile
  */
-public interface Message {
+public interface Message 
+    extends alto.lang.Buffer
+{
 
     /**
      * A message with built in list capabilities.  Whether the list is
@@ -82,20 +84,6 @@ public interface Message {
      */
     public Output getOutput()
         throws java.io.IOException;
-    /**
-     * Message buffer is filled by {@link #formatMessage()}.  Note
-     * that {@link #formatMessage()} is implied by {@link
-     * #writeMessage()}.
-     * 
-     * @return Message buffer.  Null for length zero.
-     * @see #formatMessage();
-     */
-    public byte[] getBuffer();
-    /**
-     * @return Message buffer size, always greater than negative one.
-     * @see #formatMessage();
-     */
-    public int getBufferLength();
     /**
      * @return Write message into this buffer
      * @see #writeMessage()

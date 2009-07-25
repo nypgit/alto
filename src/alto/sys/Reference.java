@@ -993,6 +993,13 @@ public abstract class Reference
         else
             return 0;
     }
+    public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
+        HttpMessage storage = this.read();
+        if (null != storage)
+            return storage.getCharContent(igEncErr);
+        else
+            return null;
+    }
     public boolean get(HttpMessage response)
         throws java.io.IOException
     {
