@@ -351,6 +351,15 @@ public class OutputStream
         }
         return null;
     }
+    public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
+        byte[] bits = this.getBuffer();
+        if (null == bits)
+            return null;
+        else {
+            char[] cary = alto.io.u.Utf8.decode(bits);
+            return new String(cary,0,cary.length);
+        }
+    }
     public final Buffer.OutStream getBufferOutStream(){
         if (this.out instanceof Buffer.OutStream)
             return (Buffer.OutStream)this.out;

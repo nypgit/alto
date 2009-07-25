@@ -478,6 +478,15 @@ public interface Sio {
                     else
                         return data.length;
                 }
+                public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
+                    byte[] bits = this.getBuffer();
+                    if (null == bits)
+                        return null;
+                    else {
+                        char[] cary = alto.io.u.Utf8.decode(bits);
+                        return new String(cary,0,cary.length);
+                    }
+                }
                 public int getPosition(){
                     return Component.Path.Position;
                 }

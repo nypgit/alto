@@ -317,6 +317,15 @@ public class InputStream
         else
             return this.trace.length();
     }
+    public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
+        byte[] bits = this.getBuffer();
+        if (null == bits)
+            return null;
+        else {
+            char[] cary = alto.io.u.Utf8.decode(bits);
+            return new String(cary,0,cary.length);
+        }
+    }
     /**
      * @return The contents of the {@link Trace} buffer, filled by
      * {@link #readLine()} or {@link #entityBuffer(int)}.
@@ -331,4 +340,5 @@ public class InputStream
     public final int getTraceLength(){
         return this.trace.length();
     }
+
 }

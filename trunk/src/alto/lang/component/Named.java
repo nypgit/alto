@@ -188,6 +188,15 @@ public abstract class Named
     public final int getBufferLength(){
         return this.stringBits.length;
     }
+    public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
+        byte[] bits = this.getBuffer();
+        if (null == bits)
+            return null;
+        else {
+            char[] cary = alto.io.u.Utf8.decode(bits);
+            return new String(cary,0,cary.length);
+        }
+    }
     public void sioRead(Input in) 
         throws IOException 
     {

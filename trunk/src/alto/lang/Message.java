@@ -21,16 +21,15 @@ package alto.lang;
 import alto.sys.Reference;
 
 /**
- * An output buffer with a reference.
+ * An I/O buffer with a reference.
  * 
  * @author jdp
  * @since 1.6
  */
 public interface Message
-    extends Buffer,
+    extends alto.io.Message,
             alto.sys.IO.Edge, 
-            alto.io.Output, 
-            alto.io.Message
+            alto.io.Output
 {
 
     public void init();

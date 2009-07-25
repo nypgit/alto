@@ -145,4 +145,7 @@ public class Value
     public final java.lang.String toString(){
         return this.valueHex;
     }
+    public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
+        return this.valueHex;
+    }
 }

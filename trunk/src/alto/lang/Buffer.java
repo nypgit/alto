@@ -280,6 +280,15 @@ public interface Buffer {
                 throw new IllegalStateException();
             }
         }
+        public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
+            byte[] bits = this.getBuffer();
+            if (null == bits)
+                return null;
+            else {
+                char[] cary = alto.io.u.Utf8.decode(bits);
+                return new String(cary,0,cary.length);
+            }
+        }
     }
     /**
      * Extends {@link java.io.ByteArrayOutputStream} with {@link
@@ -323,6 +332,15 @@ public interface Buffer {
                     throw new IllegalStateException();
                 }
             }
+            public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
+                byte[] bits = this.getBuffer();
+                if (null == bits)
+                    return null;
+                else {
+                    char[] cary = alto.io.u.Utf8.decode(bits);
+                    return new String(cary,0,cary.length);
+                }
+            }
         }
 
         /**
@@ -353,6 +371,15 @@ public interface Buffer {
                 throw new IllegalStateException();
             }
         }
+        public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
+            byte[] bits = this.getBuffer();
+            if (null == bits)
+                return null;
+            else {
+                char[] cary = alto.io.u.Utf8.decode(bits);
+                return new String(cary,0,cary.length);
+            }
+        }
     }
 
     /**
@@ -362,5 +389,9 @@ public interface Buffer {
     public byte[] getBuffer();
 
     public int getBufferLength();
-
+    /**
+     * Interface compatible with javax tools file object.  Convert
+     * buffer to string via UTF8.
+     */
+    public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException;
 }
