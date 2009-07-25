@@ -189,6 +189,15 @@ public interface Buffer {
                 throw new IllegalStateException();
             }
         }
+        public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
+            byte[] bits = this.getBuffer();
+            if (null == bits)
+                return null;
+            else {
+                char[] cary = alto.io.u.Utf8.decode(bits);
+                return new String(cary,0,cary.length);
+            }
+        }
     }
     /**
      * Extends {@link java.io.ByteArrayInputStream} with {@link

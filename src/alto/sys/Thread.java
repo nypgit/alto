@@ -88,8 +88,12 @@ public class Thread
     private volatile IO.Context context;
 
 
-    protected Thread(java.lang.ThreadGroup group, java.lang.String name){
+    protected Thread(ThreadGroup group, String name){
         super(group,name);
+        this.inherit();
+    }
+    protected Thread(ThreadGroup group, Runnable r, String name){
+        super(group,r,name);
         this.inherit();
     }
 
