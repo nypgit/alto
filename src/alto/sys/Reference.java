@@ -29,6 +29,7 @@ import alto.lang.HttpRequest;
 import alto.lang.Type;
 import alto.lang.Value;
 
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -314,6 +315,8 @@ public abstract class Reference
 
     protected Uri parser;
 
+    protected URI uri;
+
 
     protected Reference(){
         super();
@@ -340,8 +343,9 @@ public abstract class Reference
 
 
     /**
-     * This must be called before a reference will operate on remote
-     * resources.  To invert the effect, call {@link #toStorage()}.
+     * Change the connection target to URL from Storage.  This must be
+     * called before a reference will operate on remote resources.  To
+     * invert the effect, call {@link #toStorage()}.
      */
     public URL toRemote()
         throws java.net.MalformedURLException
@@ -354,6 +358,9 @@ public abstract class Reference
         }
         return url;
     }
+    /**
+     * Change the connection target to Storage from URL.
+     */
     public alto.sys.File toStorage(){
         alto.sys.File file = this.storage;
         if (null == file){
@@ -1493,6 +1500,22 @@ public abstract class Reference
         catch (java.io.IOException exc){
         }
         return this.lastModifiedString();
+    }
+    /**
+     * @see javax.tools.FileObject
+     */
+    public URI toUri(){
+        URI uri = this.uri;
+        if (null == uri){
+            try {
+                uri = new URI(this.string);
+                this.uri = uri;
+            }
+            catch (java.net.URISyntaxException exc){
+                throw new Error.State(this.string,exc);
+            }
+        }
+        return uri;
     }
     /**
      * @see IO$FileObject

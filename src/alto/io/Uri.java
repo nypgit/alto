@@ -100,10 +100,9 @@ package alto.io;
  * exposed by the user API for subsequent parsing. </p>
  * 
  * <p> The original input source URI as available from {@link
- * #toString()} and {@link #getString()} remains encoded.  Likewise
- * the {@link #hashCode()} and {@link #equals(java.lang.Object)} hash
- * key behavior of this class is based on the input source or external
- * representation. </p>
+ * #toString()}.  Likewise the {@link #hashCode()} and {@link
+ * #equals(java.lang.Object)} hash key behavior of this class is based
+ * on the input source or external representation. </p>
  * 
  * 
  * 
@@ -112,7 +111,7 @@ package alto.io;
  */
 public interface Uri {
 
-    public java.lang.String getString();
+    public java.lang.String toString();
     public boolean isRelative();
     public boolean isAbsolute();
     public boolean hasScheme();
