@@ -25,7 +25,7 @@ package alto.lang;
 public interface HttpBodyUrlEncoded
     extends alto.io.Uri,
             alto.sys.IO.Edge,
-            alto.sys.IO.Source.Parameters.Headers,
+            alto.sys.IO.Source.Parameters.H,
             alto.sys.Destroy
 {
 

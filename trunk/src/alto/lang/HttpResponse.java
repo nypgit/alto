@@ -29,7 +29,7 @@ import alto.io.Check;
  */
 public interface HttpResponse
     extends HttpMessage,
-            alto.sys.IO.Headers.Target
+            alto.sys.IO.H.Target
 {
     public static java.lang.String STDOUT_STR = "response:out";
 

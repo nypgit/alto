@@ -28,7 +28,7 @@ import alto.io.Uri;
  */
 public interface HttpRequest
     extends HttpMessage,
-            alto.sys.IO.Source.Parameters.Headers
+            alto.sys.IO.Source.Parameters.H
 {
     public final static java.lang.String STDIN_STR = "request:in";
     public final static java.lang.String STDOUT_STR = "request:out";
