@@ -347,30 +347,27 @@ public abstract class Reference
      * called before a reference will operate on remote resources.  To
      * invert the effect, call {@link #toLocal()}.
      */
-    public URL toRemote(){
-        URL url = this.url;
-        if (null == url){
+    public Reference toRemote(){
+        if (null == this.url){
             try {
-                url = new URL(this.string);
-                this.url = url;
+                this.url = new URL(this.string);
                 this.storage = null;
             }
             catch (java.net.MalformedURLException exc){
                 throw new Error.State(this.string,exc);
             }
         }
-        return url;
+        return this;
     }
     /**
      * Change the connection target to the file system store from URL.
      */
-    public alto.sys.File toLocal(){
-        alto.sys.File file = this.storage;
-        if (null == file){
+    public Reference toLocal(){
+        if (null == this.storage){
             this.url = null;
-            return this.getStorage();
+            this.getStorage();
         }
-        return file;
+        return this;
     }
     public alto.sys.File getStorage(){
         alto.sys.File storage = this.storage;
