@@ -52,7 +52,7 @@ import static javax.tools.JavaFileObject.Kind;
  * 
  * The reference may be employed on a URL or Address.  To employ a
  * reference as a URL the <tt>toRemote()</tt> method must be called on
- * the reference.  Otherwise calling the <tt>toStorage()</tt> method
+ * the reference.  Otherwise calling the <tt>toLocal()</tt> method
  * employs the reference in the default mode as operating on the
  * content storage subsystem.
  * 
@@ -345,7 +345,7 @@ public abstract class Reference
     /**
      * Change the connection target to URL from Storage.  This must be
      * called before a reference will operate on remote resources.  To
-     * invert the effect, call {@link #toStorage()}.
+     * invert the effect, call {@link #toLocal()}.
      */
     public URL toRemote()
         throws java.net.MalformedURLException
@@ -359,9 +359,9 @@ public abstract class Reference
         return url;
     }
     /**
-     * Change the connection target to Storage from URL.
+     * Change the connection target to the file system store from URL.
      */
-    public alto.sys.File toStorage(){
+    public alto.sys.File toLocal(){
         alto.sys.File file = this.storage;
         if (null == file){
             this.url = null;
