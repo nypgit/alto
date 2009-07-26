@@ -347,14 +347,17 @@ public abstract class Reference
      * called before a reference will operate on remote resources.  To
      * invert the effect, call {@link #toLocal()}.
      */
-    public URL toRemote()
-        throws java.net.MalformedURLException
-    {
+    public URL toRemote(){
         URL url = this.url;
         if (null == url){
-            url = new URL(this.string);
-            this.url = url;
-            this.storage = null;
+            try {
+                url = new URL(this.string);
+                this.url = url;
+                this.storage = null;
+            }
+            catch (java.net.MalformedURLException exc){
+                throw new Error.State(this.string,exc);
+            }
         }
         return url;
     }
