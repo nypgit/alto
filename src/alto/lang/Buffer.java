@@ -28,6 +28,9 @@ package alto.lang;
  * @since 1.5
  */
 public interface Buffer {
+
+    public final static byte[] Empty = new byte[0];
+
     /**
      * <p> A buffer implementation of {@link
      * alto.sys.IO}. </p>

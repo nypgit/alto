@@ -1007,6 +1007,35 @@ public abstract class Reference
         else
             return null;
     }
+    public void setBuffer(byte[] buf)
+        throws java.io.IOException
+    {
+        HttpMessage storage = this.write();
+        try {
+            if (null == buf)
+                storage.setBody(alto.lang.Buffer.Empty);
+            else
+                storage.setBody(buf);
+        }
+        finally {
+            this.close();
+        }
+    }
+    public void setCharContent(char[] cary) throws java.io.IOException {
+        this.setBuffer(alto.io.u.Utf8.encode(cary));
+    }
+    public void setCharContent(String string) throws java.io.IOException {
+        if (null != string)
+            this.setCharContent(string.toCharArray());
+        else
+            this.setBuffer(null);
+    }
+    public void setCharContent(CharSequence string) throws java.io.IOException {
+        if (null != string)
+            this.setCharContent(string.toString());
+        else
+            this.setBuffer(null);
+    }
     public boolean get(HttpMessage response)
         throws java.io.IOException
     {
