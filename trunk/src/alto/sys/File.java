@@ -396,6 +396,7 @@ public abstract class File
     public Object dropContent(){
         Object content = this.content;
         this.content = null;
+        this.hasPolicy = false;
         return content;
     }
     public alto.io.Uri getUri(){
