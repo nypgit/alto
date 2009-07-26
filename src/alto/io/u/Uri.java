@@ -139,10 +139,9 @@ package alto.io.u;
  * exposed by the user API for subsequent parsing. </p>
  * 
  * <p> The original input source URI as available from {@link
- * #toString()} and {@link #getString()} remains encoded.  Likewise
- * the {@link #hashCode()} and {@link #equals(java.lang.Object)} hash
- * key behavior of this class is based on the input source or external
- * representation. </p>
+ * #toString()} remains encoded.  Likewise the {@link #hashCode()} and
+ * {@link #equals(java.lang.Object)} hash key behavior of this class
+ * is based on the input source or external representation. </p>
  * 
  * <h3>Usage</h3>
  * 
@@ -1386,8 +1385,8 @@ public class Uri
     /**
      * @param uri The input source uri is trimmed and interned and
      * then that value is hashed, parsed, or returned by {@link
-     * #getString()} or {@link #toString()}, et cetera.
-     * @see #getString()
+     * #toString()} or {@link #toString()}, et cetera.
+     * 
      * @see #toString()
      * @see #hashCode()
      */
@@ -1476,14 +1475,6 @@ public class Uri
      */
     public Uri( Uri source, int truncate){
         this(Truncate(source,truncate));
-    }
-    /**
-     * @return The trimmed and interned source URI string
-     * @see #toString()
-     * @see #Uri.java.lang.String)
-     */
-    public final java.lang.String getString(){
-        return this.uri;
     }
     /**
      * @return Whether this URI has not a scheme part.  If true, then
@@ -1999,7 +1990,7 @@ public class Uri
     }
     /**
      * @return The trimmed and interned source URI string
-     * @see #getString()
+     * 
      * @see #Uri.java.lang.String)
      * @see #hashCode()
      */
@@ -2020,7 +2011,6 @@ public class Uri
      * @return Hash of the trimmed and interned input string
      * @see #Uri.java.lang.String)
      * @see #toString()
-     * @see #getString()
      * @see #hashCodeXor()
      */
     public final int hashCode(){

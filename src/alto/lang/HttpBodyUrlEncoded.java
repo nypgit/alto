@@ -38,9 +38,13 @@ public interface HttpBodyUrlEncoded
     public void setParameterHex(java.lang.String key, java.math.BigInteger value);
 
     public java.lang.String[] getQueryKeysSorted();
-
+    /**
+     * Query string
+     */
     public java.lang.String toString();
-
+    /**
+     * Query string
+     */
     public java.lang.StringBuilder toStringBuilder();
 
 }
