@@ -50,7 +50,7 @@ public class FileInputStream
 
 
 
-    protected FileInputStream(File file)
+    public FileInputStream(File file)
         throws java.io.FileNotFoundException, java.lang.SecurityException
     {
         super(file);

@@ -86,7 +86,7 @@ public final class FileOutputStream
      * {@link File} writes not transactional, or {@link FileTransaction} channel
      * lock constructor not written to.
      */
-    FileOutputStream(File named, HttpMessage message)
+    public FileOutputStream(File named, HttpMessage message)
         throws java.io.FileNotFoundException, java.lang.SecurityException
     {
         super(Ctor(named));
@@ -98,7 +98,7 @@ public final class FileOutputStream
     /**
      * {@link FileTransaction} transactional writes to temporary.
      */
-    FileOutputStream(FileTransaction transaction, HttpMessage message)
+    public FileOutputStream(FileTransaction transaction, HttpMessage message)
         throws java.io.FileNotFoundException, java.lang.SecurityException
     {
         super(Ctor(transaction.getFileTemp()));
