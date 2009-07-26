@@ -899,6 +899,8 @@ public interface Component
 
         public alto.lang.Type getType();
 
+        public void setType(alto.lang.Type type);
+
     }
     /**
      * <p> The fourth component of every address.  The hash of the
