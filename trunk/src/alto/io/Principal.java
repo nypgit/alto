@@ -177,11 +177,11 @@ public interface Principal
                 Authentic
     {
         /**
-         * Conditional read only when required to load the X500 Name
+         * Conditional read only when required to fill an empty instance.
          * 
-         * @return Context was read from storage.
+         * @return Instance could be different from initial instance.
          */
-        public boolean init() throws java.io.IOException ;
+        public Principal.Actual init() throws java.io.IOException ;
         /**
          * A system- class principal is not contained or protected.
          */

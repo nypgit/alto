@@ -517,33 +517,30 @@ public class Keys
     /**
      * Conditional read only when required to load the key set
      */
-    public synchronized boolean init(X500Name name)
+    public synchronized Principal.Actual init(X500Name name)
         throws java.io.IOException
     {
         if (null == this.name){
             this.name = name;
             this.readMessage();
-            return true;
         }
         else if (null == this.list && this.reference.existsStorage()){
             this.readMessage();
-            return true;
         }
-        else
-            return false;
+
+        return this;
     }
     /**
      * Conditional read only when required to load the key set
      */
-    public boolean init()
+    public Principal.Actual init()
         throws java.io.IOException
     {
         if (null == this.list && this.reference.existsStorage()){
             this.readMessage();
-            return true;
         }
-        else
-            return false;
+
+        return this;
     }
     protected void authenticateFromRead()
         throws java.io.IOException
