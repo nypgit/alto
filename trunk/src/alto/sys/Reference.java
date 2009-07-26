@@ -1007,6 +1007,20 @@ public abstract class Reference
         else
             return null;
     }
+    public Class getCharContentAsClass() throws java.io.IOException {
+        String name = (String)this.getCharContent(true);
+        if (null != name){
+            name = name.trim();
+            try {
+                return Class.forName(name);
+            }
+            catch (ClassNotFoundException exc){
+                throw new Error.State(name,exc);
+            }
+        }
+        else
+            return null;
+    }
     public void setBuffer(byte[] buf)
         throws java.io.IOException
     {
@@ -1035,6 +1049,9 @@ public abstract class Reference
             this.setCharContent(string.toString());
         else
             this.setBuffer(null);
+    }
+    public void setCharContentAsClass(Class clas) throws java.io.IOException {
+        this.setCharContent(clas.getName());
     }
     public boolean get(HttpMessage response)
         throws java.io.IOException
