@@ -552,6 +552,8 @@ public interface Xml
         }
 
 
+        public void close() throws java.io.IOException {
+        }
         public org.w3c.dom.bootstrap.DOMImplementationRegistry getDOMImplementationRegistry(){
             if (null == DomImplReg){
                 try {
