@@ -310,6 +310,8 @@ public abstract class FileManager
 
     protected final Ctor.Location.Parsed locationParsed;
 
+    protected Reference keysReference;
+
 
     protected FileManager(){
         super();
@@ -394,8 +396,16 @@ public abstract class FileManager
     public abstract Component.Host getComponentDN();
 
     @Code(Check.Locking)
-    public abstract Reference getKeysReference();
-
+    public Reference getKeysReference() 
+        throws java.io.IOException
+    {
+        Reference keysReference = this.keysReference;
+        if (null == keysReference){
+            keysReference = Keys.Tools.ReferenceTo(this);
+            this.keysReference = keysReference;
+        }
+        return keysReference;
+    }
     @Code(Check.Locking)
     public abstract File deleteStorage(Address address);
 
