@@ -29,7 +29,11 @@ import alto.sys.Reference;
 /**
  * SIO is a tagged message format for lists and trees.  Like XML, SIO
  * is a container for defining subformats.  SIO is lighter than XML,
- * but heavier than something like 9P messages.
+ * but heavier than something like 9P messages.  
+ * 
+ * SIO is generally comparable to Google Protobuf.  In comparison to
+ * protobuf SIO is not externally defined, and has an integrated
+ * binding identification.
  * 
  * <h3>Message format</h3>
  * 
@@ -350,6 +354,12 @@ public interface Sio {
             out.indentln("}");
         }
 
+        public final boolean hasSioTag(){
+            return Tag.IsValid(this.sioTag);
+        }
+        public final boolean hasNotSioTag(){
+            return (!Tag.IsValid(this.sioTag));
+        }
         public final int getSioTag(){
             int sioTag = this.sioTag;
             if (Tag.IsValid(sioTag))
@@ -580,7 +590,10 @@ public interface Sio {
         public boolean hasSioType(){
             return (null != this.sioType);
         }
-        public Component.Path sioType(){
+        public boolean hasNotSioType(){
+            return (null == this.sioType);
+        }
+        public Component.Path getSioType(){
             Component.Path sioType = this.sioType;
             if (null != sioType)
                 return sioType;
@@ -596,7 +609,7 @@ public interface Sio {
             throws java.io.IOException
         {
             Component.Path type = Sio.Head.Read(in);
-            Component.Path thisType = this.sioType();
+            Component.Path thisType = this.getSioType();
             if (thisType.equals(type)){
 
                 if (!thisType.hasType())
@@ -610,7 +623,7 @@ public interface Sio {
         public void sioWrite(Output out)
             throws java.io.IOException
         {
-            Component.Path type = this.sioType();
+            Component.Path type = this.getSioType();
             if (null != type)
                 Sio.Head.Write(type,out);
             else
@@ -971,11 +984,12 @@ public interface Sio {
             extends Sio
         {
             public boolean hasSioType();
+            public boolean hasNotSioType();
             /**
              * @return Non null value or throw an illegal state
              * exception
              */
-            public Component.Path sioType();
+            public Component.Path getSioType();
         }
 
         /**

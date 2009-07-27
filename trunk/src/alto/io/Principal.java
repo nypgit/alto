@@ -174,14 +174,10 @@ public interface Principal
      */
     public interface Actual
         extends Principal.Server,
-                Authentic
+                Authentic,
+                alto.lang.Message
     {
-        /**
-         * Conditional read only when required to fill an empty instance.
-         * 
-         * @return Instance could be different from initial instance.
-         */
-        public Principal.Actual init() throws java.io.IOException ;
+
         /**
          * A system- class principal is not contained or protected.
          */
@@ -198,8 +194,6 @@ public interface Principal
          * application- class principal.
          */
         public boolean isUser();
-
-        public Reference getReference();
 
         public boolean addRole(Principal.Authentic role);
 

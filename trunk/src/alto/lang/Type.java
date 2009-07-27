@@ -464,16 +464,6 @@ public interface Type
     }
 
 
-    /**
-     * Resolve content, class and canonical instance of type and
-     * return.
-     * 
-     * @see alto.sys.Reference#readType()
-     * @return Canonical instance
-     */
-    public Type init()
-        throws java.io.IOException;
-
     public boolean hasMimeType();
 
     public boolean hasNotMimeType();

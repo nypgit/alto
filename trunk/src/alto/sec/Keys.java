@@ -530,18 +530,7 @@ public class Keys
 
         return this;
     }
-    /**
-     * Conditional read only when required to load the key set
-     */
-    public Principal.Actual init()
-        throws java.io.IOException
-    {
-        if (null == this.list && this.reference.existsStorage()){
-            this.readMessage();
-        }
 
-        return this;
-    }
     protected void authenticateFromRead()
         throws java.io.IOException
     {
