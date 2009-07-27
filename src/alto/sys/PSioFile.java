@@ -111,8 +111,11 @@ public abstract class PSioFile
     public abstract void writeMessage(Output out)
         throws java.io.IOException;
 
-    public alto.lang.Message init(){
-        if (this.hasNotSioTag() && this.existsStorage()){
+    protected boolean isInstanceEmpty(){
+        return (this.hasNotSioTag() && this.existsStorage());
+    }
+    public final alto.lang.Message init(){
+        if (this.isInstanceEmpty()){
             try {
                 this.readMessage();
             }
