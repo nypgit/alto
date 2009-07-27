@@ -24,6 +24,7 @@ import alto.io.Output;
 import alto.io.Uri;
 import alto.io.u.Array;
 import alto.io.u.Utf8;
+import alto.sys.Reference;
 
 import java.io.IOException;
 
@@ -716,6 +717,15 @@ public interface Component
                 }
                 return null;
             }
+            public final static Component.Relation Dereference(Reference reference)
+                throws java.io.IOException
+            {
+                byte[] bits = reference.getBuffer();
+                if (null != bits)
+                    return new alto.lang.component.Relation.Named(bits);
+                else
+                    return null;
+            }
         }
     }
     /**
@@ -780,6 +790,15 @@ public interface Component
             public final static Component.Host ValueOf(byte[] value){
                 if (null != value)
                     return new alto.lang.component.Host.Numeric(value);
+                else
+                    return null;
+            }
+            public final static Component.Host Dereference(Reference reference)
+                throws java.io.IOException
+            {
+                byte[] bits = reference.getBuffer();
+                if (null != bits)
+                    return new alto.lang.component.Host.Numeric(bits);
                 else
                     return null;
             }
@@ -875,7 +894,7 @@ public interface Component
             /**
              * @see alto.lang.Type#getTypeClass()
              */
-            public final static java.lang.Class ClassFor(alto.sys.Reference contentReference)
+            public final static java.lang.Class ClassFor(Reference contentReference)
                 throws java.io.IOException
             {
                 alto.lang.Type type = alto.lang.Type.Tools.Dereference(ReferenceTo(contentReference));
@@ -884,14 +903,23 @@ public interface Component
                 else
                     return null;
             }
-            public final static alto.sys.Reference ReferenceToR(java.lang.String fext){
-                return alto.sys.Reference.Tools.Create(new Address(ForR(fext)));
+            public final static Reference ReferenceToR(java.lang.String fext){
+                return Reference.Tools.Create(new Address(ForR(fext)));
             }
-            public final static alto.sys.Reference ReferenceTo(java.lang.String mimetype){
-                return alto.sys.Reference.Tools.Create(new Address(For(mimetype)));
+            public final static Reference ReferenceTo(java.lang.String mimetype){
+                return Reference.Tools.Create(new Address(For(mimetype)));
             }
-            public final static alto.sys.Reference ReferenceTo(alto.sys.Reference contentReference){
+            public final static Reference ReferenceTo(Reference contentReference){
                 return contentReference.toAddressClass(alto.lang.component.Type.Numeric.MimeType.Instance);
+            }
+            public final static Component.Type Dereference(Reference reference)
+                throws java.io.IOException
+            {
+                byte[] bits = reference.getBuffer();
+                if (null != bits)
+                    return new alto.lang.component.Type.Numeric(bits);
+                else
+                    return null;
             }
         }
 
@@ -992,6 +1020,15 @@ public interface Component
                         return path;
                 }
             }
+            public final static Component.Path Dereference(Reference reference)
+                throws java.io.IOException
+            {
+                byte[] bits = reference.getBuffer();
+                if (null != bits)
+                    return new alto.lang.component.Path.Numeric(bits);
+                else
+                    return null;
+            }
         }
 
         public boolean hasType();
@@ -1058,6 +1095,15 @@ public interface Component
                 }
                 else
                     throw new java.lang.IllegalArgumentException(string);
+            }
+            public final static Component.Version Dereference(Reference reference)
+                throws java.io.IOException
+            {
+                byte[] bits = reference.getBuffer();
+                if (null != bits)
+                    return new alto.lang.component.Version.Numeric(bits);
+                else
+                    return null;
             }
         }
     }
