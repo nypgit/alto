@@ -29,6 +29,16 @@ public class Value
     extends java.math.BigInteger
     implements Buffer
 {
+    public final static Value Dereference(alto.sys.Reference reference)
+        throws java.io.IOException
+    {
+        byte[] bits = reference.getBuffer();
+        if (null != bits)
+            return new Value(bits);
+        else
+            return null;
+    }
+
     public final static Value ZERO = new Value("00");
     public final static Value ONE = new Value("01");
     public final static Value TWO = new Value("02");
