@@ -176,6 +176,12 @@ public interface Buffer {
             }
             return out;
         }
+        public void close()
+            throws java.io.IOException
+        {
+            this.in = null;
+            this.out = null;
+        }
         public byte[] getBuffer(){
             try {
                 return this.toByteArray();

@@ -372,4 +372,11 @@ public interface IO {
         @Code(Check.OnlyServer)
         public alto.sys.IO.Context popContext();
     }
+
+    /**
+     * Reset open states to init.  Release references to stateful
+     * buffer streams.
+     */
+    public void close()
+        throws java.io.IOException;
 }
