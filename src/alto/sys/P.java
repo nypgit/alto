@@ -22,18 +22,14 @@ import alto.lang.Address;
 import alto.lang.Component;
 
 /**
- * 
+ * Persistence with root and user addressing.
  */
 public interface P
-    extends alto.io.Message
+    extends alto.lang.Message
 {
     public final static Component.Host ROOT = Component.Host.Local;
     public final static Component.Host USER = Component.Host.Global;
 
-
-    public Reference getReference();
-
-    public Address getAddress();
 
     public boolean isRoot();
 

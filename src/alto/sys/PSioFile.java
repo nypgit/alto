@@ -19,7 +19,6 @@
 package alto.sys;
 
 import alto.io.Input;
-import alto.io.Message;
 import alto.io.Output;
 import alto.io.u.Chbuf;
 import alto.lang.Address;
@@ -111,6 +110,23 @@ public abstract class PSioFile
 
     public abstract void writeMessage(Output out)
         throws java.io.IOException;
+
+    public alto.lang.Message init(){
+        if (this.hasNotSioTag() && this.existsStorage()){
+            try {
+                this.readMessage();
+            }
+            catch (java.io.IOException exc){
+                throw new alto.sys.Error.State(this.getReferenceString(),exc);
+            }
+        }
+        return this;
+    }
+    /**
+     */
+    public void formatMessage()
+        throws java.io.IOException
+    {}
 
     public void readMessage()
         throws java.io.IOException

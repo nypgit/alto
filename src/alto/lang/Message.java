@@ -31,13 +31,26 @@ public interface Message
             alto.sys.IO.Edge, 
             alto.io.Output
 {
-
-    public void init();
+    /**
+     * Conditional read from reference for an empty instance object.
+     * An IO exception is wrapped in sys error (state) with the
+     * reference string message.
+     */
+    public alto.lang.Message init();
 
     public Reference getReference();
 
+    public void setReference(Reference ref)
+        throws java.io.IOException;
+
     public java.lang.String getReferenceString();
 
+    public Address getAddress();
+    /**
+     * Update output for message write.  Some implementors maintain
+     * output content distinctly, and only update the output content
+     * on a call to this method.
+     */
     public void formatMessage()
         throws java.io.IOException;
 
