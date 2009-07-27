@@ -1035,6 +1035,14 @@ public abstract class Reference
             this.close();
         }
     }
+    public void setBufferFrom(alto.lang.Buffer bits)
+        throws java.io.IOException
+    {
+        if (null != bits)
+            this.setBuffer(bits.getBuffer());
+        else
+            throw new Error.Argument();
+    }
     public void setCharContent(char[] cary) throws java.io.IOException {
         this.setBuffer(alto.io.u.Utf8.encode(cary));
     }
