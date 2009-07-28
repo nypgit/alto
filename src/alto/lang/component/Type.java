@@ -108,9 +108,14 @@ public interface Type
             if (null != type)
                 return type;
             else {
-                type = alto.lang.Type.Tools.For(this);
-                this.type = type;
-                return type;
+                try {
+                    type = alto.lang.Type.Tools.For(this);
+                    this.type = type;
+                    return type;
+                }
+                catch (alto.sys.Error.State.Init bootstrap){
+                    return null;
+                }
             }
         }
         public int getPosition(){
