@@ -36,103 +36,6 @@ public interface Xml
     public interface Child
         extends Xml
     {}
-
-    /**
-     * @return A reusable DOM Implementation Registry instance in this
-     * context.
-     */
-    public org.w3c.dom.bootstrap.DOMImplementationRegistry getDOMImplementationRegistry();
-    /**
-     * @param reg A reusable DOM Implementation Registry instance for
-     * this context.
-     */
-    public void setDOMImplementationRegistry(org.w3c.dom.bootstrap.DOMImplementationRegistry reg);
-    /**
-     * @return A reusable DOM/LS Implementation instance for this
-     * context defaults to the basic "XML 3.0" feature set.
-     */
-    public org.w3c.dom.ls.DOMImplementationLS getDOMImplementation();
-    /**
-     * @return Convenient cast of get dom implementation to base interface.
-     */
-    public org.w3c.dom.DOMImplementation getDOMImplementation2();
-
-    public java.lang.String getDOMImplementationFeatures();
-
-    public void setDOMImplementationFeatures(java.lang.String features);
-    /**
-     * @param impl A reusable DOM/LS Implementation instance for this
-     * context.
-     */
-    public void setDOMImplementation(org.w3c.dom.ls.DOMImplementationLS impl);
-    /**
-     * @param features Refer to {@link org.w3c.dom.bootstrap.DOMImplementationRegistry}
-     * @return A new DOM Implementation instance for the requested
-     * feature set.
-     */
-    public org.w3c.dom.DOMImplementation createDOMImplementation(java.lang.String features);
-    /**
-     * @return New document 
-     */
-    public org.w3c.dom.Document createDocument();
-    /**
-     * @param ns Document element namespace
-     * @param qn Document element qualified name (prefix and local part)
-     * @return New document with document element
-     */
-    public org.w3c.dom.Document createDocument(java.lang.String ns, java.lang.String qn);
-    /**
-     * @param qn Document type qualified name
-     * @param pid Document type identifier 
-     * @param sid Document type URI
-     * @return New document with document type
-     */
-    public org.w3c.dom.Document createDocument(java.lang.String qn, java.lang.String pid, java.lang.String sid);
-    /**
-     * <p> Read doc from stream and close it. </p>
-     * @see Xml$Tools#ReadDocument
-     */
-    public org.w3c.dom.Document readDocument(IO.Source url) 
-        throws org.w3c.dom.DOMException, org.w3c.dom.ls.LSException;
-    /**
-     * <p> Read doc from stream and close it. </p>
-     * @see Xml$Tools#ReadDocument
-     */
-    public org.w3c.dom.Document readDocument(IO.Source url, java.io.InputStream in) 
-        throws org.w3c.dom.DOMException, org.w3c.dom.ls.LSException;
-    /**
-     * <p> Write doc to stream and close it. </p>
-     * @see Xml$Tools#WriteDocument
-     */
-    public void writeDocument(org.w3c.dom.Document doc, IO.Target url) 
-        throws org.w3c.dom.DOMException, org.w3c.dom.ls.LSException;
-    /**
-     * <p> Write doc to stream and close it. </p>
-     * @see Xml$Tools#WriteDocument
-     */
-    public void writeDocument(org.w3c.dom.Document doc, IO.Target url, java.io.OutputStream out) 
-        throws org.w3c.dom.DOMException, org.w3c.dom.ls.LSException;
-    /**
-     * @param doc Node set to traverse
-     * @param show Node type filter
-     */
-    public org.w3c.dom.traversal.NodeIterator createNodeIterator(org.w3c.dom.Document doc, int show)
-        throws org.w3c.dom.DOMException;
-    /**
-     * <p> Traverse all nodes with filter. </p>
-     * @param doc Node set to traverse
-     * @param filter Node set traversal filter
-     */
-    public org.w3c.dom.traversal.NodeIterator createNodeIterator(org.w3c.dom.Document doc, 
-                                                                 org.w3c.dom.traversal.NodeFilter filter)
-        throws org.w3c.dom.DOMException;
-    /**
-     * <p> Traverse elements with filter. </p>
-     * @param doc Node set to traverse
-     */
-    public org.w3c.dom.traversal.NodeIterator createNodeIterator(org.w3c.dom.Document doc)
-        throws org.w3c.dom.DOMException;
-
     /**
      * <p> Common semantics expected of all implementors. </p>
      */
@@ -653,4 +556,102 @@ public interface Xml
         }
 
     }
+
+
+    /**
+     * @return A reusable DOM Implementation Registry instance in this
+     * context.
+     */
+    public org.w3c.dom.bootstrap.DOMImplementationRegistry getDOMImplementationRegistry();
+    /**
+     * @param reg A reusable DOM Implementation Registry instance for
+     * this context.
+     */
+    public void setDOMImplementationRegistry(org.w3c.dom.bootstrap.DOMImplementationRegistry reg);
+    /**
+     * @return A reusable DOM/LS Implementation instance for this
+     * context defaults to the basic "XML 3.0" feature set.
+     */
+    public org.w3c.dom.ls.DOMImplementationLS getDOMImplementation();
+    /**
+     * @return Convenient cast of get dom implementation to base interface.
+     */
+    public org.w3c.dom.DOMImplementation getDOMImplementation2();
+
+    public java.lang.String getDOMImplementationFeatures();
+
+    public void setDOMImplementationFeatures(java.lang.String features);
+    /**
+     * @param impl A reusable DOM/LS Implementation instance for this
+     * context.
+     */
+    public void setDOMImplementation(org.w3c.dom.ls.DOMImplementationLS impl);
+    /**
+     * @param features Refer to {@link org.w3c.dom.bootstrap.DOMImplementationRegistry}
+     * @return A new DOM Implementation instance for the requested
+     * feature set.
+     */
+    public org.w3c.dom.DOMImplementation createDOMImplementation(java.lang.String features);
+    /**
+     * @return New document 
+     */
+    public org.w3c.dom.Document createDocument();
+    /**
+     * @param ns Document element namespace
+     * @param qn Document element qualified name (prefix and local part)
+     * @return New document with document element
+     */
+    public org.w3c.dom.Document createDocument(java.lang.String ns, java.lang.String qn);
+    /**
+     * @param qn Document type qualified name
+     * @param pid Document type identifier 
+     * @param sid Document type URI
+     * @return New document with document type
+     */
+    public org.w3c.dom.Document createDocument(java.lang.String qn, java.lang.String pid, java.lang.String sid);
+    /**
+     * <p> Read doc from stream and close it. </p>
+     * @see Xml$Tools#ReadDocument
+     */
+    public org.w3c.dom.Document readDocument(IO.Source url) 
+        throws org.w3c.dom.DOMException, org.w3c.dom.ls.LSException;
+    /**
+     * <p> Read doc from stream and close it. </p>
+     * @see Xml$Tools#ReadDocument
+     */
+    public org.w3c.dom.Document readDocument(IO.Source url, java.io.InputStream in) 
+        throws org.w3c.dom.DOMException, org.w3c.dom.ls.LSException;
+    /**
+     * <p> Write doc to stream and close it. </p>
+     * @see Xml$Tools#WriteDocument
+     */
+    public void writeDocument(org.w3c.dom.Document doc, IO.Target url) 
+        throws org.w3c.dom.DOMException, org.w3c.dom.ls.LSException;
+    /**
+     * <p> Write doc to stream and close it. </p>
+     * @see Xml$Tools#WriteDocument
+     */
+    public void writeDocument(org.w3c.dom.Document doc, IO.Target url, java.io.OutputStream out) 
+        throws org.w3c.dom.DOMException, org.w3c.dom.ls.LSException;
+    /**
+     * @param doc Node set to traverse
+     * @param show Node type filter
+     */
+    public org.w3c.dom.traversal.NodeIterator createNodeIterator(org.w3c.dom.Document doc, int show)
+        throws org.w3c.dom.DOMException;
+    /**
+     * <p> Traverse all nodes with filter. </p>
+     * @param doc Node set to traverse
+     * @param filter Node set traversal filter
+     */
+    public org.w3c.dom.traversal.NodeIterator createNodeIterator(org.w3c.dom.Document doc, 
+                                                                 org.w3c.dom.traversal.NodeFilter filter)
+        throws org.w3c.dom.DOMException;
+    /**
+     * <p> Traverse elements with filter. </p>
+     * @param doc Node set to traverse
+     */
+    public org.w3c.dom.traversal.NodeIterator createNodeIterator(org.w3c.dom.Document doc)
+        throws org.w3c.dom.DOMException;
+
 }
