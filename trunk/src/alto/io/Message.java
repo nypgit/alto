@@ -95,6 +95,13 @@ public interface Message
      */
     public boolean isPersistent();
     /**
+     * Update output for message write.  Some implementors maintain
+     * output content distinctly, and only update the output content
+     * on a call to this method.
+     */
+    public void formatMessage()
+        throws java.io.IOException;
+    /**
      * Reset, then read from input
      */
     public void readMessage()
@@ -109,4 +116,16 @@ public interface Message
      */
     public void writeMessage()
         throws java.io.IOException;
+
+    /*
+     * TODO: see lang/Headers
+     * 
+     * the headers interface is a precursor to some message types, and
+     * includes some message methods.
+     * 
+     * naturally, this should rather be expressed in some way here in
+     * the io package and in the message interface.
+     * 
+     * this interface reflects message processing and a buffer.
+     */
 }
