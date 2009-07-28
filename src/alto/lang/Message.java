@@ -46,13 +46,6 @@ public interface Message
     public java.lang.String getReferenceString();
 
     public Address getAddress();
-    /**
-     * Update output for message write.  Some implementors maintain
-     * output content distinctly, and only update the output content
-     * on a call to this method.
-     */
-    public void formatMessage()
-        throws java.io.IOException;
 
     /**
      * @return Message reference string
