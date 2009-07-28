@@ -95,4 +95,17 @@ public interface Headers
 
     public void removeHeader(Header header);
 
+    /*
+     * TODO: extend io/Message, mergeto;
+     */
+    public void readMessage(alto.io.Input in)
+        throws java.io.IOException;
+
+    public void writeMessage(alto.io.Output out)
+        throws java.io.IOException;
+    /**
+     * Create new buffer, write, return.
+     */
+    public Buffer.IOB copyMessage()
+        throws java.io.IOException;
 }
