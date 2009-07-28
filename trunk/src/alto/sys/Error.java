@@ -110,6 +110,73 @@ public class Error
     public static class State
         extends Error
     {
+        /**
+         * Errors related to entering or remaining in an INIT state.
+         */
+        public static class Init
+            extends State
+        {
+
+            public Init(){
+                super();
+            }
+            public Init(java.lang.String msg){
+                super(msg);
+            }
+            public Init(java.lang.Throwable thrown){
+                super(thrown);
+            }
+            public Init(java.lang.String msg, java.lang.Throwable thrown){
+                super(msg,thrown);
+            }
+            public Init(org.w3c.dom.Node re){
+                super(re);
+            }
+            public Init(java.lang.String msg, org.w3c.dom.Node re){
+                super(msg,re);
+            }
+            public Init(org.w3c.dom.Node re, java.lang.Throwable thrown){
+                super(re,thrown);
+            }
+            public Init(java.lang.String msg, org.w3c.dom.Node re, java.lang.Throwable thrown){
+                super(msg,re,thrown);
+            }
+        }
+        /**
+         * Errors related to I/O that should normally proceed.  The
+         * causal exception is probably an I/O exception.
+         */
+        public static class IO
+            extends State
+        {
+
+            public IO(){
+                super();
+            }
+            public IO(java.lang.String msg){
+                super(msg);
+            }
+            public IO(java.lang.Throwable thrown){
+                super(thrown);
+            }
+            public IO(java.lang.String msg, java.lang.Throwable thrown){
+                super(msg,thrown);
+            }
+            public IO(org.w3c.dom.Node re){
+                super(re);
+            }
+            public IO(java.lang.String msg, org.w3c.dom.Node re){
+                super(msg,re);
+            }
+            public IO(org.w3c.dom.Node re, java.lang.Throwable thrown){
+                super(re,thrown);
+            }
+            public IO(java.lang.String msg, org.w3c.dom.Node re, java.lang.Throwable thrown){
+                super(msg,re,thrown);
+            }
+        }
+
+
         public State(){
             super();
         }
@@ -137,111 +204,34 @@ public class Error
     }
 
     /**
-     * <p> Usage error violates input requirements. </p>
+     * <p> Errors relating to function or method parameters. </p>
      */
-    public static class Argument
-        extends java.lang.IllegalArgumentException
+    public static class Argument 
+        extends Error
     {
-
-        protected java.lang.String re_sid, re_qname, to_string;
-        protected int re_lno, re_cno;
-
-
         public Argument(){
-            this(STR,NOD,THR);
+            super();
         }
         public Argument(java.lang.String msg){
-            this(msg,NOD,THR);
+            super(msg);
         }
         public Argument(java.lang.Throwable thrown){
-            this(STR,NOD,thrown);
+            super(thrown);
         }
         public Argument(java.lang.String msg, java.lang.Throwable thrown){
-            this(msg,NOD,thrown);
+            super(msg,thrown);
         }
         public Argument(org.w3c.dom.Node re){
-            this(STR,re,THR);
+            super(re);
         }
         public Argument(java.lang.String msg, org.w3c.dom.Node re){
-            this(msg,re,THR);
+            super(msg,re);
         }
         public Argument(org.w3c.dom.Node re, java.lang.Throwable thrown){
-            this(STR,re,thrown);
+            super(re,thrown);
         }
         public Argument(java.lang.String msg, org.w3c.dom.Node re, java.lang.Throwable thrown){
-            super(msg);
-            if (null == re){
-                this.re_sid = null;
-                this.re_qname = null;
-                this.re_lno = 0;
-                this.re_cno = 0;
-                this.to_string = super.toString();
-            }
-            else {
-                org.w3c.dom.Element elem;
-                if (re instanceof org.w3c.dom.Element)
-                    elem = (org.w3c.dom.Element)re;
-                else {
-                    re = re.getParentNode();
-                    if (re instanceof org.w3c.dom.Element)
-                        elem = (org.w3c.dom.Element)re;
-                    else
-                        elem = null;
-                }
-                if (null != elem){
-                    this.re_qname = elem.getNodeName();
-                    this.re_sid = null;
-                    this.re_lno = 0;
-                    this.re_cno = 0;
-                    this.to_string = this.ctorString(elem,thrown,msg);
-                }
-                else {
-                    this.re_qname = null;
-                    this.re_sid = null;
-                    this.re_lno = 0;
-                    this.re_cno = 0;
-                    this.to_string = super.toString();
-                }
-            }
-            if (null != thrown)
-                this.initCause(thrown);
-        }
-
-        protected java.lang.String ctorString(org.w3c.dom.Element elem, java.lang.Throwable thrown, java.lang.String msg){
-            if (elem instanceof org.w3c.dom.DOMLocator){
-                org.w3c.dom.DOMLocator loca = (org.w3c.dom.DOMLocator)elem;
-                this.re_sid = loca.getUri();
-                this.re_lno = loca.getLineNumber();
-                this.re_cno = loca.getColumnNumber();
-            }
-            java.io.PrintStream ps = new alto.io.u.Bpo();
-            ps.println(super.toString());
-            ps.print("\t[qname] ");
-            ps.println(this.re_qname);
-            if (null != this.re_sid){
-                ps.print("\t[sysid] ");
-                ps.println(this.re_sid);
-            }
-            if (0 < this.re_lno){
-                ps.print("\t[linen] ");
-                ps.println(this.re_lno);
-            }
-            return ps.toString();
-        }
-        public boolean hasReference(){
-            return (null != this.re_sid);
-        }
-        public java.lang.String getReferenceSystemId(){
-            return this.re_sid;
-        }
-        public int getReferenceLine(){
-            return this.re_lno;
-        }
-        public int getReferenceColumn(){
-            return this.re_cno;
-        }
-        public java.lang.String toString(){
-            return this.to_string;
+            super(msg,re,thrown);
         }
     }
 

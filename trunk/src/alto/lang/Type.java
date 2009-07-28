@@ -59,7 +59,7 @@ public interface Type
                 }
             }
             else
-                throw new alto.sys.Error.State("alto.io.Tools already initialized");
+                throw new alto.sys.Error.State.Init("alto.io.Tools already initialized");
         }
 
         public final static Type ForMimeType(){
@@ -77,7 +77,7 @@ public interface Type
                     return null;
                 }
             else
-                throw new alto.sys.Error.State("alto.io.Tools not initialized");
+                throw new alto.sys.Error.State.Init("alto.io.Tools not initialized");
         }
         public final static Type For(Component.Type type){
             if (null != Instance)
@@ -88,7 +88,7 @@ public interface Type
                     return null;
                 }
             else
-                throw new alto.sys.Error.State("alto.io.Tools not initialized");
+                throw new alto.sys.Error.State.Init("alto.io.Tools not initialized");
         }
         public final static Type.List For(Set<Kind> kinds){
             Kind[] kindsSet = new Kind[kinds.size()];
@@ -114,7 +114,7 @@ public interface Type
                     return null;
                 }
             else
-                throw new alto.sys.Error.State("alto.io.Tools not initialized");
+                throw new alto.sys.Error.State.Init("alto.io.Tools not initialized");
         }
         public final static Type Dereference(Reference ref)
             throws java.io.IOException
@@ -122,7 +122,7 @@ public interface Type
             if (null != Instance)
                 return Instance.dereference(ref);
             else
-                throw new alto.sys.Error.State("alto.io.Tools not initialized");
+                throw new alto.sys.Error.State.Init("alto.io.Tools not initialized");
         }
         public final static Reference ReferenceToMimetype(String identifier){
             return Reference.Tools.Create(Component.Type.Tools.For(identifier));
