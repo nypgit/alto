@@ -319,7 +319,6 @@ public interface Sio {
 
         public SIOB(){
             super();
-            this.setFormatSio();
         }
         public SIOB(Input in)
             throws java.io.IOException
