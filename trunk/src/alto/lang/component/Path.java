@@ -62,10 +62,7 @@ public interface Path
             this.type = type;
         }
         public Numeric(alto.lang.Component.Type type, java.lang.String path){
-            this(type.getType(),path);
-        }
-        public Numeric(alto.lang.component.Type.Numeric.MimeType mimetype, java.lang.String path){
-            this(mimetype.getHashFunction(),path);
+            this(type.getHashFunction(),path);
         }
         /**
          * Used only in the special case of Type addresses.
