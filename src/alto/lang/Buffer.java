@@ -49,8 +49,6 @@ public interface Buffer {
 
         protected java.lang.String lastString;
 
-        protected Type format;
-
         protected Buffer.InStream in;
 
         protected Buffer.OutStream out;
@@ -67,19 +65,6 @@ public interface Buffer {
         public alto.io.Uri getUri(){
             return UriDefault;
         }
-        public final void setFormat(Type format){
-            this.format = format;
-        }
-        public final Type getFormat(){
-            return this.format;
-        }
-        public final void setFormatSio(){
-            this.format = Type.Tools.Of("sio");
-        }
-        public final boolean isFormatSio(){
-            return (Type.Tools.Of("sio") == this.format);
-        }
-
         public java.nio.channels.ReadableByteChannel openChannelReadable(){
             return null;
         }
