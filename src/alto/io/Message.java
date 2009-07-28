@@ -126,6 +126,10 @@ public interface Message
      * naturally, this should rather be expressed in some way here in
      * the io package and in the message interface.
      * 
-     * this interface reflects message processing and a buffer.
+     * this interface reflects message processing with a buffer.
+     * perhaps its buffer components could be exported.
+     * 
+     * additionally, the sys/IO interface may export into many pieces
+     * in this package.
      */
 }

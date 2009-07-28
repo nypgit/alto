@@ -817,6 +817,12 @@ public interface Component
         public final static class Tools
             extends Component.Tools
         {
+            public final static Component.Type ForAddress(){
+                return alto.lang.component.Type.Numeric.Address.Instance;
+            }
+            public final static Component.Type ForMimeType(){
+                return alto.lang.component.Type.Numeric.MimeType.Instance;
+            }
             public final static Component.Type From(Component[] addr){
                 if (null == addr)
                     throw new IllegalArgumentException();
@@ -836,7 +842,8 @@ public interface Component
                 return list;
             }
             public final static Component[] For(java.lang.String mimetype){
-                Component.Type atyp = alto.lang.component.Type.Numeric.MimeType.Instance;
+                Component.Type atyp =
+                    alto.lang.component.Type.Numeric.MimeType.Instance;
                 return new Component[]{
                     Component.Relation.U,//(U)//(common)
                     Component.Host.Global,
