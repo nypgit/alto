@@ -18,6 +18,9 @@
  */
 package alto.sys;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * <p> The {@link #init()} method is called after instance
  * construction and before first use.  </p>
@@ -28,9 +31,39 @@ package alto.sys;
  */
 public interface Init {
 
+    public static class Tools {
+
+        protected final static Class[] InitParameters = new Class[0];
+        protected final static Object[] InitArguments = new Object[0];
+
+        public final static Object Init(Object instance){
+            if (instance instanceof Init){
+                return ((Init)instance).init();
+            }
+            else {
+                Class instanceClass = instance.getClass();
+                try {
+                    Method init = instanceClass.getMethod("init",InitParameters);
+
+                    return init.invoke(instance,InitArguments);
+                }
+                catch (NoSuchMethodException exc){
+                    return instance;
+                }
+                catch (IllegalAccessException exc){
+                    throw new alto.sys.Error.State(instanceClass.getName(),exc);
+                }
+                catch (InvocationTargetException exc){
+                    throw new alto.sys.Error.State(instanceClass.getName(),exc);
+                }
+            }
+        }
+    }
+
     /**
      * If a runtime exception is thrown, the instance is discarded and
      * related initialization processing fails.  
+     * @return This, or a substitute
      */
-    public void init();
+    public Init init();
 }

@@ -68,140 +68,6 @@ public interface Properties
          */
         public void setPropertiesParent(Properties parent);
     }
-
-    /**
-     * <p> The convention here is that this string be an absolute path
-     * expression that can be employed relative to a web based
-     * application storage service.  Its file extension suffix is
-     * "xml", subject to being a valid reference. </p>
-     * 
-     * @return String defined by "set properties location" or a class
-     * defined constant for the properties comment string. 
-     */
-    public java.lang.String getPropertiesLocation();
-    /**
-     * Possible No Op: A class that has an absolute constant value may
-     * ignore this call.
-     * 
-     * @param location A location string is an absolute or relative
-     * URI (by our convention here) that is written into the
-     * properties comments in the "export properties xml" method.
-     */
-    public void setPropertiesLocation(java.lang.String location);
-    /**
-     * @param url Input source for {@link java.util.Properties} XML
-     * format.
-     */
-    public void importPropertiesXML(IO.Source url);
-    /**
-     * @param in An input stream in {@link java.util.Properties} XML
-     * format.
-     * @exception java.io.IOException Error reading properties.
-     */
-    public void importPropertiesXML(java.io.InputStream in) throws java.io.IOException ;
-    /**
-     * @param url Output target for {@link java.util.Properties} XML
-     * format.
-     */
-    public void exportPropertiesXML(IO.Target url);
-    /**
-     * @param out An output stream for {@link java.util.Properties}
-     * XML format.
-     * @exception java.io.IOException Error writing properties.
-     */
-    public void exportPropertiesXML(java.io.OutputStream out) throws java.io.IOException ;
-    /**
-     * @param name A property name string (dot style).
-     * @return The currently mapped value.
-     */
-    public java.lang.Object getProperty(java.lang.String name);
-    /**
-     * <p> A data class like {@link java.lang.Integer} has a public
-     * constructor with a string argument which is used here.  The
-     * {@link java.lang.Object#toString()} method of a data class
-     * returns the same strings that it accepts as input to its data
-     * constructor.  </p>
-     * 
-     * @param name Property name
-     * @param dclass A data class must accept the all of the strings
-     * returned from its {@link java.lang.Object#toString()} as
-     * arguments to its constructor.  These strings must be XML Text
-     * (PCDATA) compatible.
-     * @return Pull and persist an instance of the argument class from
-     * a string returned by {@link #getProperty(java.lang.String)}.
-     * Or, null if that object is not a string.   
-     */
-    public java.lang.Object getPropertyData(java.lang.String name, java.lang.Class dclass);
-    /**
-     * @param name Property name
-     * @return Pull and persist a boolean from a string returned by
-     * {@link #getProperty(java.lang.String)}.  Or, null if that
-     * object is not a string.
-     */
-    public java.lang.Boolean getPropertyDataBoolean(java.lang.String name);
-    /**
-     * @param name Property name
-     * @return Pull and persist an integer from a string returned by
-     * {@link #getProperty(java.lang.String)}.  Or, null if that
-     * object is not a string.
-     */
-    public java.lang.Integer getPropertyDataInteger(java.lang.String name);
-    /**
-     * @param name Property name
-     * @return Pull and persist a float from a string returned by
-     * {@link #getProperty(java.lang.String)}.  Or, null if that
-     * object is not a string.
-     */
-    public java.lang.Float getPropertyDataFloat(java.lang.String name);
-    /**
-     * <p> An instance of a class name string value may be constructed
-     * using a simple, no argument constructor.  </p>
-     * 
-     * @param name Property name
-     * @return Pull a class from a string returned by {@link
-     * #getProperty(java.lang.String)}.  Or, null if that object is
-     * not a string.
-     * 
-     * @see getPropertyClassInstance(java.lang.String)
-     */
-    public java.lang.Class getPropertyClass(java.lang.String name);
-    /**
-     * <p> An instance of a class name string value is constructed
-     * using a simple, no argument constructor.  </p>
-     * 
-     * @param name Property name
-     * @return Instantiate a class returned by {@link
-     * #getPropertyClass(java.lang.String)}.  Or, null.
-     * 
-     * @see #getPropertyClass(java.lang.String)
-     */
-    public java.lang.Object getPropertyClassInstance(java.lang.String name);
-    /**
-     * @param name Property name
-     * @return Pull and persist a url from a string returned by
-     * {@link #getProperty(java.lang.String)}.  Or, null if that
-     * object is not a string.
-     */
-    public java.net.URL getPropertyDataURL(java.lang.String name);
-    /**
-     * @param name Property name
-     * @return Pull a host address from a string returned by {@link
-     * #getProperty(java.lang.String)}.  Or, null if that object is
-     * not a string.
-     */
-    public java.net.InetAddress getPropertyInetAddress(java.lang.String name);
-    /**
-     * @param name A property name string in dotted notation, employed
-     * varbatim
-     * @param value Any value to be mapped, it's "to string" method
-     * will be employed for its export value.
-     */
-    public void setProperty(java.lang.String name, java.lang.Object value);
-    /**
-     * @param name A property name string in dotted notation, employed verbatim
-     */
-    public void removeProperty(java.lang.String name);
-
     /**
      * <p> Common semantics. </p>
      */
@@ -473,5 +339,140 @@ public interface Properties
         }
 
     }
+
+
+    /**
+     * <p> The convention here is that this string be an absolute path
+     * expression that can be employed relative to a web based
+     * application storage service.  Its file extension suffix is
+     * "xml", subject to being a valid reference. </p>
+     * 
+     * @return String defined by "set properties location" or a class
+     * defined constant for the properties comment string. 
+     */
+    public java.lang.String getPropertiesLocation();
+    /**
+     * Possible No Op: A class that has an absolute constant value may
+     * ignore this call.
+     * 
+     * @param location A location string is an absolute or relative
+     * URI (by our convention here) that is written into the
+     * properties comments in the "export properties xml" method.
+     */
+    public void setPropertiesLocation(java.lang.String location);
+    /**
+     * @param url Input source for {@link java.util.Properties} XML
+     * format.
+     */
+    public void importPropertiesXML(IO.Source url);
+    /**
+     * @param in An input stream in {@link java.util.Properties} XML
+     * format.
+     * @exception java.io.IOException Error reading properties.
+     */
+    public void importPropertiesXML(java.io.InputStream in) throws java.io.IOException ;
+    /**
+     * @param url Output target for {@link java.util.Properties} XML
+     * format.
+     */
+    public void exportPropertiesXML(IO.Target url);
+    /**
+     * @param out An output stream for {@link java.util.Properties}
+     * XML format.
+     * @exception java.io.IOException Error writing properties.
+     */
+    public void exportPropertiesXML(java.io.OutputStream out) throws java.io.IOException ;
+    /**
+     * @param name A property name string (dot style).
+     * @return The currently mapped value.
+     */
+    public java.lang.Object getProperty(java.lang.String name);
+    /**
+     * <p> A data class like {@link java.lang.Integer} has a public
+     * constructor with a string argument which is used here.  The
+     * {@link java.lang.Object#toString()} method of a data class
+     * returns the same strings that it accepts as input to its data
+     * constructor.  </p>
+     * 
+     * @param name Property name
+     * @param dclass A data class must accept the all of the strings
+     * returned from its {@link java.lang.Object#toString()} as
+     * arguments to its constructor.  These strings must be XML Text
+     * (PCDATA) compatible.
+     * @return Pull and persist an instance of the argument class from
+     * a string returned by {@link #getProperty(java.lang.String)}.
+     * Or, null if that object is not a string.   
+     */
+    public java.lang.Object getPropertyData(java.lang.String name, java.lang.Class dclass);
+    /**
+     * @param name Property name
+     * @return Pull and persist a boolean from a string returned by
+     * {@link #getProperty(java.lang.String)}.  Or, null if that
+     * object is not a string.
+     */
+    public java.lang.Boolean getPropertyDataBoolean(java.lang.String name);
+    /**
+     * @param name Property name
+     * @return Pull and persist an integer from a string returned by
+     * {@link #getProperty(java.lang.String)}.  Or, null if that
+     * object is not a string.
+     */
+    public java.lang.Integer getPropertyDataInteger(java.lang.String name);
+    /**
+     * @param name Property name
+     * @return Pull and persist a float from a string returned by
+     * {@link #getProperty(java.lang.String)}.  Or, null if that
+     * object is not a string.
+     */
+    public java.lang.Float getPropertyDataFloat(java.lang.String name);
+    /**
+     * <p> An instance of a class name string value may be constructed
+     * using a simple, no argument constructor.  </p>
+     * 
+     * @param name Property name
+     * @return Pull a class from a string returned by {@link
+     * #getProperty(java.lang.String)}.  Or, null if that object is
+     * not a string.
+     * 
+     * @see getPropertyClassInstance(java.lang.String)
+     */
+    public java.lang.Class getPropertyClass(java.lang.String name);
+    /**
+     * <p> An instance of a class name string value is constructed
+     * using a simple, no argument constructor.  </p>
+     * 
+     * @param name Property name
+     * @return Instantiate a class returned by {@link
+     * #getPropertyClass(java.lang.String)}.  Or, null.
+     * 
+     * @see #getPropertyClass(java.lang.String)
+     */
+    public java.lang.Object getPropertyClassInstance(java.lang.String name);
+    /**
+     * @param name Property name
+     * @return Pull and persist a url from a string returned by
+     * {@link #getProperty(java.lang.String)}.  Or, null if that
+     * object is not a string.
+     */
+    public java.net.URL getPropertyDataURL(java.lang.String name);
+    /**
+     * @param name Property name
+     * @return Pull a host address from a string returned by {@link
+     * #getProperty(java.lang.String)}.  Or, null if that object is
+     * not a string.
+     */
+    public java.net.InetAddress getPropertyInetAddress(java.lang.String name);
+    /**
+     * @param name A property name string in dotted notation, employed
+     * varbatim
+     * @param value Any value to be mapped, it's "to string" method
+     * will be employed for its export value.
+     */
+    public void setProperty(java.lang.String name, java.lang.Object value);
+    /**
+     * @param name A property name string in dotted notation, employed verbatim
+     */
+    public void removeProperty(java.lang.String name);
+
 }
 
