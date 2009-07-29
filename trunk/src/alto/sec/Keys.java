@@ -236,9 +236,7 @@ public class Keys
         public final static void SInit(Tools instance){
             if (null == Instance){
                 Instance = instance;
-                if (instance instanceof alto.sys.Init){
-                    ((alto.sys.Init)instance).init();
-                }
+                Instance = (Tools)alto.sys.Init.Tools.Init(instance);
             }
             else
                 throw new alto.sys.Error.State();

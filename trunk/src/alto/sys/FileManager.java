@@ -60,6 +60,10 @@ public abstract class FileManager
             throw new Error.State("File manager not initialized.");
         }
     }
+    public final static void SInit(FileManager fm){
+        fm = (FileManager)alto.sys.Init.Tools.Init(fm);
+        Thread.currentThread().setContextClassLoader(fm);
+    }
 
     /**
      * {@link alto.sx.methods.List LIST method} semantics for
@@ -313,11 +317,17 @@ public abstract class FileManager
     protected Reference keysReference;
 
 
-    protected FileManager(){
+    /**
+     * Default constructor
+     */
+    public FileManager(){
         super();
         this.location = Ctor.Location.Default;
         this.locationParsed = Ctor.Location.Parsed.Nil;
     }
+    /**
+     * Application storage constructor
+     */
     protected FileManager(java.lang.ClassLoader parentCl, JavaFileManager.Location location){
         super(parentCl);
         if (null != location){

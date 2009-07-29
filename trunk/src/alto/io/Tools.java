@@ -57,7 +57,9 @@ import java.util.StringTokenizer;
  * code in this class.  Alternatively, a list may be defined in a
  * property named "alto.io.Tools.classes" having a comma separated
  * list of names for {@link
- * java.lang.Class#forName(java.lang.String)}.
+ * java.lang.Class#forName(java.lang.String)}.  Note that the order of
+ * initialization starts with reference, file manager, and then type
+ * and keys.
  * 
  * This class 
  * 
@@ -69,9 +71,10 @@ public final class Tools
     public final static String Resource = "/META-INF/services/alto.io.Tools";
 
     private final static String[] Classes = {
-        "alto.lang.Type$Tools",
-        "alto.sec.Keys$Tools",
         "alto.sys.Reference$Tools",
+        "alto.sys.FileManager",
+        "alto.lang.Type$Tools",
+        "alto.sec.Keys$Tools"
     };
 
     public final static Tools Instance = new Tools();

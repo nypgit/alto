@@ -239,9 +239,7 @@ public abstract class Reference
         public final static void SInit(Tools instance){
             if (null == Instance){
                 Instance = instance;
-                if (instance instanceof alto.sys.Init){
-                    ((alto.sys.Init)instance).init();
-                }
+                Instance = (Tools)alto.sys.Init.Tools.Init(instance);
             }
             else
                 throw new Error.State();
@@ -251,19 +249,19 @@ public abstract class Reference
             if (null != Instance)
                 return Instance.create(uri);
             else
-                throw new Error.Bug();
+                throw new Error.State.Init();
         }
         public final static Reference Create(String uri, Address addr){
             if (null != Instance)
                 return Instance.create(uri,addr);
             else
-                throw new Error.Bug();
+                throw new Error.State.Init();
         }
         public final static Reference Create(Address addr){
             if (null != Instance)
                 return Instance.create(addr);
             else
-                throw new Error.Bug();
+                throw new Error.State.Init();
         }
         public final static Reference Create(String hostname, Type type, String path){
             if (null != Instance){
@@ -272,7 +270,7 @@ public abstract class Reference
                 return Instance.create(uri,addr);
             }
             else
-                throw new Error.Bug();
+                throw new Error.State.Init();
         }
         public final static Reference Create(Component container, Component type, Component path){
             return Create(new Address(container,type,path));
@@ -575,7 +573,7 @@ public abstract class Reference
         if (null != address)
             return address.getHashAddress();
         else
-            throw new alto.sys.Error.Bug();
+            throw new alto.sys.Error.State("Missing address");
     }
     public boolean isStoreValid(){
         return this.getAddress().isStoreValid();

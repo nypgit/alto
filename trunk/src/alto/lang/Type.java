@@ -54,9 +54,7 @@ public interface Type
                 instance.bootstrap(bootstrap);
 
                 Instance = instance;
-                if (instance instanceof alto.sys.Init){
-                    ((alto.sys.Init)instance).init();
-                }
+                Instance = (Tools)alto.sys.Init.Tools.Init(instance);
             }
             else
                 throw new alto.sys.Error.State.Init("alto.io.Tools already initialized");
