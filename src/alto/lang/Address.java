@@ -250,44 +250,12 @@ public class Address
         this.path = Component.Tools.Path(parser.getPath());
 
         Component[] address = Component.Tools.AddressNumericFrom(parser);
-        if (null != address){
+        if (null != address)
             this.setAddress(address);
-            return;
-        }
         else {
             address = Component.Tools.AddressSymbolicFrom(parser);
-            if (null != address){
+            if (null != address)
                 this.setAddress(address);
-                return;
-            }
-            else if (null != this.path){
-                java.lang.String identifier = parser.toString();
-                if (Component.Tools.IsName(identifier)){
-                    /*
-                     * Host identifier address
-                     */
-                    this.host = identifier;
-                    this.path = null;
-                    this.parser = null;
-
-                    address = Component.Tools.For(Component.Relation.Base,alto.lang.Type.Nil,this.host);
-
-                    this.setAddress(address);
-                    return;
-                }
-                else {
-                    /*
-                     * Host global (user) address
-                     */
-                    address = Component.Tools.AddressSymbolicFrom(Component.Host.Base,parser);
-                    if (null != address){
-                        this.setAddress(address);
-                        return;
-                    }
-                    else
-                        throw new alto.sys.Error.Argument("Inaddressable location '"+parser.toString()+"'.");
-                }
-            }
             else
                 throw new alto.sys.Error.Argument("Inaddressable location '"+parser.toString()+"'.");
         }

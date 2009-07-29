@@ -152,19 +152,13 @@ public abstract class Named
             this.string = new java.lang.String(Utf8.decode(bits));
             this.stringBits = bits;
             this.stringHash32 = Function.Xor.Hash32(bits);
+            this.hashFunction = Function.Xor.Instance;
         }
         else
             throw new java.lang.IllegalArgumentException("Null argument 'byte[] bits'.");
     }
     public Named(java.lang.String string){
-        super();
-        if (null != string){
-            this.string = string;
-            this.stringBits = Utf8.encode(string);
-            this.stringHash32 = Function.Xor.Hash32(this.stringBits);
-        }
-        else
-            throw new java.lang.IllegalArgumentException("Null argument 'String string'.");
+        this(Function.Xor.Instance,string);
     }
     public Named(Function H, java.lang.String string){
         super();
