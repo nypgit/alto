@@ -646,9 +646,9 @@ public interface Type
 
     public boolean hasFio();
 
-    public Fio getFio();
+    public alto.lang.Fio getFio();
 
-    public Fio getCreateFio()
+    public alto.lang.Fio getCreateFio()
         throws java.io.IOException,
                java.lang.ClassNotFoundException;
 
