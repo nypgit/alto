@@ -32,6 +32,7 @@ public class Interfaces
             Interfaces infs = new Interfaces(jclass.getSuperclass());
             this.addAll(infs);
             for (Class inf : jclass.getInterfaces()){
+                this.add(inf);
                 infs = new Interfaces(inf);
                 this.addAll(infs);
             }
