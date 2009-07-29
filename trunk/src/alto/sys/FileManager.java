@@ -65,6 +65,8 @@ public abstract class FileManager
         Thread.currentThread().setContextClassLoader(fm);
     }
 
+    protected volatile static FileManager Default;
+
     /**
      * {@link alto.sx.methods.List LIST method} semantics for
      * request line query parameters "query" and "recurse".
@@ -322,8 +324,13 @@ public abstract class FileManager
      */
     public FileManager(){
         super();
-        this.location = Ctor.Location.Default;
-        this.locationParsed = Ctor.Location.Parsed.Nil;
+        if (null == Default){
+            Default = this;
+            this.location = Ctor.Location.Default;
+            this.locationParsed = Ctor.Location.Parsed.Nil;
+        }
+        else
+            throw new Error.State.Init("Default already defined.");
     }
     /**
      * Application storage constructor
@@ -346,8 +353,9 @@ public abstract class FileManager
     public final boolean isInitialized(){
         return (null != partition);
     }
-    public abstract boolean isDefault();
-
+    public final boolean isDefault(){
+        return (Default == this);
+    }
     /**
      * Default init looks for conventional <i>dev</i> and <i>prod</i>
      * store directories, <code>"/www/syntelos"</code> and

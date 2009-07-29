@@ -357,38 +357,40 @@ public interface Component
                 throw new IllegalArgumentException();
         }
         public final static java.lang.String Clean(java.lang.String string){
-            int term = (string.length()-1);
-            if (0 < term){
-                while ('/' == string.charAt(0)){
-                    string = string.substring(1);
-                    term = (string.length()-1);
-                    if (0 > term)
-                        return null;
+            if (null != string){
+                int term = (string.length()-1);
+                if (0 < term){
+                    while ('/' == string.charAt(0)){
+                        string = string.substring(1);
+                        term = (string.length()-1);
+                        if (0 > term)
+                            return null;
+                    }
+                    while ('/' == string.charAt(term)){
+                        string = string.substring(0,term);
+                        term = (string.length()-1);
+                        if (0 > term)
+                            return null;
+                    }
+                    return string;
                 }
-                while ('/' == string.charAt(term)){
-                    string = string.substring(0,term);
-                    term = (string.length()-1);
-                    if (0 > term)
-                        return null;
-                }
-                return string;
             }
-            else
-                return null;
+            return null;
         }
         public final static java.lang.String CleanTail(java.lang.String string){
-            int term = (string.length()-1);
-            if (-1 < term){
-                while ('/' == string.charAt(term)){
-                    string = string.substring(0,term);
-                    term = (string.length()-1);
-                    if (0 > term)
-                        return null;
+            if (null != string){
+                int term = (string.length()-1);
+                if (-1 < term){
+                    while ('/' == string.charAt(term)){
+                        string = string.substring(0,term);
+                        term = (string.length()-1);
+                        if (0 > term)
+                            return null;
+                    }
+                    return string;
                 }
-                return string;
             }
-            else
-                return null;
+            return null;
         }
         public final static boolean IsNotName(java.lang.String identifier){
             if (null == identifier)
@@ -397,185 +399,193 @@ public interface Component
                 return (!IsName(identifier));
         }
         public final static boolean IsName(java.lang.String identifier){
-            char[] scan = identifier.toCharArray();
-            int chars = 0, dotX = -1;
+            if (null != identifier){
+                char[] scan = identifier.toCharArray();
+                int chars = 0, dotX = -1;
 
-            for (int cc = 0, count = scan.length; cc < count; cc++){
-                switch(scan[cc]){
-                case '-':
-                    if (0 == chars)
-                        return false;
-                    else {
+                for (int cc = 0, count = scan.length; cc < count; cc++){
+                    switch(scan[cc]){
+                    case '-':
+                        if (0 == chars)
+                            return false;
+                        else {
+                            break;
+                        }
+                    case '.':
+                        if (0 == chars)
+                            return false;
+                        else if (dotX == (cc-1))
+                            return false;
+                        else {
+                            dotX = cc;
+                            break;
+                        }
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                        if (0 == chars)
+                            return false;
+                        else {
+                            break;
+                        }
+                    case 'A':
+                    case 'B':
+                    case 'C':
+                    case 'D':
+                    case 'E':
+                    case 'F':
+                    case 'G':
+                    case 'H':
+                    case 'I':
+                    case 'J':
+                    case 'K':
+                    case 'L':
+                    case 'M':
+                    case 'N':
+                    case 'O':
+                    case 'P':
+                    case 'Q':
+                    case 'R':
+                    case 'S':
+                    case 'T':
+                    case 'U':
+                    case 'V':
+                    case 'W':
+                    case 'X':
+                    case 'Y':
+                    case 'Z':
+                    case 'a':
+                    case 'b':
+                    case 'c':
+                    case 'd':
+                    case 'e':
+                    case 'f':
+                    case 'g':
+                    case 'h':
+                    case 'i':
+                    case 'j':
+                    case 'k':
+                    case 'l':
+                    case 'm':
+                    case 'n':
+                    case 'o':
+                    case 'p':
+                    case 'q':
+                    case 'r':
+                    case 's':
+                    case 't':
+                    case 'u':
+                    case 'v':
+                    case 'w':
+                    case 'x':
+                    case 'y':
+                    case 'z':
+                        chars += 1;
                         break;
-                    }
-                case '.':
-                    if (0 == chars)
+                    default:
                         return false;
-                    else if (dotX == (cc-1))
-                        return false;
-                    else {
-                        dotX = cc;
-                        break;
                     }
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    if (0 == chars)
-                        return false;
-                    else {
-                        break;
-                    }
-                case 'A':
-                case 'B':
-                case 'C':
-                case 'D':
-                case 'E':
-                case 'F':
-                case 'G':
-                case 'H':
-                case 'I':
-                case 'J':
-                case 'K':
-                case 'L':
-                case 'M':
-                case 'N':
-                case 'O':
-                case 'P':
-                case 'Q':
-                case 'R':
-                case 'S':
-                case 'T':
-                case 'U':
-                case 'V':
-                case 'W':
-                case 'X':
-                case 'Y':
-                case 'Z':
-                case 'a':
-                case 'b':
-                case 'c':
-                case 'd':
-                case 'e':
-                case 'f':
-                case 'g':
-                case 'h':
-                case 'i':
-                case 'j':
-                case 'k':
-                case 'l':
-                case 'm':
-                case 'n':
-                case 'o':
-                case 'p':
-                case 'q':
-                case 'r':
-                case 's':
-                case 't':
-                case 'u':
-                case 'v':
-                case 'w':
-                case 'x':
-                case 'y':
-                case 'z':
-                    chars += 1;
-                    break;
-                default:
-                    return false;
                 }
+                return (0 < chars);
             }
-            return (0 < chars);
+            else
+                return false;
         }
         public final static boolean IsPath(boolean sep, java.lang.String identifier){
-            char[] scan = identifier.toCharArray();
-            int chars = 0, seps = 0;
+            if (null != identifier){
+                char[] scan = identifier.toCharArray();
+                int chars = 0, seps = 0;
 
-            for (int cc = 0, count = scan.length; cc < count; cc++){
-                switch(scan[cc]){
-                case '-':
-                    if (0 == chars)
-                        return false;
-                    else {
+                for (int cc = 0, count = scan.length; cc < count; cc++){
+                    switch(scan[cc]){
+                    case '-':
+                        if (0 == chars)
+                            return false;
+                        else {
+                            break;
+                        }
+                    case '.':
+                        if (0 == chars)
+                            return false;
+                        else {
+                            break;
+                        }
+                    case '/':
+                        seps += 1;
                         break;
-                    }
-                case '.':
-                    if (0 == chars)
-                        return false;
-                    else {
+                    case 'A':
+                    case 'B':
+                    case 'C':
+                    case 'D':
+                    case 'E':
+                    case 'F':
+                    case 'G':
+                    case 'H':
+                    case 'I':
+                    case 'J':
+                    case 'K':
+                    case 'L':
+                    case 'M':
+                    case 'N':
+                    case 'O':
+                    case 'P':
+                    case 'Q':
+                    case 'R':
+                    case 'S':
+                    case 'T':
+                    case 'U':
+                    case 'V':
+                    case 'W':
+                    case 'X':
+                    case 'Y':
+                    case 'Z':
+                    case '_':
+                    case 'a':
+                    case 'b':
+                    case 'c':
+                    case 'd':
+                    case 'e':
+                    case 'f':
+                    case 'g':
+                    case 'h':
+                    case 'i':
+                    case 'j':
+                    case 'k':
+                    case 'l':
+                    case 'm':
+                    case 'n':
+                    case 'o':
+                    case 'p':
+                    case 'q':
+                    case 'r':
+                    case 's':
+                    case 't':
+                    case 'u':
+                    case 'v':
+                    case 'w':
+                    case 'x':
+                    case 'y':
+                    case 'z':
+                        chars += 1;
                         break;
+                    default:
+                        return false;
                     }
-                case '/':
-                    seps += 1;
-                    break;
-                case 'A':
-                case 'B':
-                case 'C':
-                case 'D':
-                case 'E':
-                case 'F':
-                case 'G':
-                case 'H':
-                case 'I':
-                case 'J':
-                case 'K':
-                case 'L':
-                case 'M':
-                case 'N':
-                case 'O':
-                case 'P':
-                case 'Q':
-                case 'R':
-                case 'S':
-                case 'T':
-                case 'U':
-                case 'V':
-                case 'W':
-                case 'X':
-                case 'Y':
-                case 'Z':
-                case '_':
-                case 'a':
-                case 'b':
-                case 'c':
-                case 'd':
-                case 'e':
-                case 'f':
-                case 'g':
-                case 'h':
-                case 'i':
-                case 'j':
-                case 'k':
-                case 'l':
-                case 'm':
-                case 'n':
-                case 'o':
-                case 'p':
-                case 'q':
-                case 'r':
-                case 's':
-                case 't':
-                case 'u':
-                case 'v':
-                case 'w':
-                case 'x':
-                case 'y':
-                case 'z':
-                    chars += 1;
-                    break;
-                default:
-                    return false;
                 }
+                if (sep)
+                    return (0 < chars && 0 < seps);
+                else
+                    return (0 < chars);
             }
-            if (sep)
-                return (0 < chars && 0 < seps);
             else
-                return (0 < chars);
+                return false;
         }
     }
 
