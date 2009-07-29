@@ -243,7 +243,7 @@ public class Address
     public Address(String uri){
         this(new alto.io.u.Uri(uri));
     }
-    public Address(Uri uri){
+    public Address(Uri parser){
         super();
         this.parser = parser;
         this.host = parser.getHostName();
