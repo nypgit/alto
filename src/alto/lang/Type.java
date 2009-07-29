@@ -47,12 +47,6 @@ public interface Type
          */
         public final static void SInit(Tools instance){
             if (null == Instance){
-                Component.Type[] bootstrap = new Component.Type[]{
-                    alto.lang.component.Type.Numeric.MimeType.Instance,
-                    alto.lang.component.Type.Numeric.Address.Instance
-                };
-                instance.bootstrap(bootstrap);
-
                 Instance = instance;
                 Instance = (Tools)alto.sys.Init.Tools.Init(instance);
             }
@@ -254,16 +248,19 @@ public interface Type
             }
         }
 
-        /**
-         * Called before optional {@link Init} with the builtin types
-         * required to bootstrap the store. When this method (or
-         * optional, subsequent init) returns, these instances must
-         * have valid {@link Type} objects assigned.  Currently these
-         * are {@link
-         * alto.lang.component.Type.Numeric.MimeType#Instance} and
-         * {@link alto.lang.component.Type.Numeric.Address#Instance}.
-         */
-        public abstract void bootstrap(Component.Type[] type);
+        protected void bootstrap(alto.lang.Type[] types){
+            for (alto.lang.Type type : types){
+                Reference ref = type.getReference();
+                try {
+                    ref.setStorageContent(type);
+                }
+                catch (java.io.IOException exc){
+
+                    throw new alto.sys.Error.State.Init(ref.toString(),exc);
+                }
+            }
+        }
+
         /**
          * Needs to dereference a type from a reference to type or a
          * reference to an address to type.  The former has address
