@@ -40,18 +40,23 @@ public abstract class Numeric
 
     public Numeric(int value){
         super(value);
+        this.hashFunction = Function.Xor.Instance;
     }
     public Numeric(long value){
         super(value);
+        this.hashFunction = Function.Xor.Instance;
     }
     public Numeric(byte[] value){
         super(value);
+        this.hashFunction = Function.Xor.Instance;
     }
     public Numeric(java.lang.String string, int radix){
         super(string,radix);
+        this.hashFunction = Function.Xor.Instance;
     }
     public Numeric(java.lang.String string){
         super(string);
+        this.hashFunction = Function.Xor.Instance;
     }
     public Numeric(Function H, java.lang.String string){
         this(H.hash(Utf8.encode(string)));
@@ -64,6 +69,7 @@ public abstract class Numeric
         throws java.io.IOException
     {
         super(Sio.Field.Read(in));
+        this.hashFunction = Function.Xor.Instance;
     }
 
 

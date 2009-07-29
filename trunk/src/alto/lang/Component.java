@@ -213,39 +213,20 @@ public interface Component
                 if (null != string)
                     return Component.List.Add(addr,Component.Host.Tools.ValueOf(type,string));
                 else
-                    throw new java.lang.IllegalArgumentException("Missing host name");
+                    return Component.List.Add(addr,Component.Host.Local);
             }
             case Component.Type.Position:{
                 if (null != type)
                     return Component.List.Add(addr,Component.Type.Tools.ValueOf(type));
-                else {
-                    java.lang.String path = parser.getPath();
-                    if (null != path){
-                        type = alto.lang.Type.Tools.Of(path);
-                        if (null != type)
-                            return Component.List.Add(addr,type.hashAddressComponent());
-                        else
-                            throw new java.lang.IllegalArgumentException("Missing type");
-                    }
-                    else
-                        throw new java.lang.IllegalArgumentException("Missing path");
-                }
+                else 
+                    return Component.List.Add(addr,Component.Type.Nil);
             }
             case Component.Path.Position:{
                 java.lang.String path = parser.getPath();
-                if (null != path){
-                    if (null != type)
-                        return Component.List.Add(addr,Component.Path.Tools.ValueOf(type,path));
-                    else {
-                        type = alto.lang.Type.Tools.Of(path);
-                        if (null != type)
-                            return Component.List.Add(addr,Component.Path.Tools.ValueOf(type,path));
-                        else
-                            throw new java.lang.IllegalArgumentException("Missing type");
-                    }
-                }
+                if (null != path && null != type)
+                    return Component.List.Add(addr,Component.Path.Tools.ValueOf(type,path));
                 else
-                    throw new java.lang.IllegalArgumentException("Missing path");
+                    return Component.List.Add(addr,Component.Path.Tools.ValueOf(addr,path));
             }
             case Component.Version.Position:{
                 java.lang.String version = parser.getQuery("version");
@@ -307,28 +288,21 @@ public interface Component
                 java.lang.String path = parser.getPath();
                 if (Component.Tools.IsPath(true,path)){
                     alto.lang.Type type = alto.lang.Type.Tools.Of(path);
-                    if (null != type){
+                    int ain = (null != address)?(address.length):(0);
+                    int aout;
+                    while (true){
                         address = Component.Tools.For(address,type,parser);
+                        aout = (null != address)?(address.length):(0);
                         if (IsComplete(address))
                             return address;
-                        else {
-                            address = Component.Tools.For(address,type,parser);
-                            if (IsComplete(address))
-                                return address;
-                            else {
-                                address = Component.Tools.For(address,type,parser);
-                                if (IsComplete(address))
-                                    return address;
-                                else {
-                                    address = Component.Tools.For(address,type,parser);
-                                    if (IsComplete(address))
-                                        return address;
-                                }
-                            }
-                        }
+                        else if (ain == aout)
+                            return null;
+                        else
+                            ain = aout;
                     }
                 }
-                return null;
+                else
+                    return null;
             }
             catch (java.lang.RuntimeException exc){
                 if (IsComplete(address))
@@ -742,7 +716,7 @@ public interface Component
 
         public final static Component.Host Local = new alto.lang.component.Host.Numeric(0);
         public final static Component.Host Global = new alto.lang.component.Host.Numeric(1);
-        public final static Component[] Base = new Component[]{Global};
+        public final static Component[] Base = new Component[]{Component.Relation.U, Component.Host.Global};
 
         public final static class Tools
             extends Component.Tools
@@ -813,6 +787,8 @@ public interface Component
     {
         public final static int Position = 2;
         public final static int LengthWith = (Position+1);
+
+        public final static Component.Type Nil = new alto.lang.component.Type.Numeric(0);
 
         public final static class Tools
             extends Component.Tools
@@ -988,6 +964,15 @@ public interface Component
                     return new alto.lang.component.Path.Numeric(type,path);
                 else
                     throw new java.lang.IllegalArgumentException();
+            }
+            public final static Component.Path ValueOf(Component[] partial, java.lang.String path){
+                path = Path(path);
+                if (null != path){
+                    Component.Type type = Component.Type.Tools.From(partial);
+                    return new alto.lang.component.Path.Numeric(type,path);
+                }
+                else
+                    return Component.Path.ZERO;
             }
             public final static Component.Path ValueOf(java.lang.String string){
                 string = Clean(string);
