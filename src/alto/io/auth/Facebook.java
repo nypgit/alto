@@ -31,9 +31,11 @@ import alto.sec.Auth;
 
 /**
  * Facebook is a request signature scheme that applies exclusively to
- * query parameters.  When the host and path are irrelevant and only
- * the query parameters need security, then this is a very interested
- * authentication scheme.
+ * query parameters.  When the host and path and headers are
+ * irrelevant and only the query parameters need security, then this
+ * is an interesting authentication scheme.
+ * 
+ * @author jdp
  */
 public final class Facebook
     extends java.lang.Object

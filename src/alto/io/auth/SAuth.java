@@ -30,7 +30,9 @@ import alto.lang.Header;
 import alto.lang.HttpRequest;
 
 /**
+ * Implements SAuth version one.
  * 
+ * @author jdp
  */
 public final class SAuth
     extends java.lang.Object
@@ -63,7 +65,9 @@ public final class SAuth
     public boolean sign(Principal.Authentic keys, HttpRequest request){
         if (null != keys){
             RSA rsa = new RSA(keys);
-
+            request.maySetDate();
+            request.maySetHost();
+            request.setContentMD5();
             this.setSAuthVersion(request);
             this.setSAuthUID(request,keys.getUID());
             this.setSAuthNonce(request);
