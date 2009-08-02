@@ -357,9 +357,9 @@ public abstract class FileManager
         return (Default == this);
     }
     /**
-     * Default init looks for conventional <i>dev</i> and <i>prod</i>
-     * store directories, <code>"/www/syntelos"</code> and
-     * <code>"/www"</code>, respectively.
+     * Init looks for store directories, <code>"/www/syntelos"</code>,
+     * <code>"/var/syntelos"</code> and <code>"/www"</code>,
+     * respectively.
      */
     @Code(Check.Locked)
     public final FileManager init(){
@@ -371,10 +371,17 @@ public abstract class FileManager
                 return this.init(dir);
             }
             else {
-                dir = new java.io.File("/www");
+                dir = new java.io.File("/var/syntelos");
                 if (dir.isDirectory()){
 
                     return this.init(dir);
+                }
+                else {
+                    dir = new java.io.File("/www");
+                    if (dir.isDirectory()){
+
+                        return this.init(dir);
+                    }
                 }
             }
         }
