@@ -40,7 +40,7 @@ import java.net.URL;
  */
 public interface Headers
     extends alto.sys.Xml,
-            alto.sys.IO.H
+            alto.sys.IO.H.Target
 {
 
     public void writeHeaders(alto.io.Output out)
@@ -72,9 +72,9 @@ public interface Headers
 
     public java.lang.String getHeaderAsString(java.lang.String name);
 
-
     public Type getHeaderType(java.lang.String name);
 
+    public java.math.BigInteger getHeaderHex(java.lang.String name);
 
     public boolean hasHeader(Header header);
 

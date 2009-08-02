@@ -21,6 +21,14 @@ package alto.lang;
 /**
  * The record of a statistic in a collection of {@link Statistics}.
  */
-public interface Statistic
+public abstract class Statistic
     extends Header
-{}
+{
+
+    protected final static java.lang.Object Nil = null;
+
+
+    public Statistic(java.lang.String name){
+        super(name,Nil);
+    }
+}

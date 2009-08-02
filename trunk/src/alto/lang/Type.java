@@ -248,18 +248,11 @@ public interface Type
             }
         }
 
-        protected void bootstrap(alto.lang.Type[] types){
-            for (alto.lang.Type type : types){
-                Reference ref = type.getReference();
-                try {
-                    ref.setStorageContent(type);
-                }
-                catch (java.io.IOException exc){
-
-                    throw new alto.sys.Error.State.Init(ref.toString(),exc);
-                }
-            }
-        }
+        /**
+         * Set storage content type and rtype instances into the file
+         * cache.
+         */
+        protected abstract void bootstrap(alto.lang.Type[] types);
 
         /**
          * Needs to dereference a type from a reference to type or a
@@ -476,6 +469,8 @@ public interface Type
     public java.lang.String[] listFext();
 
     public void setFext(java.lang.String value);
+
+    public Reference getReferenceR();
 
     public boolean hasHashFunctionName();
 

@@ -301,7 +301,7 @@ public abstract class Reference
 
     protected Address address;
 
-    protected HttpMessage createMeta;
+    protected HttpMessage container;
 
     protected URL url;
 
@@ -590,6 +590,15 @@ public abstract class Reference
         }
         return path;
     }
+    public boolean hasContainer(){
+        return (null != this.container);
+    }
+    public HttpMessage getContainer(){
+        return this.container;
+    }
+
+    protected abstract HttpMessage newHttpMessage(boolean store);
+
     /**
      * Read from storage
      */
@@ -608,108 +617,37 @@ public abstract class Reference
         else
             return null;
     }
-    public boolean hasCreatedMeta(){
-        return (null != this.createMeta);
-    }
-    public HttpMessage getCreatedMeta(){
-        return this.createMeta;
-    }
-
-    protected abstract HttpMessage newHttpMessage(boolean store);
-
     /**
-     * Write to createMeta buffer 
+     * Write to container buffer 
      * @see #close
      */
     public HttpMessage write()
         throws java.io.IOException
     {
-        HttpMessage createMeta = this.createMeta;
-        if (null == createMeta){
+        HttpMessage container = this.container;
+        if (null == container){
             /*
-             * Write content (to storage or network)
+             * Prepare container object
              */
-            createMeta = this.newHttpMessage(true);
-            createMeta.setPathCompleteWithDefaults(this);
+            container = this.newHttpMessage(true);
+            container.setPathCompleteWithDefaults(this);
+            /*
+             * Update container object with current state
+             */
             File storage = this.getStorage();
             if (null != storage){
-                storage.copyTo(createMeta);
-                this.createMeta = createMeta;
+                storage.copyTo(container);
+                this.container = container;
             }
         }
-        return createMeta;
-    }
-    /**
-     * @return Success setting thread context from this reference.
-     */
-    public boolean enterThreadContextTry(){
-        try {
-            HttpMessage meta = this.read();
-            return Thread.MaySetContext(meta);
-        }
-        catch (java.io.IOException exc){
-            return false;
-        }
-    }
-    /**
-     * If there is an open created meta, and the current thread has no
-     * context, then set the current thread context to the created
-     * meta.  This permits the meta to authenticate and write, for
-     * client or bootstrap operations.
-     * 
-     * This method assumes neither client side nor server side.  
-     * 
-     * @see alto.sec.Keys#authenticate()
-     */
-    public boolean enterThreadContextFromCreatedMetaTry(){
-        HttpMessage createMeta = this.createMeta;
-        if (null != createMeta)
-            return Thread.MaySetContext(createMeta);
-        else
-            return false;
-    }
-    /**
-     * Authenticate the created method from the {@link Thread}
-     * context principal.
-     * 
-     * @see alto.io.Message#writeMessage()
-     * @see PSioFile#authenticate()
-     */
-    @Code(Check.Locking)
-    public void authenticateCreatedMeta()
-        throws java.io.IOException
-    {
-        Principal principal = Thread.GetPrincipal(true);
-        if (principal instanceof Principal.Authentic)
-            this.authenticateCreatedMeta( (Principal.Authentic)principal);
-        else if (null != principal)
-            throw new alto.sys.Error.Bug(principal.getClass().getName());
-        else 
-            throw new alto.sys.Error.Bug("See 'sys/Reference#enterThreadContextFromCreatedMetaTry()'.");
-    }
-    /**
-     * This method permits the created meta to be authenticated with
-     * the argument principal when called before closing the created
-     * meta.
-     * 
-     * @see alto.sec.Keys#authenticate()
-     * @see alto.lang.HttpMessage#authenticateCreateCredentials(alto.io.Principal$Authentic)
-     */
-    public void authenticateCreatedMeta(Principal.Authentic principal)
-        throws java.io.IOException
-    {
-        HttpMessage createMeta = this.createMeta;
-        if (null != createMeta)
-            createMeta.authenticateCreateCredentials(principal);
-        else
-            throw new alto.sys.Error.Bug();
+        return container;
     }
     @Code(Check.TODO)
     public void close()
         throws java.io.IOException
     {
-        HttpMessage createMeta = this.createMeta;
-        if (null != createMeta){
+        HttpMessage container = this.container;
+        if (null != container){
             try {
                 URL url = this.url;
                 if (null != url){
@@ -719,7 +657,7 @@ public abstract class Reference
                         alto.net.Connection nc = (alto.net.Connection)connection;
                         nc.setReference(this);
                         /////////////////////////[TODO]
-                        //nc.write(createMeta);//[TODO]
+                        //nc.write(container);//[TODO]
                         /////////////////////////[TODO]
                         throw new alto.sys.Error.Bug(this.toString());
                         /////////////////////////[TODO]
@@ -730,9 +668,7 @@ public abstract class Reference
                 File storage = this.getStorage();
                 if (null != storage){
 
-                    createMeta.authenticate();
-
-                    if (storage.write(createMeta))
+                    if (storage.write(container))
                         return;
                     else
                         throw new alto.sys.Error.State("Invalid Write");
@@ -741,9 +677,91 @@ public abstract class Reference
                     throw new alto.sys.Error.Bug(this.toString());
             }
             finally {
-                this.createMeta = null;
+                this.container = null;
             }
         }
+    }
+
+    /**
+     * @return Success setting thread context from this reference.
+     */
+    public boolean enterThreadContextTry(){
+        try {
+            HttpMessage container = this.read();
+            return Thread.MaySetContext(container);
+        }
+        catch (java.io.IOException exc){
+            return false;
+        }
+    }
+    /**
+     * If there is an open created container, and the current thread has no
+     * context, then set the current thread context to the created
+     * container.  This permits the container to authenticate and write, for
+     * client or bootstrap operations.
+     * 
+     * This method assumes neither client side nor server side.  
+     * 
+     * @see alto.sec.Keys#authenticate()
+     */
+    public boolean enterThreadContextFromContainerTry(){
+        HttpMessage container = this.container;
+        if (null != container)
+            return Thread.MaySetContext(container);
+        else
+            return false;
+    }
+    /**
+     * Authenticate the created method from the {@link Thread}
+     * context principal.
+     */
+    @Code(Check.Locking)
+    public void signContainer()
+        throws java.io.IOException
+    {
+        HttpMessage container = this.container;
+        if (null != container)
+            container.authSign();
+        else
+            throw new alto.sys.Error.Bug();
+    }
+    /**
+     * Authenticated the created container with the argument principal.
+     */
+    public void signContainer(Principal.Authentic principal)
+        throws java.io.IOException
+    {
+        HttpMessage container = this.container;
+        if (null != container)
+            container.authSign(principal);
+        else
+            throw new alto.sys.Error.Bug();
+    }
+    /**
+     * Authenticate the created method from the {@link Thread}
+     * context principal.
+     */
+    @Code(Check.Locking)
+    public void verifyContainer()
+        throws java.io.IOException
+    {
+        HttpMessage container = this.container;
+        if (null != container)
+            container.authVerify();
+        else
+            throw new alto.sys.Error.Bug();
+    }
+    /**
+     * Authenticated the created container with the argument principal.
+     */
+    public void verifyContainer(Principal.Authentic principal)
+        throws java.io.IOException
+    {
+        HttpMessage container = this.container;
+        if (null != container)
+            container.authVerify(principal);
+        else
+            throw new alto.sys.Error.Bug();
     }
 
     public java.nio.channels.ReadableByteChannel openChannelReadable()
@@ -781,9 +799,9 @@ public abstract class Reference
             return new ReferenceInputStream(this,connection);
         }
 
-        HttpMessage meta = this.read();
-        if (null != meta)
-            return new ReferenceInputStream(this,meta);
+        HttpMessage container = this.read();
+        if (null != container)
+            return new ReferenceInputStream(this,container);
         else
             return null;
     }
@@ -823,8 +841,8 @@ public abstract class Reference
             return new ReferenceOutputStream(this,connection);
         }
 
-        HttpMessage meta = this.write();
-        return new ReferenceOutputStream(this,meta);
+        HttpMessage container = this.write();
+        return new ReferenceOutputStream(this,container);
     }
     public java.io.Reader openReader(boolean ignoreEncodingErrors) 
         throws java.io.IOException
@@ -1110,7 +1128,7 @@ public abstract class Reference
                 ((HttpRequest)request).setLocation();
             //
             try {
-                this.createMeta = request;
+                this.container = request;
                 return true;
             }
             finally {

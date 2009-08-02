@@ -101,10 +101,7 @@ public abstract class PSioFile
             throw new alto.sys.Error.State(exc);
         }
     }
-    /**
-     * Implementor calls {@link #authenticateFromRead} after
-     * completing the read, in order to verify authentication.
-     */
+
     public abstract void readMessage(Input in)
         throws java.io.IOException;
 
@@ -180,10 +177,6 @@ public abstract class PSioFile
             this.sioWrite(out);
 
             out.flush();
-            /*
-             * Authenticate created meta before closing
-             */
-            this.authenticateForWrite();
         }
         finally {
             out.close();
@@ -191,16 +184,31 @@ public abstract class PSioFile
 
         this.setStorageContent();
     }
-    protected void authenticateFromRead()
-        throws java.io.IOException
-    {
+
+    @Override
+    public Component.Path getSioType(){
+        Component.Path sioType = this.sioType;
+        if (null != sioType)
+            return sioType;
+        else {
+            try {
+                sioType = Sio.Type.From(this.reference);
+                if (null != sioType){
+                    this.sioType = sioType;
+                    return sioType;
+                }
+                else
+                    throw new alto.sys.Error.State("Missing Sio Type");
+            }
+            catch (java.io.IOException exc){
+                throw new alto.sys.Error.State(this.reference.toString(),exc);
+            }
+            catch (alto.sys.Error exc){
+                throw new alto.sys.Error.State(this.reference.toString(),exc);
+            }
+        }
     }
-    protected void authenticateForWrite()
-        throws java.io.IOException
-    {
-        if (this.reference.hasCreatedMeta())
-            this.reference.authenticateCreatedMeta();
-    }
+
     public final Reference getReference(){
         return this.reference;
     }

@@ -848,6 +848,13 @@ public interface Component
                     Component.Version.Current
                 };
             }
+            public final static Component[] ForR(alto.lang.Type type){
+                String fext = type.getFext();
+                if (null != fext)
+                    return ForR(fext);
+                else
+                    throw new alto.sys.Error.State(type.toString());
+            }
             public final static Component[] For(alto.lang.Component.Type addr){
                 Component.Type atyp = 
                     alto.lang.component.Type.Numeric.MimeType.Instance;
@@ -898,6 +905,9 @@ public interface Component
             }
             public final static Reference ReferenceToR(java.lang.String fext){
                 return Reference.Tools.Create(new Address(ForR(fext)));
+            }
+            public final static Reference ReferenceToR(alto.lang.Type type){
+                return Reference.Tools.Create(new Address(ForR(type)));
             }
             public final static Reference ReferenceTo(java.lang.String mimetype){
                 return Reference.Tools.Create(new Address(For(mimetype)));

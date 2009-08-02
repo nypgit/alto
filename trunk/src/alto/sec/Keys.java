@@ -52,7 +52,6 @@ import java.util.Set;
 public class Keys
     extends alto.sys.PSioFile
     implements alto.sys.Destroy,
-               alto.io.Keys,
                alto.io.Principal.Actual
 {
 
@@ -151,7 +150,17 @@ public class Keys
                 Reference target = ReferenceTo(identifier);
 
                 Keys keys = Dereference(target);
-                if (keys.existsStorage()){
+                if (null == keys){
+                    keys = new Keys(target);
+                    keys.setName(name);
+                    if (keys.generate(alg)){
+                        keys.writeMessage();
+                        return keys;
+                    }
+                    else
+                        throw new alto.sys.Error.Bug("Unable to generate keys for '"+alg+"'.");
+                }
+                else if (keys.existsStorage()){
                     if (keys.generate(alg))
                         keys.writeMessage();
 
@@ -387,9 +396,6 @@ public class Keys
         Keys protector = (Keys)this.getProtector();
         return (null != protector && protector.isApplication());
     }
-    public alto.io.Keys getKeys(){
-        return this;
-    }
     public Principal.Authentic getPrincipal(){
         return this;
     }
@@ -529,26 +535,6 @@ public class Keys
         return this;
     }
 
-    protected void authenticateFromRead()
-        throws java.io.IOException
-    {
-    }
-    /**
-     * Called from the super class on this instance writing itself.
-     * 
-     * @see alto.io.Message#writeMessage()
-     * @see alto.sys.PSioFile#authenticate()
-     */
-    protected void authenticateForWrite()
-        throws java.io.IOException
-    {
-        if (this.reference.hasCreatedMeta()){
-            this.reference.authenticateCreatedMeta(this);
-            this.reference.enterThreadContextFromCreatedMetaTry();
-        }
-        else
-            super.authenticateForWrite();
-    }
     public void writeMessage(Output out)
         throws java.io.IOException
     {
@@ -619,8 +605,6 @@ public class Keys
             }
             this.roles = list;
         }
-
-        this.authenticateFromRead();
     }
     protected Key getProtectorRSA(){
         Keys protector = (Keys)this.getProtector();
@@ -769,7 +753,7 @@ public class Keys
             return false;
     }
     public boolean addRole(Principal.Authentic role){
-        return this.addRole(role.getKeys());
+        return this.addRole(role);
     }
     public boolean inRole(alto.io.Role role){
         if (null != role)
@@ -811,7 +795,7 @@ public class Keys
     }
     public boolean inRole(alto.io.Principal.Authentic role){
         if (null != role)
-            return this.inRole(role.getKeys());
+            return this.inRole(role);
         else
             return false;
     }
