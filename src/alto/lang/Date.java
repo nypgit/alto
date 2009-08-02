@@ -37,12 +37,9 @@ import java.util.TimeZone;
  */
 public final class Date
     extends java.lang.Object
+    implements alto.sys.Millis
 {
-    public final static long Seconds = 1000L;
-    public final static long Minutes = (60L * Seconds);
-    public final static long Hours = (60L * Minutes);
-    public final static long Days = (24L * Hours);
-    public final static long Years = (365L * Days);
+
 
     public final static java.util.Date Future(long project){
         long time = (java.lang.System.currentTimeMillis() + project);

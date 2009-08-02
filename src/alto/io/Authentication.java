@@ -18,6 +18,14 @@
  */
 package alto.io;
 
+import alto.lang.HttpRequest;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.StringTokenizer;
 
 /**
  * Enumeration of authentication identifiers for quantifying the
@@ -28,6 +36,216 @@ package alto.io;
 public final class Authentication 
     extends java.lang.Object
 {
+    /**
+     * Implementors are defined in
+     * <code>"/META-INF/services/alto.io.Authentication"</code> as a
+     * (properties) map from an {@link Authentication} name to the
+     * fully qualified implementor class name.
+     * 
+     * Implementors are stateless.  These methods shall not employ
+     * fields within their instances.  These methods may be invoked by
+     * many independent threads concurrently.
+     * 
+     * @see alto.io.auth.SAuth
+     * @see alto.io.auth.Facebook
+     */
+    public interface Method {
+        /**
+         * @return Mapped from
+         */
+        public Authentication getKind();
+        /**
+         * @param Mapped from (once only init)
+         */
+        public void setKind(Authentication from);
+        /**
+         * @return Request has info for verification in this authentication method
+         */
+        public boolean isVerifiable(HttpRequest request);
+        /**
+         * @return System UID from this authentication method
+         */
+        public String getUID(HttpRequest request);
+
+        public boolean sign(Principal.Authentic keys, HttpRequest request);
+
+        public boolean verify(Principal.Authentic keys, HttpRequest request);
+    }
+    /**
+     * @see alto.lang.HttpMessage
+     */
+    public interface Container {
+        /**
+         * The principal is a placeholder ready for authentication
+         */
+        public boolean isAuthenticating();
+        /**
+         * The principal has been authenticated
+         */
+        public boolean isAuthenticated();
+        /**
+         * Convert a principal conditional to principal actual, or
+         * return null.
+         */
+        public Principal.Authentic authenticate() 
+            throws java.io.IOException;
+
+        public boolean hasAuthenticationMethod();
+
+        public Authentication getAuthenticationMethod();
+
+        public boolean isAuthVerifiable();
+
+        public boolean authSign()
+            throws java.io.IOException;
+
+        public boolean authSign(Principal.Authentic principal)
+            throws java.io.IOException;
+
+        public boolean authVerify()
+            throws java.io.IOException;
+
+        public boolean authVerify(Principal.Authentic principal)
+            throws java.io.IOException;
+
+    }
+
+    /**
+     * This class is the package resource service for
+     * <code>"/META-INF/services/alto.io.Authentication"</code>.
+     * 
+     * The services file is a properties map from an {@link
+     * Authentication} name to a {@link Authentication$Method}
+     * implementation class name.
+     * 
+     * @author jdp
+     */
+    public final static class Tools
+        extends java.util.Properties
+    {
+        public final static String Resource = "/META-INF/services/alto.io.Authentication";
+
+        private final static Tools Instance = new Tools();
+
+
+        public final static boolean IsDefined(Authentication type){
+            return Instance.isDefined(type);
+        }
+        public final static boolean IsVerifiable(Authentication type, HttpRequest request){
+            return Instance.isVerifiable(type,request);
+        }
+        public final static boolean Sign(Authentication type, Principal.Authentic keys, HttpRequest request){
+            return Instance.sign(type,keys,request);
+        }
+        public final static boolean Verify(Authentication type, Principal.Authentic keys, HttpRequest request){
+            return Instance.verify(type,keys,request);
+        }
+        /**
+         * @return Verification method
+         */
+        public final static Authentication.Method For(HttpRequest request){
+            return Instance.scanFor(request);
+        }
+        public final static Authentication.Method Lookup(Authentication auth){
+            return Instance.lookup(auth);
+        }
+
+
+        private final Method[] list;
+
+
+        private Tools(){
+            super();
+            URL url = this.getClass().getResource(Resource);
+            if (null != url){
+                try {
+                    InputStream in = url.openStream();
+                    try {
+                        super.load(in);
+                    }
+                    finally {
+                        in.close();
+                    }
+                }
+                catch (IOException exc){
+                    throw new alto.sys.Error.State(Resource,exc);
+                }
+            }
+            int count = this.size(), cc = 0;
+            Method[] list = new Method[count];
+            java.util.Enumeration keys = this.keys();
+            while (keys.hasMoreElements()){
+                String authtname = (String)keys.nextElement();
+                Authentication type = Authentication.Lookup(authtname);
+                if (null != type){
+                    String classname = (String)this.get(authtname);
+                    try {
+                        Class clas = Class.forName(classname);
+                        Method method = (Method)clas.newInstance();
+                        method.setKind(type);
+                        this.put(authtname,method);
+                        this.list[cc++] = method;
+                    }
+                    catch (ClassNotFoundException exc){
+                        throw new alto.sys.Error.State(classname,exc);
+                    }
+                    catch (InstantiationException exc){
+                        throw new alto.sys.Error.State(classname,exc);
+                    }
+                    catch (IllegalAccessException exc){
+                        throw new alto.sys.Error.State(classname,exc);
+                    }
+                }
+                else
+                    throw new alto.sys.Error.State("Unrecognized authentication type '"+authtname+"'.");
+            }
+            this.list = list;
+        }
+
+        protected Method lookup(Authentication type){
+            if (null != type){
+                String name = type.getName();
+                Object value = this.get(name);
+                if (null == value)
+                    throw new alto.sys.Error.Argument("Undefined Authentication Type '"+name+"'");
+                else {
+                    return (Method)value;
+                }
+            }
+            else
+                throw new alto.sys.Error.Argument("Missing Authentication Type");
+        }
+        public boolean isDefined(Authentication type){
+            try {
+                this.lookup(type);
+                return true;
+            }
+            catch (alto.sys.Error exc){
+                return false;
+            }
+        }
+        public boolean isVerifiable(Authentication type, HttpRequest request){
+            Method method = this.lookup(type);
+            return method.isVerifiable(request);
+        }
+        public boolean sign(Authentication type, Principal.Authentic keys, HttpRequest request){
+            Method method = this.lookup(type);
+            return method.sign(keys,request);
+        }
+        public boolean verify(Authentication type, Principal.Authentic keys, HttpRequest request){
+            Method method = this.lookup(type);
+            return method.verify(keys,request);
+        }
+        public Authentication.Method scanFor(HttpRequest request){
+            for (Method m : this.list){
+                if (m.isVerifiable(request))
+                    return m;
+            }
+            return null;
+        }
+    }
+
+
     public final static class Names {
         public final static String SAuth    = "SAuth";
         public final static String SSL      = "SSL";
@@ -117,6 +335,19 @@ public final class Authentication
      */
     public final static Authentication OAuth    = new Authentication(Names.OAuth,   Constants.OAuth,   Properties.None);
 
+    private final static alto.io.u.Objmap Map = new alto.io.u.Objmap();
+    static {
+        Map.put(SAuth.getName().toLowerCase(),SAuth);
+        Map.put(SSL.getName().toLowerCase(),SSL);
+        Map.put(Facebook.getName().toLowerCase(),Facebook);
+        Map.put(AWS.getName().toLowerCase(),AWS);
+        Map.put(OpenID.getName().toLowerCase(),OpenID);
+        Map.put(OAuth.getName().toLowerCase(),OAuth);
+    }
+    
+    public final static Authentication Lookup(String name){
+        return (Authentication)Map.get(name.trim().toLowerCase());
+    }
 
 
     public final String name;
@@ -124,6 +355,8 @@ public final class Authentication
     public final int constant;
 
     public final int properties;
+
+    private Authentication.Method method;
 
 
     private Authentication(String name, int constant, int properties){
@@ -137,8 +370,8 @@ public final class Authentication
     public String getName(){
         return this.name;
     }
-    public String getConstant(){
-        return this.name;
+    public int getConstant(){
+        return this.constant;
     }
     /**
      * @return True when the {@link alto.sec.Auth} object uses
@@ -147,6 +380,61 @@ public final class Authentication
     public boolean hasAuthKeyAndSecret(){
         return (Properties.KeyAndSecret == (Properties.KeyAndSecret & this.properties));
     }
+    public Authentication.Method getMethod(){
+        Authentication.Method method = this.method;
+        if (null == method && Authentication.Tools.IsDefined(this)){
+            method = Authentication.Tools.Lookup(this);
+            this.method = method;
+        }
+        return method;
+    }
+    /**
+     * @return Whether sign and verify are available
+     */
+    public boolean isDefinedMethod(){
+        return (null != this.getMethod());
+    }
+    /**
+     * Throws an alto sys error exception when not a defined method.
+     * @return Success
+     */
+    public boolean isVerifiable(HttpRequest request){
+        Authentication.Method method = this.getMethod();
+        if (null != method)
+            return method.isVerifiable(request);
+        else
+            return false;
+    }
+    /**
+     * Throws an alto sys error exception when not a defined method.
+     * @return Success
+     */
+    public boolean sign(Principal.Authentic keys, HttpRequest request){
+        Authentication.Method method = this.getMethod();
+        if (null != method)
+            return method.sign(keys,request);
+        else
+            return false;
+    }
+    /**
+     * Throws an alto sys error exception when not a defined method.
+     * @return Success
+     */
+    public boolean verify(Principal.Authentic keys, HttpRequest request){
+        Authentication.Method method = this.getMethod();
+        if (null != method)
+            return method.verify(keys,request);
+        else
+            return false;
+    }
+    public String getUID(HttpRequest request){
+        Authentication.Method method = this.getMethod();
+        if (null != method)
+            return method.getUID(request);
+        else
+            return null;
+    }
+
     public String toString(){
         return this.name;
     }

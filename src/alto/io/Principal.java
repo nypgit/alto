@@ -131,10 +131,9 @@ public interface Principal
      * Common 
      */
     public interface Authentic
-        extends Principal
-    {
-        public Keys getKeys();
-    }
+        extends Principal,
+                alto.io.Keys
+    {}
     /**
      * Client side
      */
@@ -152,22 +151,92 @@ public interface Principal
     {
     }
     /**
-     * Server side
+     * Server side authentication placeholder.  This permits an
+     * authentication process to be setup, and consumed on demand as
+     * required.  Authentication is not performed unless and until
+     * required.
      */
-    public interface Conditional 
-        extends Principal.Server
+    public final static class Conditional 
+        extends java.lang.Object
+        implements Principal.Server
     {
-        public Authentication getMethodOfAuthentication();
 
-        public boolean isAuthenticated();
+        private alto.lang.HttpRequest request;
 
-        /**
-         * Conditional authenticator used only when required by access
-         * or capabilities controls.
-         * 
-         * @return Replacement principal context pushed over this one.
-         */
-        public Principal.Actual authenticate() throws java.io.IOException ;
+        private Authentication.Method authMethod;
+
+        private String name;
+
+        private boolean once;
+
+        private Principal.Actual actual;
+
+
+        public Conditional(alto.lang.HttpRequest request){
+            super();
+            if (null != request){
+                this.request = request;
+                this.authMethod = Authentication.Tools.For(request);
+            }
+            else
+                throw new alto.sys.Error.Argument();
+        }
+
+
+        public void destroy(){
+            this.request = null;
+            this.authMethod = null;
+            this.actual = null;
+        }
+        public java.lang.String getName(){
+            String name = this.name;
+            if (null == name){
+                Authentication.Method authMethod = this.authMethod;
+                if (null != authMethod){
+                    name = authMethod.getUID(this.request);
+                    this.name = name;
+                }
+            }
+            return name;
+        }
+        public boolean hasMethodOfAuthentication(){
+            return (null != this.authMethod);
+        }
+        public Authentication getMethodOfAuthentication(){
+            if (null != this.authMethod)
+                return this.authMethod.getKind();
+            else
+                return null;
+        }
+        public boolean isAuthenticated(){
+            return (null != this.actual);
+        }
+        public Principal.Actual authenticate() 
+            throws java.io.IOException 
+        {
+            if (null != this.actual)
+                return this.actual;
+            else if (this.once)
+                return null;
+            else {
+                this.once = true;
+                alto.lang.HttpRequest request = this.request;
+                Authentication.Method authMethod = this.authMethod;
+                if (null != authMethod){
+                    Authentication auth = authMethod.getKind();
+                    String uid = this.getName();
+                    if (null != uid){
+                        alto.sec.Keys keys = alto.sec.Keys.Tools.Dereference(uid);
+                        if (null != keys && authMethod.verify(keys,request)){
+                            Principal.Actual principal = keys;
+                            this.actual = principal.push(auth);
+                            return this.actual;
+                        }
+                    }
+                }
+                return null;
+            }
+        }
     }
     /**
      * Server side

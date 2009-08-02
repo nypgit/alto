@@ -61,8 +61,6 @@ import java.util.StringTokenizer;
  * initialization starts with reference, file manager, and then type
  * and keys.
  * 
- * This class 
- * 
  * @author jdp
  */
 public final class Tools

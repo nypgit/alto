@@ -313,7 +313,8 @@ public interface IO {
      * @see Thread
      */
     public interface Context 
-        extends IO
+        extends IO,
+                Authentication.Container
     {
         /**
          * Notational parameter for {@link Thread#Context(boolean)}.
@@ -324,20 +325,6 @@ public interface IO {
          */
         public final static boolean Peek = false;
 
-        /**
-         * The principal is a placeholder ready for authentication
-         */
-        public boolean isAuthenticating();
-        /**
-         * (Care with locks)
-         */
-        public void authenticate() throws java.io.IOException;
-        /**
-         * The principal has been authenticated
-         */
-        public boolean isAuthenticated();
-
-        public Authentication getAuthentication();
         /**
          * @return May be null
          */

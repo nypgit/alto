@@ -30,7 +30,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * 
- * @see alto.net.Keys
+ * @see alto.io.Principal$Authentic
  * @see alto.sec.Keys
  */
 public interface Keys {

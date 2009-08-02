@@ -573,7 +573,7 @@ public interface Sio {
         }
 
 
-        protected Component.Path sioType;
+        protected volatile Component.Path sioType;
 
 
         public File(){
@@ -592,17 +592,28 @@ public interface Sio {
         public boolean hasNotSioType(){
             return (null == this.sioType);
         }
+        /**
+         * Simple getter is overridden with a lazy fetch from
+         * reference in {@link alto.sys.PSioFile} to dynamically get a
+         * type from a reference.
+         */
         public Component.Path getSioType(){
             Component.Path sioType = this.sioType;
             if (null != sioType)
                 return sioType;
-            else
-                throw new alto.sys.Error.State("Missing value of sio type.");
+            else {
+                throw new alto.sys.Error.State("Missing Sio Type");
+            }
         }
-        protected final void setSioTypeFrom(Reference reference)
+        protected final boolean setSioTypeFrom(Reference reference)
             throws java.io.IOException
         {
-            this.sioType = Sio.Type.From(reference);
+            try {
+                this.sioType = Sio.Type.From(reference);
+            }
+            catch (alto.sys.Error ignore){
+            }
+            return (null != this.sioType);
         }
         public void sioRead(Input in)
             throws java.io.IOException
@@ -626,7 +637,7 @@ public interface Sio {
             if (null != type)
                 Sio.Head.Write(type,out);
             else
-                throw new IllegalStateException();
+                throw new alto.sys.Error.State("Missing Sio Type");
             super.sioWrite(out);
         }
     }
@@ -1025,7 +1036,7 @@ public interface Sio {
             if (null != contentType)
                 return alto.lang.Type.Tools.ForMimeType().hash(contentType.toString());
             else
-                throw new java.lang.IllegalArgumentException("Missing type '"+contentType+"'.");
+                throw new alto.sys.Error.Argument("Missing type.");
         }
         public final static Component.Path From(Reference contentReference)
             throws java.io.IOException
@@ -1033,7 +1044,7 @@ public interface Sio {
             if (null != contentReference)
                 return From(contentReference.getContentType());
             else
-                throw new java.lang.IllegalArgumentException();
+                throw new alto.sys.Error.Argument("Missing reference.");
         }
         public final static Component.Path Read(Input in)
             throws java.io.IOException

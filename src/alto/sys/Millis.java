@@ -24,5 +24,6 @@ public interface Millis {
     public final static long Minutes = (60*Seconds);
     public final static long Hours   = (60*Minutes);
     public final static long Days    = (24*Hours);
+    public final static long Years = (365L * Days);
 
 }

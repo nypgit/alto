@@ -37,7 +37,8 @@ public interface HttpMessage
     extends alto.lang.Headers,
             alto.io.Message,
             alto.sys.IO.Context,
-            alto.sys.IO.Edge
+            alto.sys.IO.Edge,
+            alto.io.Authentication.Container
 {
     /**
      * Body buffer returned by get create buffer.
@@ -88,15 +89,6 @@ public interface HttpMessage
     public void disconnect()
         throws java.io.IOException;
 
-    /**
-     * This method permits this message to be authenticated with the
-     * argument principal when called before {@link #authenticate()}.
-     * 
-     * @see alto.sys.Reference#authenticateCreatedMeta(alto.io.Principal$Authentic)
-     */
-    @Code(Check.SecImplSAuth)
-    public Principal.Authentic authenticateCreateCredentials(Principal.Authentic principal)
-        throws java.io.IOException;
 
     public boolean headTo(HttpMessage dst)
         throws java.io.IOException;
@@ -378,7 +370,10 @@ public interface HttpMessage
     public java.lang.String getAuthorization();
 
     public void setAuthorization(java.lang.String value);
-
+    /**
+     * Has authentication method.
+     * @return Authentication method
+     */
     public Authentication setAuthorization();
 
     public boolean hasIfNoneMatch();
@@ -658,13 +653,6 @@ public interface HttpMessage
 
     public void maySetSDFSNotify(java.lang.String uid);
 
-    /*
-     * Authentication
-     */
-    public boolean hasAuthenticationMethod();
-
-    public Authentication getAuthenticationMethod();
-
     /**
      * Server side response unauthorized called from {@link
      * HttpResponse#setStatusUnauthorized()}.
@@ -675,95 +663,6 @@ public interface HttpMessage
      * Server side response Unauthorized
      */
     public void setWWWAuthenticate(HttpRequest request);
-
-    public boolean hasCredentialsSAuth();
-    /**
-     * Authentication moved into lang/Headers so that any Headers
-     * object could be employed as a client authentication context.
-     */
-    public boolean hasSAuthVersion();
-
-    public boolean hasNotSAuthVersion();
-
-    public Header getSAuthVersionHeader();
-
-    public java.lang.String getSAuthVersion();
-
-    public java.lang.String getSAuthVersionHeaderString();
-
-    public java.lang.String validateSAuthVersionHeaderString();
-    /**
-     * Define client request for authentication.
-     */
-    public void setSAuthVersion();
-
-    public void maySetSAuthVersion();
-
-    public boolean hasSAuthUID();
-
-    public boolean hasNotSAuthUID();
-
-    public Header getSAuthUIDHeader();
-
-    public java.lang.String validateSAuthUIDHeaderString();
-
-    public java.lang.String getSAuthUID();
-
-    public java.lang.String getSAuthUIDHeaderString();
-
-    public void setSAuthUID(java.lang.String value);
-
-    public void maySetSAuthUID(java.lang.String uid);
-
-    public void setSAuthUID(Principal principal);
-
-    public boolean hasSAuthNonce();
-
-    public boolean hasNotSAuthNonce();
-
-    public Header getSAuthNonceHeader();
-
-    public java.lang.String getSAuthNonce();
-
-    public java.lang.String getSAuthNonceHeaderString();
-
-    public java.lang.String validateSAuthNonceHeaderString();
-
-    public void setSAuthNonce();
-
-    public void maySetSAuthNonce();
-
-    public void setSAuthNonce(java.lang.String value);
-
-    public boolean hasSAuthSignature();
-
-    public boolean hasNotSAuthSignature();
-
-    public Header getSAuthSignatureHeader();
-
-    public java.lang.String getSAuthSignature();
-
-    public long getSAuthSignatureLong();
-
-    public void setSAuthSignature(java.lang.String value);
-
-    public void setSAuthSignature(long folded);
-
-    /**
-     */
-    @Code(Check.SecImplSAuth)
-    public boolean hasCredentials();
-
-    /**
-     * This map includes the user parameters "SAuth-UID", and normally
-     * include "PFX-File" and "PFX-Password".
-     * 
-     * Implements client side "authenticateSAuth" with pass- in
-     * parameters.
-     * 
-     * @param request 
-     */
-    public boolean clientAuthenticateSAuth(HttpRequest request);
 
     /**
      * Set content length as the size of an existing buffer.  No

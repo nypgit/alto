@@ -45,9 +45,9 @@ package alto.lang.math;
  */
 public class Window
     extends Statistic
+    implements alto.sys.Millis
 {
-    public final static long Seconds = 1000;
-    public final static long Minutes = (60*Seconds);
+
     /**
      * Default window size is fifteen minutes.
      */
