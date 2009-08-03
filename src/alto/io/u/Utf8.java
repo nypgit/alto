@@ -38,7 +38,7 @@ public abstract class Utf8 {
      * Decode UTF-8 input, terminates decoding at a null character,
      * value 0x0.
      * 
-     * @exception IllegalStateException Bad format.
+     * @exception alto.sys.Error.State Bad format.
      */
     public final static char[] decode( byte[] code){
 
@@ -50,7 +50,7 @@ public abstract class Utf8 {
      * Decode UTF-8 input, terminates decoding at a null character,
      * value 0x0.
      * 
-     * @exception IllegalStateException Bad format.
+     * @exception alto.sys.Error.State Bad format.
      */
     public final static char[] decode( byte[] code, int off, int many){
 
@@ -80,11 +80,11 @@ public abstract class Utf8 {
                 case 13:
                     cc += 2;
                     if (cc > trm)
-                        throw new IllegalStateException();
+                        throw new alto.sys.Error.State();
                     else {
                         ch2 = (int) (code[cc-1]&0xff);
                         if (0x80 != (ch2 & 0xC0))
-                            throw new IllegalStateException();
+                            throw new alto.sys.Error.State();
                         else {
                             tmpc = (char)(((ch & 0x1F) <<6)|(ch2 & 0x3F));
                             strbuf.append(tmpc);
@@ -94,12 +94,12 @@ public abstract class Utf8 {
                 case 14:
                     cc += 3;
                     if (cc > trm)
-                        throw new IllegalStateException();
+                        throw new alto.sys.Error.State();
                     else {
                         ch2 = (code[cc-2]&0xff);
                         ch3 = (code[cc-1]&0xff);
                         if ((0x80 != (ch2 & 0xC0)) || (0x80 != (ch3 & 0xC0)))
-                            throw new IllegalStateException();
+                            throw new alto.sys.Error.State();
                         else {
                             tmpc = (char)(((ch  & 0x0F) << 12)|
                                           ((ch2 & 0x3F) << 6) |
@@ -109,7 +109,7 @@ public abstract class Utf8 {
                     }
                     break;
                 default:
-                    throw new IllegalStateException();
+                    throw new alto.sys.Error.State();
                 }
             }
             return strbuf.toCary();

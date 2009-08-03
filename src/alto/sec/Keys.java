@@ -154,6 +154,10 @@ public class Keys
                     keys = new Keys(target);
                     keys.setName(name);
                     if (keys.generate(alg)){
+
+                        if (keys.isSystem())
+                            target.enterThreadContextTry();
+
                         keys.writeMessage();
                         return keys;
                     }
@@ -163,8 +167,8 @@ public class Keys
                 else if (keys.existsStorage()){
                     if (keys.generate(alg))
                         keys.writeMessage();
-
-                    keys.readMessage();
+                    else
+                        keys.readMessage();
                     return keys;
                 }
                 else if (null != name){
@@ -840,28 +844,28 @@ public class Keys
         if (null != key)
             return key.signSHA1WithRSAO(msg);
         else
-            throw new java.lang.IllegalStateException("RSA");
+            throw new alto.sys.Error.State("RSA");
     }
     public byte[] signWithRSAO(SHA1 hash){
         Key key = this.get("RSA");
         if (null != key)
             return key.signWithRSAO(hash);
         else
-            throw new java.lang.IllegalStateException("RSA");
+            throw new alto.sys.Error.State("RSA");
     }
     public byte[] signWithRSA(SHA1 hash){
         Key key = this.get("RSA");
         if (null != key)
             return key.signWithRSA(hash);
         else
-            throw new java.lang.IllegalStateException("RSA");
+            throw new alto.sys.Error.State("RSA");
     }
     public byte[] createKeyRSA(Address address){
         Key key = this.get("RSA");
         if (null != key)
             return key.createKeyRSA(address);
         else
-            throw new java.lang.IllegalStateException("RSA");
+            throw new alto.sys.Error.State("RSA");
     }
     public java.lang.String signWithRSAHex(SHA1 hash){
         byte[] bytes = this.signWithRSA(hash);

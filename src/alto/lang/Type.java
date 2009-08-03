@@ -38,7 +38,9 @@ public interface Type
 
     public final static Type Nil = null;
 
-    public abstract static class Tools {
+    public abstract static class Tools
+        extends java.lang.Object
+    {
 
         protected static Tools Instance;
 
@@ -261,14 +263,17 @@ public interface Type
         public Tools init(){
             alto.lang.Type[] types = this.bootstrap();
             int idx = 0;
+            alto.lang.Type test;
             for (alto.lang.Type type : types){
                 String name = type.getName();
-                if (type != Type.Tools.For(name))
-                    throw new alto.sys.Error.Bug(name+'@'+String.valueOf(idx));
+                test = Type.Tools.For(name);
+                if (type != test && (!type.equals(test)))
+                    throw new alto.sys.Error.Bug(name+'@'+String.valueOf(idx)+'@'+type);
 
                 String fext = type.getFext();
-                if (type != Type.Tools.Of(fext))
-                    throw new alto.sys.Error.Bug(fext+'@'+String.valueOf(idx));
+                test = Type.Tools.Of(fext);
+                if (type != test && (!type.equals(test)))
+                    throw new alto.sys.Error.Bug(fext+'@'+String.valueOf(idx)+'@'+type);
 
                 idx += 1;
             }

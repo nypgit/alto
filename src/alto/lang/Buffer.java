@@ -172,7 +172,7 @@ public interface Buffer {
                 return this.toByteArray();
             }
             catch (java.io.IOException notreached){
-                throw new IllegalStateException();
+                throw new alto.sys.Error.State();
             }
         }
         public int getBufferLength(){
@@ -180,7 +180,7 @@ public interface Buffer {
                 return this.length();
             }
             catch (java.io.IOException notreached){
-                throw new IllegalStateException();
+                throw new alto.sys.Error.State();
             }
         }
         public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
@@ -263,7 +263,7 @@ public interface Buffer {
                 return this.toByteArray();
             }
             catch (java.io.IOException notreached){
-                throw new IllegalStateException();
+                throw new alto.sys.Error.State();
             }
         }
         public int getBufferLength(){
@@ -271,7 +271,7 @@ public interface Buffer {
                 return this.length();
             }
             catch (java.io.IOException notreached){
-                throw new IllegalStateException();
+                throw new alto.sys.Error.State();
             }
         }
         public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
@@ -315,7 +315,7 @@ public interface Buffer {
                     return this.getOutputStream().toByteArray();
                 }
                 catch (java.io.IOException notreached){
-                    throw new IllegalStateException();
+                    throw new alto.sys.Error.State();
                 }
             }
             public int getBufferLength(){
@@ -323,7 +323,7 @@ public interface Buffer {
                     return this.getOutputStream().length();
                 }
                 catch (java.io.IOException notreached){
-                    throw new IllegalStateException();
+                    throw new alto.sys.Error.State();
                 }
             }
             public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {
@@ -354,7 +354,7 @@ public interface Buffer {
                 return this.toByteArray();
             }
             catch (java.io.IOException ignore){
-                throw new IllegalStateException();
+                throw new alto.sys.Error.State();
             }
         }
         public int getBufferLength(){
@@ -362,7 +362,7 @@ public interface Buffer {
                 return this.length();
             }
             catch (java.io.IOException ignore){
-                throw new IllegalStateException();
+                throw new alto.sys.Error.State();
             }
         }
         public CharSequence getCharContent(boolean igEncErr) throws java.io.IOException {

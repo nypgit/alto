@@ -372,7 +372,7 @@ public class Address
             return buf.toByteArray();
         }
         catch (java.io.IOException api){
-            throw new IllegalStateException(api);
+            throw new alto.sys.Error.State(api);
         }
     }
     protected final boolean attributes(){

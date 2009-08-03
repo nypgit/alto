@@ -618,7 +618,7 @@ public class Uri
             if (null != this.parser_term)
                 return this.parser_term;
             else
-                throw new java.lang.IllegalStateException("Dead parser.");
+                throw new alto.sys.Error.State("Dead parser.");
         }
         public final java.lang.String testString(){
             if (null != this.parser_term){
@@ -2002,7 +2002,7 @@ public class Uri
             return new java.net.URL(this.uri);
         }
         catch (java.net.MalformedURLException malurl){
-            java.lang.RuntimeException rex = new java.lang.IllegalStateException(this.uri);
+            java.lang.RuntimeException rex = new alto.sys.Error.State(this.uri);
             rex.initCause(malurl);
             throw rex;
         }

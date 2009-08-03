@@ -224,7 +224,7 @@ public interface Xml
         public final static void SetChildValueText(org.w3c.dom.Element node, java.lang.String childname, java.lang.String value){
             org.w3c.dom.Element child = GetChildElementByName(node,childname);
             if (null == child)
-                throw new java.lang.IllegalStateException("Missing required element '"+childname+"', child of '"+node.getNodeName()+"'.");
+                throw new alto.sys.Error.State("Missing required element '"+childname+"', child of '"+node.getNodeName()+"'.");
             else
                 SetValueText(child,value);
         }

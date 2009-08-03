@@ -152,7 +152,7 @@ public final class FOAM
                         System.out.println(validateMsg);
                         System.exit(0);
                     }
-                    catch (IllegalStateException decoderr){
+                    catch (alto.sys.Error.State decoderr){
 
                         ComparisonPrint(ptext,ttext,System.err);
 
@@ -160,10 +160,10 @@ public final class FOAM
                     }
                 }
                 else
-                    throw new IllegalStateException("foam.decipherOutputLength("+olen+") = "+ool);
+                    throw new alto.sys.Error.State("foam.decipherOutputLength("+olen+") = "+ool);
             }
             else
-                throw new IllegalStateException("foam.encipherOutputLength("+ptext.length+") = "+ctextLen);
+                throw new alto.sys.Error.State("foam.encipherOutputLength("+ptext.length+") = "+ctextLen);
         }
         catch (Exception exc){
             exc.printStackTrace();

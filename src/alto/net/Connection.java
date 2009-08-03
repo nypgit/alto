@@ -38,6 +38,9 @@ public interface Connection
 
     public void setReference(Reference ref);
 
+    public void write(alto.lang.HttpMessage container)
+        throws java.io.IOException;
+
     public java.lang.String getHost();
 
     public java.lang.String getPath();

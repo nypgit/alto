@@ -44,7 +44,7 @@ public final class Partition
         while (1L > test){
             dir = dir.getParentFile();
             if (null == dir)
-                throw new java.lang.IllegalStateException("Unable to find partition for directory.");
+                throw new alto.sys.Error.State("Unable to find partition for directory.");
             else
                 test = dir.getTotalSpace();
         }

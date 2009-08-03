@@ -230,7 +230,7 @@ public class Geno
             this.indentln("}");
         }
         else
-            throw new java.lang.IllegalStateException("no open block");
+            throw new alto.sys.Error.State("no open block");
     }
     /**
      * Print close block '}' if possible.

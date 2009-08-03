@@ -18,9 +18,10 @@
  */
 package alto.sys;
 
-import alto.io.Principal;
+import alto.io.Authentication;
 import alto.io.Check;
 import alto.io.Code;
+import alto.io.Principal;
 import alto.io.Uri;
 import alto.lang.Address;
 import alto.lang.Component;
@@ -580,7 +581,7 @@ public abstract class Reference
         return this.container;
     }
 
-    protected abstract HttpMessage newHttpMessage(boolean store);
+    protected abstract HttpMessage newHttpMessage();
 
     /**
      * Read from storage
@@ -612,7 +613,7 @@ public abstract class Reference
             /*
              * Prepare container object
              */
-            container = this.newHttpMessage(true);
+            container = this.newHttpMessage();
             container.setPathCompleteWithDefaults(this);
             /*
              * Update container object with current state
@@ -638,18 +639,18 @@ public abstract class Reference
                     connection.setDoOutput(true);
                     if (connection instanceof alto.net.Connection){
                         alto.net.Connection nc = (alto.net.Connection)connection;
+
                         nc.setReference(this);
-                        /////////////////////////[TODO]
-                        //nc.write(container);//[TODO]
-                        /////////////////////////[TODO]
-                        throw new alto.sys.Error.Bug(this.toString());
-                        /////////////////////////[TODO]
+
+                        nc.write(container);
                     }
                     else
                         throw new alto.sys.Error.Bug(this.toString());
                 }
                 File storage = this.getStorage();
                 if (null != storage){
+
+                    container.maySetAuthenticationMethodStore();
 
                     if (storage.write(container))
                         return;
@@ -746,6 +747,45 @@ public abstract class Reference
         else
             throw new alto.sys.Error.Bug();
     }
+    public boolean hasContainerAuthenticationMethod(){
+        HttpMessage container = this.container;
+        if (null != container)
+            return container.hasAuthenticationMethod();
+        else
+            throw new alto.sys.Error.Bug();
+    }
+    public Authentication getContainerAuthenticationMethod(){
+        HttpMessage container = this.container;
+        if (null != container)
+            return container.getAuthenticationMethod();
+        else
+            throw new alto.sys.Error.Bug();
+    }
+    public void setContainerAuthenticationMethod(Authentication auth){
+        HttpMessage container = this.container;
+        if (null != container)
+            container.setAuthenticationMethod(auth);
+        else
+            throw new alto.sys.Error.Bug();
+    }
+    public boolean maySetContainerAuthenticationMethod(Authentication auth){
+        HttpMessage container = this.container;
+        if (null != container)
+            return container.maySetAuthenticationMethod(auth);
+        else
+            throw new alto.sys.Error.Bug();
+    }
+    public boolean maySetContainerAuthenticationMethodStore(){
+        return this.maySetContainerAuthenticationMethodStore();
+    }
+    public boolean isContainerAuthVerifiable(){
+        HttpMessage container = this.container;
+        if (null != container)
+            return container.isAuthVerifiable();
+        else
+            throw new alto.sys.Error.Bug();
+    }
+
 
     public java.nio.channels.ReadableByteChannel openChannelReadable()
         throws java.io.IOException
@@ -900,8 +940,9 @@ public abstract class Reference
         throws java.io.IOException
     {
         File storage = this.getStorage();
-        if (null != storage)
+        if (null != storage){
             return storage.getContent();
+        }
         else
             return null;
     }
@@ -912,8 +953,9 @@ public abstract class Reference
         throws java.io.IOException
     {
         File storage = this.getStorage();
-        if (null != storage)
+        if (null != storage){
             return storage.setContent(content);
+        }
         else
             return null;
     }

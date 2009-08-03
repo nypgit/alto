@@ -141,7 +141,7 @@ public abstract class Index
             return index;
         }
         catch (CloneNotSupportedException cns){
-            throw new IllegalStateException();
+            throw new alto.sys.Error.State();
         }
     }
     /** <p> Grow the table. </p>

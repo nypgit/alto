@@ -133,7 +133,7 @@ public class IndexLong
                 return idx;
             }
             else
-                throw new java.lang.IllegalStateException(java.lang.String.valueOf(idx));
+                throw new alto.sys.Error.State(java.lang.String.valueOf(idx));
         }
     }
     public final Entry lookupEntry(long key){
@@ -248,7 +248,7 @@ public class IndexLong
         Entry ent = super.removeByIndex(idx);
         if (null != ent){
             if (idx != ent.aryix)
-                throw new java.lang.IllegalStateException("bug");
+                throw new alto.sys.Error.State("bug");
             else {
                 this.count -= 1;
                 Array.shift(this.keys,idx);

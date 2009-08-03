@@ -89,7 +89,7 @@ public class RSA
                 RSAKeyFactory = KeyFactory.getInstance("RSA");
             }
             catch (java.security.NoSuchAlgorithmException unexpected){
-                throw new IllegalStateException(unexpected);
+                throw new alto.sys.Error.State(unexpected);
             }
         }
         return RSAKeyFactory;
@@ -376,7 +376,7 @@ public class RSA
                 this.keyPublic = keyPublic;
             }
             catch (java.security.spec.InvalidKeySpecException unexpected){
-                throw new IllegalStateException(unexpected);
+                throw new alto.sys.Error.State(unexpected);
             }
         }
         return keyPublic;
@@ -390,7 +390,7 @@ public class RSA
                 this.keyPrivate = keyPrivate;
             }
             catch (java.security.spec.InvalidKeySpecException unexpected){
-                throw new IllegalStateException(unexpected);
+                throw new alto.sys.Error.State(unexpected);
             }
         }
         return keyPrivate;
@@ -601,7 +601,7 @@ public class RSA
                         System.out.println(validateMsg);
                         System.exit(0);
                     }
-                    catch (IllegalStateException decoderr){
+                    catch (alto.sys.Error.State decoderr){
 
                         ComparisonPrint(ptext,ttext,System.err);
 
@@ -609,10 +609,10 @@ public class RSA
                     }
                 }
                 else
-                    throw new IllegalStateException("rsa.decipherOutputLength("+olen+") = "+ool);
+                    throw new alto.sys.Error.State("rsa.decipherOutputLength("+olen+") = "+ool);
             }
             else
-                throw new IllegalStateException("rsa.encipherOutputLength("+ptext.length+") = "+ctextLen);
+                throw new alto.sys.Error.State("rsa.encipherOutputLength("+ptext.length+") = "+ctextLen);
         }
         catch (Exception exc){
             exc.printStackTrace();

@@ -122,7 +122,7 @@ public class Bbp extends Bbuf {
         throws java.io.IOException
     {
         if (apierrors) 
-            throw new IllegalStateException("Skip not available on pipe.");
+            throw new alto.sys.Error.State("Skip not available on pipe.");
         else
             return 0L;
     }
@@ -130,7 +130,7 @@ public class Bbp extends Bbuf {
     public void mark(int readlimit) {}
 
     public void reset() {
-        if (apierrors) throw new IllegalStateException("Reset not available on pipe.");
+        if (apierrors) throw new alto.sys.Error.State("Reset not available on pipe.");
     }
     public boolean markSupported() {
         return false;
@@ -157,11 +157,11 @@ public class Bbp extends Bbuf {
     public void flush() 
         throws java.io.IOException
     {
-        if (apierrors) throw new IllegalStateException("Flush not available on pipe.");
+        if (apierrors) throw new alto.sys.Error.State("Flush not available on pipe.");
     }
     public void close() 
         throws java.io.IOException
     {
-        if (apierrors) throw new IllegalStateException("Close not available on pipe, will be GC'ed.");
+        if (apierrors) throw new alto.sys.Error.State("Close not available on pipe, will be GC'ed.");
     }
 }
