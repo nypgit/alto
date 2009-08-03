@@ -828,10 +828,9 @@ public interface Component
                 return list;
             }
             public final static Component[] For(java.lang.String mimetype){
-                Component.Type atyp =
-                    alto.lang.component.Type.Numeric.MimeType.Instance;
+                Component.Type atyp = alto.lang.component.Type.Numeric.MimeType.Instance;
                 return new Component[]{
-                    Component.Relation.U,//(U)//(common)
+                    Component.Relation.U,//(U)//(direct)
                     Component.Host.Global,
                     atyp,
                     new alto.lang.component.Path.Numeric(atyp,mimetype),
@@ -841,7 +840,7 @@ public interface Component
             public final static Component[] ForR(java.lang.String fext){
                 Component.Type atyp = alto.lang.component.Type.Numeric.Address.Instance;
                 return new Component[]{
-                    Component.Relation.V,//(V)//(distinct)
+                    Component.Relation.V,//(V)//(indirect)
                     Component.Host.Global,
                     atyp,
                     new alto.lang.component.Path.Numeric(atyp,fext),
@@ -856,10 +855,9 @@ public interface Component
                     throw new alto.sys.Error.State(type.toString());
             }
             public final static Component[] For(alto.lang.Component.Type addr){
-                Component.Type atyp = 
-                    alto.lang.component.Type.Numeric.MimeType.Instance;
+                Component.Type atyp = alto.lang.component.Type.Numeric.MimeType.Instance;
                 return new Component[]{
-                    Component.Relation.U,//(U)//(common)
+                    Component.Relation.U,//(U)//(direct)
                     Component.Host.Global,
                     atyp,
                     new alto.lang.component.Path.Numeric(addr.toByteArray()),
