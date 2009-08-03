@@ -358,7 +358,7 @@ public class OAEP
                         System.out.println(validateMsg);
                         System.exit(0);
                     }
-                    catch (IllegalStateException decoderr){
+                    catch (alto.sys.Error.State decoderr){
 
                         ComparisonPrint(ptext,ttext,System.err);
 
@@ -366,10 +366,10 @@ public class OAEP
                     }
                 }
                 else
-                    throw new IllegalStateException("oaep.decipherOutputLength("+olen+") = "+ool);
+                    throw new alto.sys.Error.State("oaep.decipherOutputLength("+olen+") = "+ool);
             }
             else
-                throw new IllegalStateException("oaep.encipherOutputLength("+ptext.length+") = "+ctextLen);
+                throw new alto.sys.Error.State("oaep.encipherOutputLength("+ptext.length+") = "+ctextLen);
         }
         catch (Exception exc){
             exc.printStackTrace();

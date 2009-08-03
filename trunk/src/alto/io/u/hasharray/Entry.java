@@ -138,7 +138,7 @@ public class Entry
                     return li;
                 }
                 else
-                    throw new java.lang.IllegalStateException();
+                    throw new alto.sys.Error.State();
             }
         }
         public Entry[] Add(Entry[] list, Entry item){
@@ -244,7 +244,7 @@ public class Entry
             return entry;
         }
         catch (CloneNotSupportedException cns){
-            throw new IllegalStateException();
+            throw new alto.sys.Error.State();
         }
     }
 }

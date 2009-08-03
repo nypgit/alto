@@ -230,7 +230,7 @@ public class Bbuf
         if (0 < rc && this.wc > rc)
             this.buf[(--this.rc)] = (byte)(ch & 0xff);
         else
-            throw new java.lang.IllegalStateException("Each 'unread' must follow a 'read'.");
+            throw new alto.sys.Error.State("Each 'unread' must follow a 'read'.");
     }
     public void unreadn( int n){
         int rc = this.rc;
@@ -1396,7 +1396,7 @@ public class Bbuf
             }
         }
         catch (java.io.IOException ignore){
-            throw new IllegalStateException("Not reached");
+            throw new alto.sys.Error.State("Not reached");
         }
     }
 

@@ -189,7 +189,7 @@ public abstract class File
     }
 
 
-    protected abstract HttpMessage newHttpMessage(boolean store);
+    protected abstract HttpMessage newHttpMessage();
 
     @Code(Check.Locking)
     public HttpMessage read()
@@ -204,15 +204,13 @@ public abstract class File
                 /*
                  * Read message from storage
                  */
-                message = this.newHttpMessage(true);
+                message = this.newHttpMessage();
                 synchronized(this){
                     if (null != this.message){
                         this.message = message;
-                        this.content = null;
                     }
                     else {
                         this.message = message;
-                        this.content = null;
                         alto.io.Input in = this.openMessageInput();
                         message.readMessage(in);
                         message = this.message;
@@ -236,7 +234,6 @@ public abstract class File
             if (this.isNotPersistent()){
                 synchronized(this){
                     this.message = message;
-                    this.content = null;
                     this.stat(message.getContentLength(),message.getLastModified());
                 }
             }
@@ -253,7 +250,6 @@ public abstract class File
                 }
                 synchronized(this){
                     this.message = message;
-                    this.content = null;
                 }
                 FileManager.DFSNotifyPUT(this);
             }
@@ -564,7 +560,6 @@ public abstract class File
      */
     public void dropBuffer(){
         this.message = null;
-        this.content = null;
     }
     public void ensureContainer()
         throws java.io.IOException
@@ -916,7 +911,6 @@ public abstract class File
     protected void stat(boolean test){
         if (test){
             this.message = null;
-            this.content = null;
             this.dirty = false;
             this.statExists = super.exists();
             this.statIsfile = super.isFile();
@@ -927,7 +921,6 @@ public abstract class File
         }
         else {
             this.message = null;
-            this.content = null;
             this.statExists = false;
             this.statIsfile = false;
             this.statLast = 0L;
@@ -958,7 +951,6 @@ public abstract class File
         this.statIsfile = isfile;
         this.statLength = length;
         this.message = null;
-        this.content = null;
         this.dirty = false;
         if (0L < last){
             this.setLastModified(last);

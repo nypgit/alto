@@ -46,7 +46,7 @@ public class ReferenceOutputStream
 
     private final Reference reference; 
     private final URLConnection connection;
-    private final HttpMessage meta;
+    private final HttpMessage container;
 
 
     public ReferenceOutputStream(Reference ref, URLConnection connection)
@@ -55,7 +55,7 @@ public class ReferenceOutputStream
         super(connection.getOutputStream());
         this.reference = ref;
         this.connection = connection;
-        this.meta = null;
+        this.container = null;
     }
     public ReferenceOutputStream(Reference ref, File file)
         throws IOException
@@ -63,7 +63,7 @@ public class ReferenceOutputStream
         super(new java.io.FileOutputStream(file));
         this.reference = ref;
         this.connection = null;
-        this.meta = null;
+        this.container = null;
     }
     public ReferenceOutputStream(Reference ref, alto.io.Output out)
         throws IOException
@@ -71,7 +71,7 @@ public class ReferenceOutputStream
         super((java.io.OutputStream)out);
         this.reference = ref;
         this.connection = null;
-        this.meta = null;
+        this.container = null;
     }
     public ReferenceOutputStream(Reference ref, java.io.OutputStream out)
         throws IOException
@@ -79,15 +79,15 @@ public class ReferenceOutputStream
         super(out);
         this.reference = ref;
         this.connection = null;
-        this.meta = null;
+        this.container = null;
     }
-    public ReferenceOutputStream(Reference ref, HttpMessage meta)
+    public ReferenceOutputStream(Reference ref, HttpMessage container)
         throws IOException
     {
-        super(meta.openOutputStream());
+        super(container.openOutputStream());
         this.reference = ref;
         this.connection = null;
-        this.meta = meta;
+        this.container = container;
     }
 
 
@@ -106,14 +106,14 @@ public class ReferenceOutputStream
     public final URLConnection getConnection(){
         return this.connection;
     }
-    public final boolean isMetaOutput(){
-        return (null != this.meta);
+    public final boolean isContainerOutput(){
+        return (null != this.container);
     }
-    public final boolean hasMeta(){
-        return (null != this.meta);
+    public final boolean hasContainer(){
+        return (null != this.container);
     }
-    public final HttpMessage getMeta(){
-        return this.meta;
+    public final HttpMessage getContainer(){
+        return this.container;
     }
     public void print(char ch)
         throws java.io.IOException
@@ -165,17 +165,17 @@ public class ReferenceOutputStream
     {
         try {
             /*
-             * In the "meta" case, this is closing the buffer to the
+             * In the "container" case, this is closing the buffer to the
              * message body.
              */
             super.close();
         }
         finally {
             /*
-             * In the "meta" case, subsequent to closing the message
+             * In the "container" case, subsequent to closing the message
              * body, authenticate and write the message to storage.
              */
-            if (null != this.meta){
+            if (null != this.container){
                 Reference reference = this.reference;
                 reference.close();
             }

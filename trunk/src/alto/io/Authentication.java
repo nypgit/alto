@@ -94,6 +94,12 @@ public final class Authentication
 
         public Authentication getAuthenticationMethod();
 
+        public void setAuthenticationMethod(Authentication auth);
+
+        public boolean maySetAuthenticationMethod(Authentication auth);
+
+        public boolean maySetAuthenticationMethodStore();
+
         public boolean isAuthVerifiable();
 
         public boolean authSign()
@@ -348,6 +354,11 @@ public final class Authentication
     public final static Authentication Lookup(String name){
         return (Authentication)Map.get(name.trim().toLowerCase());
     }
+
+    /**
+     * Default authentication method for the store.
+     */
+    public final static Authentication DefaultStore = SAuth;
 
 
     public final String name;

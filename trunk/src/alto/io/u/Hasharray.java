@@ -187,7 +187,7 @@ public abstract class Hasharray
                 factor = table.load;
             }
             else if (0f == factor)
-                throw new java.lang.IllegalStateException();
+                throw new alto.sys.Error.State();
         }
         if (null == jclass)
             throw new IllegalArgumentException("Missing keys (index) class");
@@ -205,25 +205,25 @@ public abstract class Hasharray
             }
             catch (java.lang.NoSuchMethodException exc){
                 java.lang.RuntimeException rex = 
-                    new java.lang.IllegalStateException(jclass.getName());
+                    new alto.sys.Error.State(jclass.getName());
                 rex.initCause(exc);
                 throw rex;
             }
             catch (java.lang.InstantiationException exc){
                 java.lang.RuntimeException rex = 
-                    new java.lang.IllegalStateException(jclass.getName());
+                    new alto.sys.Error.State(jclass.getName());
                 rex.initCause(exc);
                 throw rex;
             }
             catch (java.lang.IllegalAccessException exc){
                 java.lang.RuntimeException rex = 
-                    new java.lang.IllegalStateException(jclass.getName());
+                    new alto.sys.Error.State(jclass.getName());
                 rex.initCause(exc);
                 throw rex;
             }
             catch (java.lang.reflect.InvocationTargetException exc){
                 java.lang.RuntimeException rex = 
-                    new java.lang.IllegalStateException(jclass.getName());
+                    new alto.sys.Error.State(jclass.getName());
                 rex.initCause(exc);
                 throw rex;
             }
@@ -792,7 +792,7 @@ public abstract class Hasharray
                 else {
                     atypeName = "<nil>";
                 }
-                throw new IllegalStateException("bug "+atypeName);
+                throw new alto.sys.Error.State("bug "+atypeName);
             }
         }
         else
@@ -821,7 +821,7 @@ public abstract class Hasharray
             else {
                 atypeName = "<nil>";
             }
-            throw new IllegalStateException("bug "+atypeName);
+            throw new alto.sys.Error.State("bug "+atypeName);
         }
     }
     protected final int indexOfKeyAsObject(int kindex, Object key, int from){
@@ -847,7 +847,7 @@ public abstract class Hasharray
             else {
                 atypeName = "<nil>";
             }
-            throw new IllegalStateException("bug "+atypeName);
+            throw new alto.sys.Error.State("bug "+atypeName);
         }
     }
     protected final int[] indexListOfKeyAsObject(int kindex, Object key){
@@ -873,7 +873,7 @@ public abstract class Hasharray
             else {
                 atypeName = "<nil>";
             }
-            throw new IllegalStateException("bug "+atypeName);
+            throw new alto.sys.Error.State("bug "+atypeName);
         }
     }
     protected final int[] indexListOfKeyAsObject(int kindex, Object key, int from){
@@ -899,7 +899,7 @@ public abstract class Hasharray
             else {
                 atypeName = "<nil>";
             }
-            throw new IllegalStateException("bug "+atypeName);
+            throw new alto.sys.Error.State("bug "+atypeName);
         }
     }
     protected final Entry removeKeyByIndex(int kindex, int idx){
@@ -935,7 +935,7 @@ public abstract class Hasharray
             else {
                 atypeName = "<nil>";
             }
-            throw new IllegalStateException("bug "+atypeName);
+            throw new alto.sys.Error.State("bug "+atypeName);
         }
     }
     protected final Entry putKeyAsObject(int kindex, Object key){
@@ -961,7 +961,7 @@ public abstract class Hasharray
             else {
                 atypeName = "<nil>";
             }
-            throw new IllegalStateException("bug "+atypeName);
+            throw new alto.sys.Error.State("bug "+atypeName);
         }
     }
     protected final Entry putKeyAsObject(int kindex, int idx, Object key){
@@ -987,7 +987,7 @@ public abstract class Hasharray
             else {
                 atypeName = "<nil>";
             }
-            throw new IllegalStateException("bug "+atypeName);
+            throw new alto.sys.Error.State("bug "+atypeName);
         }
     }
     protected final Entry insertKeyAsObject(int kindex, int idx, Object key){
@@ -1018,7 +1018,7 @@ public abstract class Hasharray
                 else {
                     atypeName = "<nil>";
                 }
-                throw new IllegalStateException("bug "+atypeName);
+                throw new alto.sys.Error.State("bug "+atypeName);
             }
         }
     }
@@ -1047,7 +1047,7 @@ public abstract class Hasharray
             else {
                 atypeName = "<nil>";
             }
-            throw new IllegalStateException("bug "+atypeName);
+            throw new alto.sys.Error.State("bug "+atypeName);
         }
     }
     protected final Entry appendKeyAsObject(int kindex, Object key){
@@ -1073,7 +1073,7 @@ public abstract class Hasharray
             else {
                 atypeName = "<nil>";
             }
-            throw new IllegalStateException("bug "+atypeName);
+            throw new alto.sys.Error.State("bug "+atypeName);
         }
     }
     protected final Entry appendKeyAsObject(int kindex, int idx, Object key){
@@ -1099,7 +1099,7 @@ public abstract class Hasharray
             else {
                 atypeName = "<nil>";
             }
-            throw new IllegalStateException("bug "+atypeName);
+            throw new alto.sys.Error.State("bug "+atypeName);
         }
     }
     //                    (((gen:end)))

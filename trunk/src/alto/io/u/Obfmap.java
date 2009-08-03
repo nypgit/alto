@@ -122,7 +122,7 @@ public class Obfmap
                 return clone;
             }
             catch (java.lang.CloneNotSupportedException cns){
-                throw new java.lang.IllegalStateException();
+                throw new alto.sys.Error.State();
             }
         }
         int size(){
@@ -166,7 +166,7 @@ public class Obfmap
                     return;
                 }
                 else
-                    throw new java.lang.IllegalStateException("bug:gidx "+gidx+" != "+sz);
+                    throw new alto.sys.Error.State("bug:gidx "+gidx+" != "+sz);
             }
             else {
                 if ((-1 < fp_idx)&&(this.hasPxNot(fp_idx))){
@@ -395,7 +395,7 @@ public class Obfmap
         }
         else if (null == this.frame_parent){
             if (this == pf)
-                throw new java.lang.IllegalStateException("cyclic frame reference identical");
+                throw new alto.sys.Error.State("cyclic frame reference identical");
             else {
                 this.frame_parent = pf;
                 if (null != this.frame_distinct)
@@ -414,7 +414,7 @@ public class Obfmap
         }
         else {
             if (this == pf)
-                throw new java.lang.IllegalStateException("cyclic frame reference identical");
+                throw new alto.sys.Error.State("cyclic frame reference identical");
             else {
                 if (null != this.frame_distinct)
                     this.frame_distinct.reset(true);
@@ -506,9 +506,9 @@ public class Obfmap
     }
     protected final java.lang.Object[] frary(Class comp, boolean keys, boolean filter){
         if (null == this.frameGet())
-            throw new java.lang.IllegalStateException("bug:missing-frame");
+            throw new alto.sys.Error.State("bug:missing-frame");
         else if (this.frameStale())
-            throw new java.lang.IllegalStateException("bug:frame-stale");
+            throw new alto.sys.Error.State("bug:frame-stale");
         else {
             int glen = this.frame_distinct.size();
             java.lang.Object test, gary[] = Array.grow(null,glen,comp);
@@ -519,13 +519,13 @@ public class Obfmap
                     test = this.value(gidx);
                 //
                 if (null == test)
-                    throw new java.lang.IllegalStateException("bug:null-pointer @ "+gidx+" in "+glen);
+                    throw new alto.sys.Error.State("bug:null-pointer @ "+gidx+" in "+glen);
                 else if (filter){
                     if (comp.isAssignableFrom(test.getClass()))
                         gary[gidx] = test;
                     else
                         /////////////////////////////////////////////////////////////////////////////////////////////////////
-                        throw new java.lang.IllegalStateException("bug:unimplemented-filter-failure @ "+gidx+" in "+glen); //
+                        throw new alto.sys.Error.State("bug:unimplemented-filter-failure @ "+gidx+" in "+glen); //
                     /////////////////////////////////////////////////////////////////////////////////////////////////////
                     /////////////////////////////////////////////////////////////////////////////////////////////////////
                 }
@@ -580,11 +580,11 @@ public class Obfmap
                 int xfp_gidx = this.frame_distinct.gx4px(xfp_idx);
                 if (0 > xfc_gidx || 0 > xfp_gidx){
                     if (0 > xfc_gidx && 0 > xfp_gidx)
-                        throw new java.lang.IllegalStateException("bug:xfc-and-xfp");
+                        throw new alto.sys.Error.State("bug:xfc-and-xfp");
                     else if (0 > xfc_gidx)
-                        throw new java.lang.IllegalStateException("bug:xfc");
+                        throw new alto.sys.Error.State("bug:xfc");
                     else 
-                        throw new java.lang.IllegalStateException("bug:xfp");
+                        throw new alto.sys.Error.State("bug:xfp");
                 }
                 else if (xfc_gidx <= xfp_gidx)
                     return xfc_gidx;
@@ -637,11 +637,11 @@ public class Obfmap
                 int xfp_gidx = this.frame_distinct.gx4px(xfp_idx);
                 if (0 > xfc_gidx || 0 > xfp_gidx){
                     if (0 > xfc_gidx && 0 > xfp_gidx)
-                        throw new java.lang.IllegalStateException("bug:xfc-and-xfp");
+                        throw new alto.sys.Error.State("bug:xfc-and-xfp");
                     else if (0 > xfc_gidx)
-                        throw new java.lang.IllegalStateException("bug:xfc");
+                        throw new alto.sys.Error.State("bug:xfc");
                     else 
-                        throw new java.lang.IllegalStateException("bug:xfp");
+                        throw new alto.sys.Error.State("bug:xfp");
                 }
                 else if (xfc_gidx <= xfp_gidx)
                     return xfc_gidx;
@@ -679,7 +679,7 @@ public class Obfmap
             return Math.max(xgc,xgp);
         }
         //
-        throw new java.lang.IllegalStateException("frame-stale");
+        throw new alto.sys.Error.State("frame-stale");
     }
     public int lastIndexOf(java.lang.Object key, int from) {
         if (null == this.frame_parent)
@@ -694,7 +694,7 @@ public class Obfmap
             return Math.max(xgc,xgp);
         }
         //
-        throw new java.lang.IllegalStateException("frame-stale");
+        throw new alto.sys.Error.State("frame-stale");
     }
     public int lastIndexOfNof(java.lang.Object key, int from) {
         return super.lastIndexOf(key,from);
@@ -750,7 +750,7 @@ public class Obfmap
                 return Math.min(xgc,xgp);
         }
         //
-        throw new java.lang.IllegalStateException("frame-stale");
+        throw new alto.sys.Error.State("frame-stale");
     }
     public int indexOfValueClassNof(Class vc) {
         return super.indexOfValueClass(vc,0);
@@ -809,7 +809,7 @@ public class Obfmap
             return Math.max(xgc,xgp);
         }
         //
-        throw new java.lang.IllegalStateException("frame-stale");
+        throw new alto.sys.Error.State("frame-stale");
     }
     public int lastIndexOfValue(java.lang.Object val, int from) {
         if (null == this.frame_parent)
@@ -824,7 +824,7 @@ public class Obfmap
             return Math.max(xgc,xgp);
         }
         //
-        throw new java.lang.IllegalStateException("frame-stale");
+        throw new alto.sys.Error.State("frame-stale");
     }
     public int lastIndexOfValueClass(Class clas) {
         if (null == this.frame_parent)
@@ -837,7 +837,7 @@ public class Obfmap
             return Math.max(xgc,xgp);
         }
         //
-        throw new java.lang.IllegalStateException("frame-stale");
+        throw new alto.sys.Error.State("frame-stale");
     }
     public int lastIndexOfValueClassNof(Class key) {
         return super.lastIndexOfValueClass(key,(this.sizeNof()-1));
@@ -861,11 +861,11 @@ public class Obfmap
                 int xfp_gidx = this.frame_distinct.gx4px(xfp_idx);
                 if (0 > xfc_gidx || 0 > xfp_gidx){
                     if (0 > xfc_gidx && 0 > xfp_gidx)
-                        throw new java.lang.IllegalStateException("bug:xfc-and-xfp");
+                        throw new alto.sys.Error.State("bug:xfc-and-xfp");
                     else if (0 > xfc_gidx)
-                        throw new java.lang.IllegalStateException("bug:xfc");
+                        throw new alto.sys.Error.State("bug:xfc");
                     else 
-                        throw new java.lang.IllegalStateException("bug:xfp");
+                        throw new alto.sys.Error.State("bug:xfp");
                 }
                 else if (xfc_gidx <= xfp_gidx)
                     return super.value(xfc_idx);
@@ -931,11 +931,11 @@ public class Obfmap
                 int xfp_gidx = this.frame_distinct.gx4px(xfp_idx);
                 if (0 > xfc_gidx || 0 > xfp_gidx){
                     if (0 > xfc_gidx && 0 > xfp_gidx)
-                        throw new java.lang.IllegalStateException("bug:xfc-and-xfp");
+                        throw new alto.sys.Error.State("bug:xfc-and-xfp");
                     else if (0 > xfc_gidx)
-                        throw new java.lang.IllegalStateException("bug:xfc");
+                        throw new alto.sys.Error.State("bug:xfc");
                     else 
-                        throw new java.lang.IllegalStateException("bug:xfp");
+                        throw new alto.sys.Error.State("bug:xfp");
                 }
                 else if (xfc_gidx <= xfp_gidx)
                     return super.key(xfc_idx);
@@ -983,11 +983,11 @@ public class Obfmap
                 int xfp_gidx = this.frame_distinct.gx4px(xfp_idx);
                 if (0 > xfc_gidx || 0 > xfp_gidx){
                     if (0 > xfc_gidx && 0 > xfp_gidx)
-                        throw new java.lang.IllegalStateException("bug:xfc-and-xfp");
+                        throw new alto.sys.Error.State("bug:xfc-and-xfp");
                     else if (0 > xfc_gidx)
-                        throw new java.lang.IllegalStateException("bug:xfc");
+                        throw new alto.sys.Error.State("bug:xfc");
                     else 
-                        throw new java.lang.IllegalStateException("bug:xfp");
+                        throw new alto.sys.Error.State("bug:xfp");
                 }
                 else if (xfc_gidx <= xfp_gidx)
                     return super.value(xfc_idx,value);
@@ -996,7 +996,7 @@ public class Obfmap
             }
         }
         else
-            throw new java.lang.IllegalStateException("frame-stale @ "+this.toString()+" @ "+idx);
+            throw new alto.sys.Error.State("frame-stale @ "+this.toString()+" @ "+idx);
     }
     public java.lang.Object valueNof(int idx, java.lang.Object value){
         this.stale();
@@ -1025,11 +1025,11 @@ public class Obfmap
                 int xfp_gidx = this.frame_distinct.gx4px(xfp_idx);
                 if (0 > xfc_gidx || 0 > xfp_gidx){
                     if (0 > xfc_gidx && 0 > xfp_gidx)
-                        throw new java.lang.IllegalStateException("bug:xfc-and-xfp");
+                        throw new alto.sys.Error.State("bug:xfc-and-xfp");
                     else if (0 > xfc_gidx)
-                        throw new java.lang.IllegalStateException("bug:xfc");
+                        throw new alto.sys.Error.State("bug:xfc");
                     else 
-                        throw new java.lang.IllegalStateException("bug:xfp");
+                        throw new alto.sys.Error.State("bug:xfp");
                 }
                 else if (xfc_gidx <= xfp_gidx){
                     this.stale();
@@ -1042,7 +1042,7 @@ public class Obfmap
             }
         }
         else
-            throw new java.lang.IllegalStateException("frame-stale @ "+this.toString()+" @ "+idx);
+            throw new alto.sys.Error.State("frame-stale @ "+this.toString()+" @ "+idx);
     }
     public java.util.Enumeration keys(){
         if (null == this.frame_parent)
@@ -1146,7 +1146,7 @@ public class Obfmap
                 return super.insert(xfc_idx,key,val);
         }
         //
-        throw new java.lang.IllegalStateException("frame-stale @ "+this.toString()+" @ "+idx);
+        throw new alto.sys.Error.State("frame-stale @ "+this.toString()+" @ "+idx);
     }
     public int insertNof( int idx, java.lang.Object key, java.lang.Object val){
         return super.insert(idx,key,val);

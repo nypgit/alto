@@ -125,7 +125,7 @@ public final class Find
             if (null != file)
                 return file;
             else
-                throw new java.lang.IllegalStateException();
+                throw new alto.sys.Error.State();
         }
         public boolean isDirectory(){
             return (null != this.directory);
@@ -135,14 +135,14 @@ public final class Find
             if (null != directory)
                 return directory.hasNext();
             else
-                throw new java.lang.IllegalStateException();
+                throw new alto.sys.Error.State();
         }
         public java.io.File next(){
             Find directory = this.directory;
             if (null != directory)
                 return directory.next();
             else
-                throw new java.lang.IllegalStateException();
+                throw new alto.sys.Error.State();
         }
     }
 

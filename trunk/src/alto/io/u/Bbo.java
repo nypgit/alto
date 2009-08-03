@@ -305,7 +305,7 @@ public class Bbo extends java.io.OutputStream {
         if (null != this.buf)
             return this.buf.copyOutLoop(out);
         else
-            throw new java.lang.IllegalStateException("destroyed");
+            throw new alto.sys.Error.State("destroyed");
     }
 
     public int copyOutArray( java.io.OutputStream out) 
@@ -314,7 +314,7 @@ public class Bbo extends java.io.OutputStream {
         if (null != this.buf)
             return this.buf.copyOutArray(out);
         else
-            throw new java.lang.IllegalStateException("destroyed");
+            throw new alto.sys.Error.State("destroyed");
     }
 
     public void copyFrom( java.io.File fi) 
@@ -323,7 +323,7 @@ public class Bbo extends java.io.OutputStream {
         if (null != this.buf)
             this.buf.readFrom(fi);
         else
-            throw new java.lang.IllegalStateException("destroyed");
+            throw new alto.sys.Error.State("destroyed");
     }
 
 }

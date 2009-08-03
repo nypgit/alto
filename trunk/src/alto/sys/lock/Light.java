@@ -259,15 +259,15 @@ public class Light
                     this.notify();
                 }
                 else
-                    throw new java.lang.IllegalStateException();
+                    throw new alto.sys.Error.State();
             }
             else
                 return;
         }
         else if (null == W)
-            throw new java.lang.IllegalStateException();
+            throw new alto.sys.Error.State();
         else
-            throw new java.lang.IllegalStateException();
+            throw new alto.sys.Error.State();
     }
     public final boolean isWriteLocked(){
         return (!this.get());

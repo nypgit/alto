@@ -502,7 +502,7 @@ public class B64 {
                     }
                 }
                 else
-                    throw new IllegalStateException( "Byte value 0x" + Integer.toHexString(source[i])+" at offset " + i );
+                    throw new alto.sys.Error.State( "Byte value 0x" + Integer.toHexString(source[i])+" at offset " + i );
             }
         byte[] out = new byte[ outbufPosn ];
         System.arraycopy( outbuf, 0, out, 0, outbufPosn ); 

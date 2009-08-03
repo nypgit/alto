@@ -179,7 +179,7 @@ public class OTP
                         System.out.println(validateMsg);
                         System.exit(0);
                     }
-                    catch (IllegalStateException decoderr){
+                    catch (alto.sys.Error.State decoderr){
 
                         ComparisonPrint(ptext,ttext,System.err);
 
@@ -187,10 +187,10 @@ public class OTP
                     }
                 }
                 else
-                    throw new IllegalStateException("otp.decipherOutputLength("+olen+") = "+ool);
+                    throw new alto.sys.Error.State("otp.decipherOutputLength("+olen+") = "+ool);
             }
             else
-                throw new IllegalStateException("otp.encipherOutputLength("+ptext.length+") = "+ctextLen);
+                throw new alto.sys.Error.State("otp.encipherOutputLength("+ptext.length+") = "+ctextLen);
         }
         catch (Exception exc){
             exc.printStackTrace();

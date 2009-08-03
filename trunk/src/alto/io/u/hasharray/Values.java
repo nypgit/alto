@@ -131,7 +131,7 @@ public abstract class Values
                 else if (Boolean == clas)
                     return new Values.Boolean();
                 else
-                    throw new java.lang.IllegalStateException(clas.getName());
+                    throw new alto.sys.Error.State(clas.getName());
             }
             else
                 return new Values.Object();
@@ -195,7 +195,7 @@ public abstract class Values
                 return clone;
             }
             catch (CloneNotSupportedException exc){
-                throw new IllegalStateException(exc);
+                throw new alto.sys.Error.State(exc);
             }
         }
         public java.lang.Object[] get(){
@@ -675,7 +675,7 @@ public abstract class Values
                 return clone;
             }
             catch (CloneNotSupportedException exc){
-                throw new IllegalStateException(exc);
+                throw new alto.sys.Error.State(exc);
             }
         }
         public long[] get(){
@@ -1155,7 +1155,7 @@ public abstract class Values
                 return clone;
             }
             catch (CloneNotSupportedException exc){
-                throw new IllegalStateException(exc);
+                throw new alto.sys.Error.State(exc);
             }
         }
         public int[] get(){
@@ -1635,7 +1635,7 @@ public abstract class Values
                 return clone;
             }
             catch (CloneNotSupportedException exc){
-                throw new IllegalStateException(exc);
+                throw new alto.sys.Error.State(exc);
             }
         }
         public double[] get(){
@@ -2115,7 +2115,7 @@ public abstract class Values
                 return clone;
             }
             catch (CloneNotSupportedException exc){
-                throw new IllegalStateException(exc);
+                throw new alto.sys.Error.State(exc);
             }
         }
         public float[] get(){
@@ -2595,7 +2595,7 @@ public abstract class Values
                 return clone;
             }
             catch (CloneNotSupportedException exc){
-                throw new IllegalStateException(exc);
+                throw new alto.sys.Error.State(exc);
             }
         }
         public byte[] get(){
@@ -3075,7 +3075,7 @@ public abstract class Values
                 return clone;
             }
             catch (CloneNotSupportedException exc){
-                throw new IllegalStateException(exc);
+                throw new alto.sys.Error.State(exc);
             }
         }
         public short[] get(){
@@ -3555,7 +3555,7 @@ public abstract class Values
                 return clone;
             }
             catch (CloneNotSupportedException exc){
-                throw new IllegalStateException(exc);
+                throw new alto.sys.Error.State(exc);
             }
         }
         public boolean[] get(){
@@ -4035,7 +4035,7 @@ public abstract class Values
                 return clone;
             }
             catch (CloneNotSupportedException exc){
-                throw new IllegalStateException(exc);
+                throw new alto.sys.Error.State(exc);
             }
         }
         public char[] get(){

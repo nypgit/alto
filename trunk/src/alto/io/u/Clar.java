@@ -1011,7 +1011,7 @@ public class Clar {
                             break;
 
                         default:
-                            throw new IllegalStateException("BBBUGGG in `Clar.renameMethodRef' lookup types, found type ("+lv+").");
+                            throw new alto.sys.Error.State("BBBUGGG in `Clar.renameMethodRef' lookup types, found type ("+lv+").");
                         }
                     }
 
@@ -1028,7 +1028,7 @@ public class Clar {
                             break;
 
                         default:
-                            throw new IllegalStateException("BBBUGGG in `Clar.renameMethodRef' lookup types, found type ("+lv+").");
+                            throw new alto.sys.Error.State("BBBUGGG in `Clar.renameMethodRef' lookup types, found type ("+lv+").");
                         }
                     }
                 }
@@ -1147,7 +1147,7 @@ public class Clar {
                         break;
 
                     default:
-                        throw new IllegalStateException("BBBUGGG in `Clar.renameMethodRef' lookup types, found type ("+lv+").");
+                        throw new alto.sys.Error.State("BBBUGGG in `Clar.renameMethodRef' lookup types, found type ("+lv+").");
                     }
                 }
 
@@ -1164,7 +1164,7 @@ public class Clar {
                         break;
 
                     default:
-                        throw new IllegalStateException("BBBUGGG in `Clar.renameMethodRef' lookup types, found type ("+lv+").");
+                        throw new alto.sys.Error.State("BBBUGGG in `Clar.renameMethodRef' lookup types, found type ("+lv+").");
                     }
                 }
             }

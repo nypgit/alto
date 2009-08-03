@@ -98,7 +98,7 @@ public class Objmap
     }
     public boolean frameStale(){
         if (null != this.frame_parent)
-            throw new java.lang.IllegalStateException("class use bug");
+            throw new alto.sys.Error.State("class use bug");
         else
             return false;/*(no frame,- not stale)
                           */
@@ -119,7 +119,7 @@ public class Objmap
         }
         else if (null == this.frame_parent){
             if (this == pf)
-                throw new java.lang.IllegalStateException("cyclic frame reference identical");
+                throw new alto.sys.Error.State("cyclic frame reference identical");
             else {
                 this.frame_parent = pf;
                 return true;
@@ -133,7 +133,7 @@ public class Objmap
             this.frame_parent = null;
         else {
             if (this == pf)
-                throw new java.lang.IllegalStateException("cyclic frame reference identical");
+                throw new alto.sys.Error.State("cyclic frame reference identical");
             else 
                 this.frame_parent = pf;
         }
@@ -475,7 +475,7 @@ public class Objmap
                             tm.put(tt,tt);
                             //
                             if (tt != tm.get(tt))
-                                throw new java.lang.IllegalStateException("input-store-test failed at "+cc);
+                                throw new alto.sys.Error.State("input-store-test failed at "+cc);
                             else
                                 break;
                         }
@@ -483,7 +483,7 @@ public class Objmap
                     duration = (double)(java.lang.System.currentTimeMillis()-start);
                     //
                     if ((N-dupe) != (tm.size()))
-                        throw new java.lang.IllegalStateException("input-store-test failed for size "+tm.size()+" != N "+N);
+                        throw new alto.sys.Error.State("input-store-test failed for size "+tm.size()+" != N "+N);
                     else {
                         java.lang.System.out.println("input-store-test completed for "+N+" cycles in "+(duration/1000.0)+" seconds.");
                         java.util.Enumeration keys = tm.keys();
@@ -498,7 +498,7 @@ public class Objmap
                             if (tv == tk)
                                 continue;
                             else
-                                throw new java.lang.IllegalStateException("keys-lookup-test miss "+tv+" != "+tk);
+                                throw new alto.sys.Error.State("keys-lookup-test miss "+tv+" != "+tk);
                         }
                         duration = (double)(java.lang.System.currentTimeMillis()-start);
                         //
@@ -509,7 +509,7 @@ public class Objmap
                             tt = testvector[cc];
                             tv = tm.get(tt);
                             if (tt != tv)
-                                throw new java.lang.IllegalStateException("vector-lookup-test miss "+tt+" != "+tv);
+                                throw new alto.sys.Error.State("vector-lookup-test miss "+tt+" != "+tv);
                         }
                         duration = (double)(java.lang.System.currentTimeMillis()-start);
                         //
