@@ -862,7 +862,7 @@ public interface Component
                     Component.Relation.U,//(U)//(common)
                     Component.Host.Global,
                     atyp,
-                    new alto.lang.component.Path.Numeric(atyp.getType(),addr.toByteArray()),
+                    new alto.lang.component.Path.Numeric(addr.toByteArray()),
                     Component.Version.Current
                 };
             }

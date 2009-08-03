@@ -178,8 +178,7 @@ public class Address
     protected Component[] address;
     protected long hashAddress;
     protected int hashCode;
-    protected boolean storevalid;
-    protected boolean meta, persistent, transactional;
+    protected boolean attributes, persistent, transactional;
 
 
     /**
@@ -376,74 +375,42 @@ public class Address
             throw new IllegalStateException(api);
         }
     }
-    public final boolean isStoreValid(){
-        return this.storevalid;
-    }
-    /**
-     * Address to resource type in special log category.
-     */
-    public final boolean isMeta(){
-        return this.meta;
-    }
-    public final boolean isNotMeta(){
-        return (!this.meta);
+    protected final boolean attributes(){
+        if (this.attributes)
+            return true;
+        else {
+            Component.Type classValue = this.getComponentClass();
+            alto.lang.Type classType = classValue.getType();
+            if (null != classType){
+                this.persistent = classType.isTypePersistent();
+                this.transactional = classType.isTypeTransactional();
+                this.attributes = true;
+                return true;
+            }
+            else
+                return false;
+        }
     }
     public final boolean isPersistent(){
-        return this.persistent;
+        if (this.attributes())
+            return this.persistent;
+        else
+            throw new alto.sys.Error.State.Init();
     } 
     public final boolean isNotPersistent(){
-        return (!this.persistent);
+        return (!this.isPersistent());
     }
     public final boolean isTransient(){
-        return (!this.persistent);
+        return (!this.isPersistent());
     }
     public final boolean isTransactional(){
-        return this.transactional;
-    } 
+        if (this.attributes())
+            return this.transactional;
+        else
+            throw new alto.sys.Error.State.Init();
+    }
     public final boolean isNotTransactional(){
-        return (!this.transactional);
-    }
-    /**
-     * Enable meta 
-     */
-    public final Address toMeta(){
-        this.meta = true;
-        return this;
-    }
-    /**
-     * Disable meta 
-     */
-    public final Address toNotMeta(){
-        this.meta = false;
-        return this;
-    }
-    /**
-     * Enable write file
-     */
-    public final Address toPersistent(){
-        this.persistent = true;
-        return this;
-    }
-    /**
-     * Disable write file
-     */
-    public final Address toTransient(){
-        this.persistent = false;
-        return this;
-    }
-    /**
-     * Enable transactional writes
-     */
-    public final Address toTransactional(){
-        this.transactional = true;
-        return this;
-    }
-    /**
-     * Disable transactional writes
-     */
-    public final Address toNotTransactional(){
-        this.transactional = false;
-        return this;
+        return (!this.isTransactional());
     }
     /**
      * Address to resource "current" version.
@@ -718,8 +685,8 @@ public class Address
         Component b = type.hashAddressComponent();
         return this.inClass(b);
     }
-    public final boolean nocache(){
-        return (this.meta || this.hasNotComponentTerminal());
+    public boolean nocache(){
+        return this.hasNotComponentTerminal();
     }
     public final void readMessage(alto.io.Input in)
         throws java.io.IOException
@@ -771,19 +738,6 @@ public class Address
     protected void setAddress(Component[] address){
         if (null != address){
             this.address = address;
-            this.storevalid = true;
-            Component.Type classValue = this.getComponentClass();
-            alto.lang.Type classType = classValue.getType(); 
-            if (null != classType){
-                this.meta = classType.isTypeMeta();
-                this.persistent = classType.isTypePersistent();
-                this.transactional = (classType.isTypeTransactional() && this.isNotMeta());
-            }
-            else {
-                this.meta = false;
-                this.persistent = false;
-                this.transactional = false;
-            }
             this.path_storage = Component.Tools.PathStorageFor(address);
             byte[] addrbits = Component.Tools.Cat(address);
             this.hashAddress = Ctor.Hash(addrbits);

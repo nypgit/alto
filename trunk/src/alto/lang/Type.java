@@ -252,7 +252,28 @@ public interface Type
          * Set storage content type and rtype instances into the file
          * cache.
          */
-        protected abstract void bootstrap(alto.lang.Type[] types);
+        protected abstract alto.lang.Type[] bootstrap();
+
+        /**
+         * Boostrap and validate type and rtype instances in the file
+         * cache.
+         */
+        public Tools init(){
+            alto.lang.Type[] types = this.bootstrap();
+            int idx = 0;
+            for (alto.lang.Type type : types){
+                String name = type.getName();
+                if (type != Type.Tools.For(name))
+                    throw new alto.sys.Error.Bug(name+'@'+String.valueOf(idx));
+
+                String fext = type.getFext();
+                if (type != Type.Tools.Of(fext))
+                    throw new alto.sys.Error.Bug(fext+'@'+String.valueOf(idx));
+
+                idx += 1;
+            }
+            return this;
+        }
 
         /**
          * Needs to dereference a type from a reference to type or a
@@ -509,18 +530,6 @@ public interface Type
     public void setPClass(java.lang.Class value);
 
     public void setPClass(java.lang.String value);
-
-    public boolean isTypeMeta();
-
-    public boolean isNotTypeMeta();
-
-    public boolean hasTypeMeta();
-
-    public boolean hasNotTypeMeta();
-
-    public java.lang.Boolean getTypeMeta();
-
-    public void setTypeMeta(java.lang.Boolean value);
 
     public boolean isTypePersistent();
 
