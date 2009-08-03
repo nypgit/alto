@@ -505,20 +505,6 @@ public abstract class Reference
         else
             return false;
     }
-    public boolean isAddressMeta(){
-        Address address = this.getAddress();
-        if (null != address)
-            return address.isMeta();
-        else
-            return false;
-    }
-    public boolean isNotAddressMeta(){
-        Address address = this.getAddress();
-        if (null != address)
-            return address.isNotMeta();
-        else
-            return false;
-    }
     public boolean isAddressPersistent(){
         Address address = this.getAddress();
         if (null != address)
@@ -574,9 +560,6 @@ public abstract class Reference
             return address.getHashAddress();
         else
             throw new alto.sys.Error.State("Missing address");
-    }
-    public boolean isStoreValid(){
-        return this.getAddress().isStoreValid();
     }
     public String getRequestPath(){
         String path = this.path_request;
