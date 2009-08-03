@@ -44,7 +44,7 @@ public interface Type
             public final static MimeType Instance = new MimeType();
 
             private MimeType(){
-                super(Function.Djb.Short.Instance,"application/x-syntelos-mime-type");
+                super(Function.Djb.Short.Instance,"application/x-mimetype");
             }
         }
         /**
