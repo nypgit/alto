@@ -471,7 +471,7 @@ public class Header
         if (parsed instanceof alto.sys.Reference)
             return (alto.sys.Reference)parsed;
         else {
-            alto.sys.Reference p = alto.sys.Reference.Tools.Create(this.value);
+            alto.sys.Reference p = new alto.sys.Reference(this.value);
             this.parsed = p;
             return p;
         }

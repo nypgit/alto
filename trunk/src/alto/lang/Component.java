@@ -902,13 +902,13 @@ public interface Component
                     return null;
             }
             public final static Reference ReferenceToR(java.lang.String fext){
-                return Reference.Tools.Create(new Address(ForR(fext)));
+                return new Reference(new Address(ForR(fext)));
             }
             public final static Reference ReferenceToR(alto.lang.Type type){
-                return Reference.Tools.Create(new Address(ForR(type)));
+                return new Reference(new Address(ForR(type)));
             }
             public final static Reference ReferenceTo(java.lang.String mimetype){
-                return Reference.Tools.Create(new Address(For(mimetype)));
+                return new Reference(new Address(For(mimetype)));
             }
             public final static Reference ReferenceTo(Reference contentReference){
                 return contentReference.toAddressClass(alto.lang.component.Type.Numeric.MimeType.Instance);

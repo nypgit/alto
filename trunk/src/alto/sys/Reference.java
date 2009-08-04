@@ -61,7 +61,7 @@ import static javax.tools.JavaFileObject.Kind;
  * @see Address
  * @since 1.6
  */
-public abstract class Reference
+public class Reference
     extends java.lang.Object
     implements IO.Edge,
                IO.FileObject,
@@ -232,68 +232,13 @@ public abstract class Reference
             }
         }
 
-        protected static Tools Instance;
 
-        /**
-         * @see alto.io.Tools
-         */
-        public final static void SInit(Tools instance){
-            if (null == Instance){
-                Instance = instance;
-                Instance = (Tools)alto.sys.Init.Tools.Init(instance);
-            }
-            else
-                throw new Error.State();
-        }
-
-        public final static Reference Create(String uri){
-            if (null != Instance)
-                return Instance.create(uri);
-            else
-                throw new Error.State.Init();
-        }
-        public final static Reference Create(String uri, Address addr){
-            if (null != Instance)
-                return Instance.create(uri,addr);
-            else
-                throw new Error.State.Init();
-        }
-        public final static Reference Create(Address addr){
-            if (null != Instance)
-                return Instance.create(addr);
-            else
-                throw new Error.State.Init();
-        }
         public final static Reference Create(String hostname, Type type, String path){
-            if (null != Instance){
-                String uri = "http://"+alto.io.u.Chbuf.fcat(hostname,path);
-                Address addr = new Address(Component.Host.Tools.ValueOf(hostname),Component.Type.Tools.ValueOf(type),Component.Path.Tools.ValueOf(path));
-                return Instance.create(uri,addr);
-            }
-            else
-                throw new Error.State.Init();
-        }
-        public final static Reference Create(Component container, Component type, Component path){
-            return Create(new Address(container,type,path));
-        }
-        public final static Reference Create(Component relation, Component container, Component type, Component path){
-            return Create(new Address(relation,container,type,path));
-        }
-        public final static Reference Create(Component relation, Component container, Component type, Component path, Component version){
-            return Create(new Address(relation,container,type,path,version));
-        }
-        public final static Reference Create(Component[] address){
-            return Create(new Address(address));
-        }
-        public final static Reference Create(Component[] prefix, Component version){
-            return Create(new Address(prefix,version));
-        }
 
-        public abstract Reference create(String uri);
-
-        public abstract Reference create(String uri, Address addr);
-
-        public abstract Reference create(Address addr);
+            String uri = "http://"+alto.io.u.Chbuf.fcat(hostname,path);
+            Address addr = new Address(Component.Host.Tools.ValueOf(hostname),Component.Type.Tools.ValueOf(type),Component.Path.Tools.ValueOf(path));
+            return new Reference(uri,addr);
+        }
 
     }
 
@@ -321,25 +266,30 @@ public abstract class Reference
         super();
         this.string = null;
     }
-    protected Reference(String string){
+    public Reference(String string){
         super();
         this.string = string;
         this.address = new Address(string);
         this.parser = address.getUri();
     }
-    protected Reference(Address address){
+    public Reference(Address address){
         super();
         this.address = address;
         this.string = address.getAddressReference();
         this.parser = address.getUri();
     }
-    protected Reference(String string, Address address){
+    public Reference(Component[] address){
+        this(new Address(address));
+    }
+    public Reference(String string, Address address){
         super();
         this.string = string;
         this.address = address;
         this.parser = new alto.io.u.Uri(string);
     }
-
+    public Reference(String hostname, Type type, String path){
+        this( ("http://"+alto.io.u.Chbuf.fcat(hostname,path)), (new Address(Component.Host.Tools.ValueOf(hostname),Component.Type.Tools.ValueOf(type),Component.Path.Tools.ValueOf(path))));
+    }
 
     /**
      * Change the connection target to URL from Storage.  This must be
@@ -410,7 +360,7 @@ public abstract class Reference
         if (this.inAddressRelation(relation))
             return this;
         else
-            return Reference.Tools.Create(this.getAddress().toRelation(relation));
+            return new Reference(this.getAddress().toRelation(relation));
     }
     public Component getAddressRelation(){
         Address address = this.getAddress();
@@ -451,7 +401,7 @@ public abstract class Reference
         if (this.inAddressClass(type))
             return this;
         else
-            return Reference.Tools.Create(this.getAddress().toAddressClass(type));
+            return new Reference(this.getAddress().toAddressClass(type));
     }
     public Component getAddressPath(){
         Address address = this.getAddress();
@@ -581,10 +531,8 @@ public abstract class Reference
         return this.container;
     }
 
-    protected abstract HttpMessage newHttpMessage();
-
     /**
-     * Read from storage
+     * Reference container from storage
      */
     public HttpMessage read()
         throws java.io.IOException
@@ -602,29 +550,22 @@ public abstract class Reference
             return null;
     }
     /**
-     * Write to container buffer 
-     * @see #close
+     * Clone container from storage
      */
     public HttpMessage write()
         throws java.io.IOException
     {
-        HttpMessage container = this.container;
-        if (null == container){
-            /*
-             * Prepare container object
-             */
-            container = this.newHttpMessage();
-            container.setPathCompleteWithDefaults(this);
-            /*
-             * Update container object with current state
-             */
-            File storage = this.getStorage();
-            if (null != storage){
-                storage.copyTo(container);
-                this.container = container;
+        File storage = this.getStorage();
+        if (null != storage){
+            try {
+                return storage.write();
+            }
+            catch (alto.sys.UnauthorizedException exc){
+                throw new alto.sys.UnauthorizedException(this.toString(),exc);
             }
         }
-        return container;
+        else
+            return null;
     }
     @Code(Check.TODO)
     public void close()
@@ -656,16 +597,16 @@ public abstract class Reference
                                 if (storage.write(container))
                                     return;
                                 else
-                                    throw new alto.sys.Error.State("Invalid write");
+                                    throw new alto.sys.Error.State("Invalid authentication");
                             }
                             else
-                                throw new alto.sys.Error.State("Invalid authentication");
+                                throw new alto.sys.Error.State("Failed authentication");
                         }
                         else
-                            throw new alto.sys.Error.State("Invalid principal");
+                            throw new alto.sys.Error.State("Missing principal");
                     }
                     else
-                        throw new alto.sys.Error.State("Invalid authentication method");
+                        throw new alto.sys.Error.State("Missing authentication method");
                 }
                 else
                     throw new alto.sys.Error.Bug(this.toString());
@@ -1386,11 +1327,11 @@ public abstract class Reference
                 switch (select){
                 case 'b':
                     newpath = path.substring(0,idx)+"/bin/"+path.substring(idx4);
-                    return Reference.Tools.Create(newpath);
+                    return new Reference(newpath);
 
                 case 's':
                     newpath = path.substring(0,idx)+"/src/"+path.substring(idx4);
-                    return Reference.Tools.Create(newpath);
+                    return new Reference(newpath);
 
                 default:
                     throw new Error.Bug(path);
@@ -1425,7 +1366,7 @@ public abstract class Reference
             int idx = Type.Tools.IndexOfFext(string);
             if (-1 < idx){
                 String nstring = string.substring(0,(idx+1))+fext;
-                return Reference.Tools.Create(nstring);
+                return new Reference(nstring);
             }
             else
                 throw new Error.State(string);

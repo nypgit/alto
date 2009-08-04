@@ -60,9 +60,12 @@ public class Keys
         public final static String NAME = ROLE.name();
         public final static String PATH = Keys.Tools.PathTo(NAME);
 
+        private static Reference REF;
+
+
         public final static boolean IsReferenceTo(Reference ref){
 
-            return (null != ref && ref.isAddressContainerLocal() && ref.getPath().equals(PATH));
+            return (ReferenceTo().equals(ref));
         }
         public final static boolean EnterThreadContextTry(){
             return Keys.System.ReferenceTo().enterThreadContextTry();

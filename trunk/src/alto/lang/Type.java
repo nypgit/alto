@@ -65,7 +65,7 @@ public interface Type
         public final static Type For(String mimetype){
             if (null != Instance)
                 try {
-                    return Instance.dereference(Reference.Tools.Create(Component.Type.Tools.For(mimetype)));
+                    return Instance.dereference(new Reference(Component.Type.Tools.For(mimetype)));
                 }
                 catch (java.io.IOException exc){
                     return null;
@@ -76,7 +76,7 @@ public interface Type
         public final static Type For(Component.Type type){
             if (null != Instance)
                 try {
-                    return Instance.dereference(Reference.Tools.Create(Component.Type.Tools.For(type)));
+                    return Instance.dereference(new Reference(Component.Type.Tools.For(type)));
                 }
                 catch (java.io.IOException exc){
                     return null;
@@ -102,7 +102,7 @@ public interface Type
         public final static Type Of(String fext){
             if (null != Instance)
                 try {
-                    return Instance.dereference(Reference.Tools.Create(Component.Type.Tools.ForR(FextI(fext))));
+                    return Instance.dereference(new Reference(Component.Type.Tools.ForR(FextI(fext))));
                 }
                 catch (java.io.IOException exc){
                     return null;
@@ -119,10 +119,10 @@ public interface Type
                 throw new alto.sys.Error.State.Init("alto.io.Tools not initialized");
         }
         public final static Reference ReferenceToMimetype(String identifier){
-            return Reference.Tools.Create(Component.Type.Tools.For(identifier));
+            return new Reference(Component.Type.Tools.For(identifier));
         }
         public final static Reference ReferenceToFext(String identifier){
-            return Reference.Tools.Create(Component.Type.Tools.ForR(identifier));
+            return new Reference(Component.Type.Tools.ForR(identifier));
         }
 
         /**

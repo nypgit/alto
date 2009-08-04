@@ -69,7 +69,7 @@ public final class TrustStore
         if (null != host){
             String path = principal.getName();
             if (null != path)
-                return Reference.Tools.Create(host,Type.Tools.Of("der"),path);
+                return new Reference(host,Type.Tools.Of("der"),path);
         }
         throw new alto.sys.Error.Argument();
     }
@@ -77,7 +77,7 @@ public final class TrustStore
         String host = HostName(request);
         if (null != host){
             if (null != subject)
-                return Reference.Tools.Create(host,Type.Tools.Of("der"),subject);
+                return new Reference(host,Type.Tools.Of("der"),subject);
         }
         throw new alto.sys.Error.Argument();
     }
@@ -86,7 +86,7 @@ public final class TrustStore
         if (null != host){
             String path = principal.getName();
             if (null != path)
-                return Reference.Tools.Create(host,CertAlias,path);
+                return new Reference(host,CertAlias,path);
         }
         throw new alto.sys.Error.Argument();
     }
@@ -94,7 +94,7 @@ public final class TrustStore
         String host = HostName(request);
         if (null != host){
             if (null != subject)
-                return Reference.Tools.Create(host,CertAlias,subject);
+                return new Reference(host,CertAlias,subject);
         }
         throw new alto.sys.Error.Argument();
     }
@@ -102,7 +102,7 @@ public final class TrustStore
         String host = HostName(request);
         if (null != host){
             if (null != alias)
-                return Reference.Tools.Create(host,CertSubject,alias);
+                return new Reference(host,CertSubject,alias);
         }
         throw new alto.sys.Error.Argument();
     }
