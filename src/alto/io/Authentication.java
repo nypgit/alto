@@ -199,7 +199,7 @@ public final class Authentication
                         Method method = (Method)clas.newInstance();
                         method.setKind(type);
                         this.put(authtname,method);
-                        this.list[cc++] = method;
+                        list[cc++] = method;
                     }
                     catch (ClassNotFoundException exc){
                         throw new alto.sys.Error.State(classname,exc);
