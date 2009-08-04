@@ -650,12 +650,22 @@ public abstract class Reference
                 File storage = this.getStorage();
                 if (null != storage){
 
-                    container.maySetAuthenticationMethodStore();
-
-                    if (storage.write(container))
-                        return;
+                    if (container.maySetAuthenticationMethodStore()){
+                        if (container.maySetPrincipalFromContext()){
+                            if (container.authSign()){
+                                if (storage.write(container))
+                                    return;
+                                else
+                                    throw new alto.sys.Error.State("Invalid write");
+                            }
+                            else
+                                throw new alto.sys.Error.State("Invalid authentication");
+                        }
+                        else
+                            throw new alto.sys.Error.State("Invalid principal");
+                    }
                     else
-                        throw new alto.sys.Error.State("Invalid Write");
+                        throw new alto.sys.Error.State("Invalid authentication method");
                 }
                 else
                     throw new alto.sys.Error.Bug(this.toString());

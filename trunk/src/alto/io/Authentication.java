@@ -96,9 +96,18 @@ public final class Authentication
 
         public void setAuthenticationMethod(Authentication auth);
 
+        /**
+         * @return Has a defined authentication method on returning
+         */
         public boolean maySetAuthenticationMethod(Authentication auth);
-
+        /**
+         * @return Has a defined authentication method on returning
+         */
         public boolean maySetAuthenticationMethodStore();
+        /**
+         * @return Has an authentic principal on returning
+         */
+        public boolean maySetPrincipalFromContext();
 
         public boolean isAuthVerifiable();
 
