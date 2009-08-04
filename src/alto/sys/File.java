@@ -227,6 +227,20 @@ public abstract class File
             return null;
     }
     @Code(Check.Locking)
+    public HttpMessage write()
+        throws java.io.IOException
+    {
+        HttpMessage message = this.message;
+        if (null != message)
+            return message.cloneHttpMessage();
+
+        else {
+            message = this.newHttpMessage();
+            this.message = message;
+            return message.cloneHttpMessage();
+        }
+    }
+    @Code(Check.Locking)
     public boolean write(HttpMessage message)
         throws java.io.IOException
     {

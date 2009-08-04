@@ -69,7 +69,6 @@ public final class Tools
     public final static String Resource = "/META-INF/services/alto.io.Tools";
 
     private final static String[] Classes = {
-        "alto.sys.Reference$Tools",
         "alto.sys.FileManager",
         "alto.lang.Type$Tools",
         "alto.sec.Keys$Tools"
