@@ -167,12 +167,10 @@ public class Thread
     {
         IO.Context context = this.context;
         if (null != context){
-            if (context.isAuthenticated())
+            if (context.isAuthenticating())
+                return context.authenticate();
+            else
                 return context.getPrincipal();
-            else if (context.isAuthenticating()){
-                context.authenticate();
-                return context.getPrincipal();
-            }
         }
         return null;
     }
