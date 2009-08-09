@@ -31,7 +31,22 @@ import alto.io.u.Chbuf;
 
 /**
  * An instance of {@link HttpMessage} represents a network message as
- * parsed and recognized.  
+ * parsed and recognized.
+ * 
+ * <h3>Storage</h3>
+ * 
+ * A storage object is typically an instance of {@link HttpRequest}.
+ * See {@link alto.sys.File} and {@link alto.sys.Reference} for more
+ * information.  
+ * 
+ * <h3>Authentication</h3>
+ * 
+ * A message is referenced from the store on "read", and cloned from
+ * the store on "write", therefore the sourcing of a principal from a
+ * message is incorrect in every case excepting that of a network
+ * request message to a server.
+ * 
+ * @author jdp
  */
 public interface HttpMessage
     extends alto.lang.Headers,

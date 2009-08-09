@@ -52,11 +52,8 @@ import alto.sys.Reference;
  * 
  * Byte "V" file format version has value one (0x01).  
  * 
- * Value "U" is a four byte integer Sio Type Class (network byte
- * order).  It is mapped to a java class name via the mimetype
- * <code>"application/x-syntelos-io-type"</code>, at global
- * configuration host address one, and the 32 bit DJB hash of the
- * classname path.  See {@link Sio$Type}.
+ * Value "U" is a four byte integer Sio Type Class.  See {@link
+ * Sio$Type}.
  * 
  * <h4>Message body</h4>
  * 
@@ -1033,8 +1030,10 @@ public interface Sio {
                 return false;
         }
         public final static Component.Path From(alto.lang.Type contentType){
-            if (null != contentType)
-                return alto.lang.Type.Tools.ForMimeType().hash(contentType.toString());
+            if (null != contentType){
+                Component.Type addr = contentType.getAddressComponent();
+                return new alto.lang.component.Path.Numeric(Function.Djb.Hash32(addr.toByteArray()));
+            }
             else
                 throw new alto.sys.Error.Argument("Missing type.");
         }
@@ -1059,7 +1058,7 @@ public interface Sio {
                 (byte)c,
                 (byte)d
             };
-            return Component.Path.Tools.ValueOf(alto.lang.Type.Tools.ForMimeType(),bits);
+            return Component.Path.Tools.ValueOf(alto.lang.Type.Tools.Instances.Sio(),bits);
         }
         public final static void Write(Component.Path type, Output out)
             throws java.io.IOException

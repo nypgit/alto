@@ -93,15 +93,6 @@ public abstract class PSioFile
     public boolean isPersistent(){
         return true;
     }
-    protected final boolean setStorageContent(){
-        try {
-            return (null != this.reference.setStorageContent(this));
-        }
-        catch (java.io.IOException exc){
-            throw new alto.sys.Error.State(exc);
-        }
-    }
-
     public abstract void readMessage(Input in)
         throws java.io.IOException;
 
@@ -169,20 +160,16 @@ public abstract class PSioFile
             out.close();
         }
 
-        out = this.reference.openOutput();
+        out = this.reference.openOutput(this);
         try {
             /*
              * Write container
              */
             this.sioWrite(out);
-
-            out.flush();
         }
         finally {
             out.close();
         }
-
-        this.setStorageContent();
     }
 
     @Override

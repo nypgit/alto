@@ -65,6 +65,13 @@ public abstract class Numeric
     public Numeric(java.math.BigInteger value){
         this(value.toByteArray());
     }
+    public Numeric(Component c){
+        super(c.toByteArray());
+        if (c.hasHashFunction())
+            this.hashFunction = c.getHashFunction();
+        else
+            this.hashFunction = Function.Xor.Instance;
+    }
     public Numeric(alto.io.Input in)
         throws java.io.IOException
     {

@@ -82,53 +82,57 @@ public class Keys
 
     public abstract static class Tools {
 
+        public final static alto.lang.Type TypeOf(){
+            return alto.lang.Type.Tools.Of("keys");
+        }
+
         public final static Keys Dereference(String identifier)
             throws java.io.IOException
         {
-            if (null != Instance)
-                return Instance.dereference(Instance.referenceTo(identifier));
-            else
-                throw new alto.sys.Error.Bug();
+            return Dereference(ReferenceTo(identifier));
         }
         public final static Keys Dereference(Reference ref)
             throws java.io.IOException
         {
-            if (null != Instance)
-                return Instance.dereference(ref);
+            Keys keys = (Keys)ref.getStorageContent();
+            if (null != keys)
+                return keys;
+            else if (ref.existsStorage()){
+                keys = (Keys)(new Keys(ref).init());
+                ref.setStorageContent(keys);
+                return keys;
+            }
             else
-                throw new alto.sys.Error.Bug();
+                return null;
         }
         public final static Keys Dereference(Reference ref, X500Name dn)
             throws java.io.IOException
         {
-            if (null != Instance)
-                return Instance.dereference(ref,dn);
+            Keys keys = (Keys)ref.getStorageContent();
+            if (null != keys)
+                return keys;
+            else if (ref.existsStorage()){
+                keys = (Keys)(new Keys(ref).init(dn));
+                ref.setStorageContent(keys);
+                return keys;
+            }
             else
-                throw new alto.sys.Error.Bug();
+                return null;
         }
         public final static Reference ReferenceTo(String identifier)
             throws java.io.IOException
         {
-            if (null != Instance)
-                return Instance.referenceTo(identifier);
-            else
-                throw new alto.sys.Error.Bug();
+            return new Reference(Component.Host.Local,TypeOf(),PathTo(identifier));
         }
         public final static Reference ReferenceTo(String host, String identifier)
             throws java.io.IOException
         {
-            if (null != Instance)
-                return Instance.referenceTo(host,identifier);
-            else
-                throw new alto.sys.Error.Bug();
+            return new Reference(host,TypeOf(),PathTo(identifier));
         }
         public final static Reference ReferenceTo(Component.Host host, String identifier)
             throws java.io.IOException
         {
-            if (null != Instance)
-                return Instance.referenceTo(host,identifier);
-            else
-                throw new alto.sys.Error.Bug();
+            return new Reference(host,TypeOf(),PathTo(identifier));
         }
         public final static Reference ReferenceTo(FileManager fm)
             throws java.io.IOException
@@ -157,10 +161,6 @@ public class Keys
                     keys = new Keys(target);
                     keys.setName(name);
                     if (keys.generate(alg)){
-
-                        if (keys.isSystem())
-                            target.enterThreadContextTry();
-
                         keys.writeMessage();
                         return keys;
                     }
@@ -242,33 +242,6 @@ public class Keys
             else 
                 throw new alto.sys.Error.Argument();
         }
-
-
-        protected static Tools Instance;
-
-        /**
-         * @see alto.io.Tools
-         */
-        public final static void SInit(Tools instance){
-            if (null == Instance){
-                Instance = instance;
-                Instance = (Tools)alto.sys.Init.Tools.Init(instance);
-            }
-            else
-                throw new alto.sys.Error.State();
-        }
-
-        public abstract Keys dereference(Reference ref)
-            throws java.io.IOException;
-
-        public abstract Keys dereference(Reference ref, X500Name dn)
-            throws java.io.IOException;
-
-        public abstract Reference referenceTo(String identifier);
-
-        public abstract Reference referenceTo(String host, String identifier);
-
-        public abstract Reference referenceTo(Component.Host host, String identifier);
     }
 
 

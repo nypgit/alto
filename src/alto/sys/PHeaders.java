@@ -23,8 +23,4 @@ package alto.sys;
  */
 public interface PHeaders
     extends alto.lang.Headers, P
-{
-
-    public boolean setStorageContent();
-
-}
+{}

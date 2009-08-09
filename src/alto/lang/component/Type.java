@@ -44,7 +44,7 @@ public interface Type
             public final static MimeType Instance = new MimeType();
 
             private MimeType(){
-                super(Function.Djb.Short.Instance,"application/x-mimetype");
+                super(Function.Xor.Instance,Strings.MimeType);
             }
         }
         /**
@@ -56,7 +56,7 @@ public interface Type
             public final static Address Instance = new Address();
 
             private Address(){
-                super(Function.Djb.Short.Instance,"application/x-syntelos-address");
+                super(Function.Xor.Instance,Strings.Address);
             }
         }
 
@@ -73,8 +73,9 @@ public interface Type
             super(bits);
         }
         public Numeric(alto.lang.Type type){
-            super(type.hashAddress());
+            super(type.getAddress().getComponentPath());
             this.type = type;
+            this.hashFunction = type.getHashFunction();
         }
         public Numeric(alto.io.Input in)
             throws java.io.IOException

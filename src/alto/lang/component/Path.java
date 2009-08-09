@@ -45,17 +45,25 @@ public interface Path
         public Numeric(alto.lang.Type type, int bits){
             super(bits);
             this.type = type;
+            this.hashFunction = type.getHashFunction();
         }
         public Numeric(alto.lang.Type type, long bits){
             super(bits);
             this.type = type;
+            this.hashFunction = type.getHashFunction();
         }
         public Numeric(byte[] bits){
             super(bits);
         }
+        public Numeric(alto.lang.Component.Type type, byte[] bits){
+            super(bits);
+            this.type = type.getType();
+            this.hashFunction = type.getHashFunction();
+        }
         public Numeric(alto.lang.Type type, byte[] bits){
             super(bits);
             this.type = type;
+            this.hashFunction = type.getHashFunction();
         }
         public Numeric(alto.lang.Type type, java.lang.String path){
             super(type.getHashFunction(),type.pathTo(path));

@@ -102,17 +102,12 @@ public interface Message
     public void formatMessage()
         throws java.io.IOException;
     /**
-     * Reset, then read from input
+     * Reset, then read message from reference input
      */
     public void readMessage()
         throws java.io.IOException;
     /**
-     * Format message, then write to output.
-     * 
-     * The last line of this method definition should be 
-     * <pre>
-     * this.reference.setStorageContent(this);
-     * </pre>
+     * Write message to reference output.
      */
     public void writeMessage()
         throws java.io.IOException;

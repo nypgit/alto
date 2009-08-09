@@ -70,8 +70,7 @@ public final class Tools
 
     private final static String[] Classes = {
         "alto.sys.FileManager",
-        "alto.lang.Type$Tools",
-        "alto.sec.Keys$Tools"
+        "alto.lang.Type$Tools"
     };
 
     public final static Tools Instance = new Tools();
