@@ -23,6 +23,7 @@ import alto.io.Input;
 import alto.io.Output;
 import alto.io.Uri;
 import alto.io.u.Array;
+import alto.io.u.Bbuf;
 import alto.io.u.Utf8;
 import alto.sys.Reference;
 
@@ -723,9 +724,18 @@ public interface Component
     {
         public final static int Position = 1;
         public final static int LengthWith = (Position+1);
-
+        /**
+         * A host address component with no bits "on" is very special,
+         * as in "do not route".
+         */
         public final static Component.Host Local = new alto.lang.component.Host.Numeric(0);
+        /**
+         * A host address component with the low bit on.
+         */
         public final static Component.Host Global = new alto.lang.component.Host.Numeric(1);
+        /**
+         * In (relation U) with (host Global).
+         */
         public final static Component[] Base = new Component[]{Component.Relation.U, Component.Host.Global};
 
         public final static class Tools
@@ -789,12 +799,38 @@ public interface Component
         }
     }
     /**
-     * <p> The third component of every address.  A DJB32 hash of a
-     * mimetype string. </p>
+     * <p> The third component of every address.  A hash of a mimetype
+     * identifier string. </p>
      */
     public interface Type
         extends Component.Numeric
     {
+        /**
+         * Necessary mimetype strings 
+         */
+        public final static class Strings {
+            public final static String MimeType = "application/x-mimetype";
+            public final static String Address = "application/x-syntelos-address";
+            public final static String Keys = "application/x-syntelos-io-keys";
+            public final static String Sio = "application/x-syntelos-io";
+            public final static String Affinity = "application/x-syntelos-config;x=affinity";
+            public final static String Capabilities = "application/x-syntelos-io-capabilities";
+            public final static String Config = "application/x-syntelos-config";
+            public final static String Index = "application/x-syntelos-index-value";
+            public final static String Init = "application/x-syntelos-config;x=init";
+        }
+        public final static class Instances {
+            public final static Component.Type MimeType = new alto.lang.component.Type.Numeric(Strings.MimeType);
+            public final static Component.Type Address = new alto.lang.component.Type.Numeric(Strings.Address);
+            public final static Component.Type Keys = new alto.lang.component.Type.Numeric(Strings.Keys);
+            public final static Component.Type Sio = new alto.lang.component.Type.Numeric(Strings.Sio);
+            public final static Component.Type Affinity = new alto.lang.component.Type.Numeric(Strings.Affinity);
+            public final static Component.Type Capabilities = new alto.lang.component.Type.Numeric(Strings.Capabilities);
+            public final static Component.Type Config = new alto.lang.component.Type.Numeric(Strings.Config);
+            public final static Component.Type Index = new alto.lang.component.Type.Numeric(Strings.Index);
+            public final static Component.Type Init = new alto.lang.component.Type.Numeric(Strings.Init);
+        }
+
         public final static int Position = 2;
         public final static int LengthWith = (Position+1);
 
@@ -821,7 +857,7 @@ public interface Component
                 Component[][] list = null;
                 for (int cc = 0, count = typeList.length(); cc < count; cc++){
                     alto.lang.Type type = typeList.get(cc);
-                    Component componentType = type.hashAddressComponent();
+                    Component.Type componentType = type.getAddressComponent();
                     Component[] address = new Component[]{Component.Relation.U,host,componentType};
                     list = Component.List.Add(list,address);
                 }
@@ -860,7 +896,7 @@ public interface Component
                     Component.Relation.U,//(U)//(direct)
                     Component.Host.Global,
                     atyp,
-                    new alto.lang.component.Path.Numeric(addr.toByteArray()),
+                    new alto.lang.component.Path.Numeric(atyp,addr.toByteArray()),
                     Component.Version.Current
                 };
             }
@@ -872,7 +908,7 @@ public interface Component
             }
             public final static Component.Type ValueOf(alto.lang.Type type){
                 if (null != type)
-                    return (Component.Type)type.hashAddressComponent();
+                    return type.getAddressComponent();
                 else
                     throw new java.lang.IllegalArgumentException();
             }
@@ -1067,12 +1103,12 @@ public interface Component
          */
         public final static Component.Version Current = new alto.lang.component.Version.Named(CurrentName);
             
-        public final static java.lang.String TempName = "temporary";
+        public final static java.lang.String TemporaryName = "temporary";
         /**
          * Storage item version transaction temporary file name
          * <code>"temporary"</code>.
          */
-        public final static Component.Version Temp = new alto.lang.component.Version.Named(TempName);
+        public final static Component.Version Temporary = new alto.lang.component.Version.Named(TemporaryName);
 
         public final static class Tools
             extends Component.Tools

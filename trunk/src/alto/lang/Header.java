@@ -159,9 +159,10 @@ public class Header
             {
                 public final static String Name = "X-Method";
 
-                public final static Method SX = new Method("SX/1.0");
-                public final static Method SXU = new Method("SX/1.0 U/1.0");
-
+                public interface Const {
+                    public final static Method SX = new Method("SX/1.0");
+                    public final static Method SXU = new Method("SX/1.0 U/1.0");
+                }
 
                 public Method(String value){
                     super(Name,value);
@@ -171,10 +172,11 @@ public class Header
                 extends Header.Http
                 implements Header.Http.Value
             {
-                public final static Connection KeepAlive = new Connection("Connection","keep-alive");
-                public final static Connection Close = new Connection("Connection","close");
-                public final static Connection Upgrade = new Connection("Connection","Upgrade");
-
+                public interface Const {
+                    public final static Connection KeepAlive = new Connection("Connection","keep-alive");
+                    public final static Connection Close = new Connection("Connection","close");
+                    public final static Connection Upgrade = new Connection("Connection","Upgrade");
+                }
 
                 public Connection(String name, String value){
                     super(name,value);
@@ -184,20 +186,22 @@ public class Header
                 extends Header.Http
                 implements Header.Http.Value
             {
-                public final static ContentType Text = new ContentType("Content-Type",Type.Tools.Of("txt"));
-                public final static ContentType Html = new ContentType("Content-Type",Type.Tools.Of("html"));
-                public final static ContentType Xml = new ContentType("Content-Type",Type.Tools.Of("xml"));
-                public final static ContentType ApplicationXml = new ContentType("Content-Type",Type.Tools.Of("axml"));
-                public final static ContentType JavaSource = new ContentType("Content-Type",Type.Tools.Of("java"));
-                public final static ContentType JavaClass = new ContentType("Content-Type",Type.Tools.Of("class"));
 
-                public final static ContentType Multipart = new ContentType("Content-Type",Type.Tools.Of("multipart"));
-                public final static ContentType MessageHttp = new ContentType("Content-Type",Type.Tools.Of("http"));
-                public final static ContentType UrlEncoded = new ContentType("Content-Type",Type.Tools.Of("www"));
+                public interface Const {
+                    public final static ContentType Text = new ContentType("Content-Type",Type.Tools.Of("txt"));
+                    public final static ContentType Html = new ContentType("Content-Type",Type.Tools.Of("html"));
+                    public final static ContentType Xml = new ContentType("Content-Type",Type.Tools.Of("xml"));
+                    public final static ContentType ApplicationXml = new ContentType("Content-Type",Type.Tools.Of("axml"));
+                    public final static ContentType JavaSource = new ContentType("Content-Type",Type.Tools.Of("java"));
+                    public final static ContentType JavaClass = new ContentType("Content-Type",Type.Tools.Of("class"));
 
-                public final static ContentType Jar = new ContentType("Content-Type",Type.Tools.Of("jar"));
-                public final static ContentType Zip = new ContentType("Content-Type",Type.Tools.Of("zip"));
+                    public final static ContentType Multipart = new ContentType("Content-Type",Type.Tools.Of("multipart"));
+                    public final static ContentType MessageHttp = new ContentType("Content-Type",Type.Tools.Of("http"));
+                    public final static ContentType UrlEncoded = new ContentType("Content-Type",Type.Tools.Of("www"));
 
+                    public final static ContentType Jar = new ContentType("Content-Type",Type.Tools.Of("jar"));
+                    public final static ContentType Zip = new ContentType("Content-Type",Type.Tools.Of("zip"));
+                }
 
                 public ContentType(String name, alto.lang.Type value){
                     super(name,value.toString(),value);
@@ -257,7 +261,7 @@ public class Header
         }
         throw new Malformed(line);
     }
-    public Header(String name, java.lang.Object value){
+    public Header(String name, Object value){
         this(name,((null != value)?(value.toString()):(null)),value);
     }
     public Header(String name, String value){
@@ -503,9 +507,11 @@ public class Header
         if (null != bufBytes && bufString == string)
             return bufBytes;
         else {
-            if (null == string)
+            if (null == string){
                 string = this.toString();
-
+                if (1 > string.length())
+                    return new byte[0];
+            }
             bufBytes = alto.io.u.Utf8.encode(string+"\r\n");
 
             synchronized(this){
@@ -521,14 +527,17 @@ public class Header
             return string;
         else { 
             String name = this.name;
-            String value = this.value;
-            if (null != value)
-                string = (name+": "+value);
-            else
-                string = (name+": ");
-
-            this.string = string;
-            return string;
+            if (null == name)
+                return "";
+            else {
+                String value = this.value;
+                if (null != value)
+                    string = (name+": "+value);
+                else
+                    string = (name+": ");
+                this.string = string;
+                return string;
+            }
         }
     }
     /**

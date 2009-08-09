@@ -236,6 +236,10 @@ public class Address
     public Address(Component[] prefix, Component suffix){
         this(Component.List.Add(prefix,suffix));
     }
+    public Address(Component container, alto.lang.Type type, java.lang.String path){
+        this(container,type.getAddressComponent(),Component.Path.Tools.ValueOf(type,path));
+        this.path = Component.Tools.Path(path);
+    }
     public Address(Address prefix, java.lang.String p){
         this(Component.Tools.For(prefix.getAddressComponents(),p));
     }
@@ -420,6 +424,12 @@ public class Address
     }
     public final boolean isNotAddressToCurrent(){
         return (!(Component.Version.Current.equals(this.getComponentTerminal())));
+    }
+    public final boolean isAddressToTemporary(){
+        return (Component.Version.Temporary.equals(this.getComponentTerminal()));
+    }
+    public final boolean isNotAddressToTemporary(){
+        return (!(Component.Version.Temporary.equals(this.getComponentTerminal())));
     }
     public final boolean isAddressToNamed(){
         return (this.getComponentTerminal() instanceof Component.Named);
@@ -682,7 +692,7 @@ public class Address
         return false;
     }
     public final boolean inClass(alto.lang.Type type){
-        Component b = type.hashAddressComponent();
+        Component.Type b = type.getAddressComponent();
         return this.inClass(b);
     }
     public boolean nocache(){

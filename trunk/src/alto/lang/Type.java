@@ -42,6 +42,22 @@ public interface Type
         extends java.lang.Object
     {
 
+        public final static class Instances {
+
+            public final static alto.lang.Type MimeType(){
+                return alto.lang.Type.Tools.For(Component.Type.Instances.MimeType);
+            }
+            public final static alto.lang.Type Address(){
+                return alto.lang.Type.Tools.For(Component.Type.Instances.Address);
+            }
+            public final static alto.lang.Type Keys(){
+                return alto.lang.Type.Tools.For(Component.Type.Instances.Keys);
+            }
+            public final static alto.lang.Type Sio(){
+                return alto.lang.Type.Tools.For(Component.Type.Instances.Sio);
+            }
+        }
+
         protected static Tools Instance;
 
         /**
@@ -56,12 +72,6 @@ public interface Type
                 throw new alto.sys.Error.State.Init("alto.io.Tools already initialized");
         }
 
-        public final static Type ForMimeType(){
-            return For(alto.lang.component.Type.Numeric.MimeType.Instance);
-        }
-        public final static Type ForAddress(){
-            return For(alto.lang.component.Type.Numeric.Address.Instance);
-        }
         public final static Type For(String mimetype){
             if (null != Instance)
                 try {
@@ -73,10 +83,17 @@ public interface Type
             else
                 throw new alto.sys.Error.State.Init("alto.io.Tools not initialized");
         }
-        public final static Type For(Component.Type type){
+        public final static Type For(Component.Type addr){
             if (null != Instance)
                 try {
-                    return Instance.dereference(new Reference(Component.Type.Tools.For(type)));
+                    Reference ref = new Reference(Component.Type.Tools.For(addr));
+                    Type type = Instance.dereference(ref);
+                    if (null != type){
+                        String name = type.getName();
+                        if (null == name)
+                            throw new alto.sys.Error.Bug();
+                    }
+                    return type;
                 }
                 catch (java.io.IOException exc){
                     return null;
@@ -252,7 +269,7 @@ public interface Type
 
         /**
          * Set storage content type and rtype instances into the file
-         * cache.
+         * cache for those types necessary to storage I/O.
          */
         protected abstract alto.lang.Type[] bootstrap();
 
@@ -261,21 +278,26 @@ public interface Type
          * cache.
          */
         public Tools init(){
+            /*
+             * Install 
+             */
             alto.lang.Type[] types = this.bootstrap();
-            int idx = 0;
+            /*
+             * Validate
+             */
             alto.lang.Type test;
+
             for (alto.lang.Type type : types){
+
                 String name = type.getName();
                 test = Type.Tools.For(name);
                 if (type != test && (!type.equals(test)))
-                    throw new alto.sys.Error.Bug(name+'@'+String.valueOf(idx)+'@'+type);
+                    throw new alto.sys.Error.Bug(name+'@'+type);
 
                 String fext = type.getFext();
                 test = Type.Tools.Of(fext);
                 if (type != test && (!type.equals(test)))
-                    throw new alto.sys.Error.Bug(fext+'@'+String.valueOf(idx)+'@'+type);
-
-                idx += 1;
+                    throw new alto.sys.Error.Bug(fext+'@'+type);
             }
             return this;
         }
@@ -556,13 +578,8 @@ public interface Type
 
     public void setTypeTransactional(java.lang.Boolean value);
 
-    public java.lang.String getKey();
+    public Component.Type getAddressComponent();
 
-    public byte[] hashAddress();
-
-    public Component.Numeric hashAddressComponent();
-
-    public java.lang.String hashAddressString();
     /**
      * @return This type expression is "* / *".
      */

@@ -262,33 +262,44 @@ public class Reference
     protected URI uri;
 
 
-    protected Reference(){
-        super();
-        this.string = null;
-    }
     public Reference(String string){
         super();
-        this.string = string;
-        this.address = new Address(string);
-        this.parser = address.getUri();
+        if (null != string){
+            this.string = string;
+            this.address = new Address(string);
+            this.parser = address.getUri();
+        }
+        else
+            throw new alto.sys.Error.Argument();
     }
     public Reference(Address address){
         super();
-        this.address = address;
-        this.string = address.getAddressReference();
-        this.parser = address.getUri();
+        if (null != address){
+            this.address = address;
+            this.string = address.getAddressReference();
+            this.parser = address.getUri();
+        }
+        else
+            throw new alto.sys.Error.Argument();
     }
     public Reference(Component[] address){
         this(new Address(address));
     }
     public Reference(String string, Address address){
         super();
-        this.string = string;
-        this.address = address;
-        this.parser = new alto.io.u.Uri(string);
+        if (null != string){
+            this.string = string;
+            this.address = address;
+            this.parser = new alto.io.u.Uri(string);
+        }
+        else
+            throw new alto.sys.Error.Argument();
     }
     public Reference(String hostname, Type type, String path){
         this( ("http://"+alto.io.u.Chbuf.fcat(hostname,path)), (new Address(Component.Host.Tools.ValueOf(hostname),Component.Type.Tools.ValueOf(type),Component.Path.Tools.ValueOf(path))));
+    }
+    public Reference(Component container, Type type, String path){
+        this(new Address(container,type,path));
     }
 
     /**
@@ -558,7 +569,10 @@ public class Reference
         File storage = this.getStorage();
         if (null != storage){
             try {
-                return storage.write();
+                HttpMessage container = storage.write();
+                container.setPathCompleteWithDefaults(this);
+                this.container = container;
+                return container;
             }
             catch (alto.sys.UnauthorizedException exc){
                 throw new alto.sys.UnauthorizedException(this.toString(),exc);
@@ -592,7 +606,29 @@ public class Reference
                 if (null != storage){
 
                     if (container.maySetAuthenticationMethodStore()){
-                        if (container.maySetPrincipalFromContext()){
+                        Object content = this.getStorageContent();
+                        if (content instanceof Principal.Authentic){
+                            /*
+                             * Defining init credentials
+                             */
+                            Principal.Authentic principal = (Principal.Authentic)content;
+                            if (container.maySetPrincipalToContext(principal)){
+                                if (container.authSign()){
+                                    if (storage.write(container))
+                                        return;
+                                    else
+                                        throw new alto.sys.Error.State("Invalid authentication");
+                                }
+                                else
+                                    throw new alto.sys.Error.State("Failed authentication");
+                            }
+                            else 
+                                throw new alto.sys.Error.Bug();
+                        }
+                        /*
+                         * Normal pull credentials
+                         */
+                        else if (container.maySetPrincipalFromContext()){
                             if (container.authSign()){
                                 if (storage.write(container))
                                     return;
@@ -802,6 +838,13 @@ public class Reference
     {
         return (java.io.OutputStream)this.openOutput();
     }
+    public alto.io.Output openOutput(Object content)
+        throws java.io.IOException
+    {
+        alto.io.Output out = this.openOutput();
+        this.setStorageContent(content);
+        return out;
+    }
     public alto.io.Output openOutput()
         throws java.io.IOException
     {
@@ -891,9 +934,8 @@ public class Reference
         throws java.io.IOException
     {
         File storage = this.getStorage();
-        if (null != storage){
+        if (null != storage)
             return storage.getContent();
-        }
         else
             return null;
     }
@@ -904,9 +946,8 @@ public class Reference
         throws java.io.IOException
     {
         File storage = this.getStorage();
-        if (null != storage){
+        if (null != storage)
             return storage.setContent(content);
-        }
         else
             return null;
     }

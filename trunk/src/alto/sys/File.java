@@ -205,19 +205,10 @@ public abstract class File
                  * Read message from storage
                  */
                 message = this.newHttpMessage();
-                synchronized(this){
-                    if (null != this.message){
-                        this.message = message;
-                    }
-                    else {
-                        this.message = message;
-                        alto.io.Input in = this.openMessageInput();
-                        message.readMessage(in);
-                        message = this.message;
-                        return message;
-                    }
-                }
-                return null;
+                this.message = message;
+                alto.io.Input in = this.openMessageInput();
+                message.readMessage(in);
+                return message;
             }
             finally {
                 this.lockReadExit();
@@ -246,10 +237,8 @@ public abstract class File
     {
         if (this.isValidForWrite(message)){
             if (this.isNotPersistent()){
-                synchronized(this){
-                    this.message = message;
-                    this.stat(message.getContentLength(),message.getLastModified());
-                }
+                this.message = message;
+                this.stat(message.getContentLength(),message.getLastModified());
             }
             else {
                 /*
@@ -262,9 +251,8 @@ public abstract class File
                 finally {
                     out.close();
                 }
-                synchronized(this){
-                    this.message = message;
-                }
+                this.message = message;
+
                 FileManager.DFSNotifyPUT(this);
             }
             return true;
@@ -400,7 +388,6 @@ public abstract class File
      * @return Argument on success
      */
     public Object setContent(Object content){
-
         return (this.content = content);
     }
     public Object dropContent(){
@@ -430,6 +417,15 @@ public abstract class File
     }
     public boolean isAddressToCurrent(){
         return this.address.isAddressToCurrent();
+    }
+    public boolean isNotAddressToCurrent(){
+        return this.address.isNotAddressToCurrent();
+    }
+    public boolean isAddressToTemporary(){
+        return this.address.isAddressToTemporary();
+    }
+    public boolean isNotAddressToTemporary(){
+        return (this.address.isNotAddressToTemporary());
     }
     /**
      * @return Writes are to "temporary", and then moved to named
@@ -836,7 +832,7 @@ public abstract class File
         return fm.getStorage(newVersion);
     }
     public Component tempVersion(){
-        return Component.Version.Temp;
+        return Component.Version.Temporary;
     }
     public Address tempVersionAddress(){
         Component tempVersion = this.tempVersion();
