@@ -820,15 +820,15 @@ public interface Component
             public final static String Init = "application/x-syntelos-config;x=init";
         }
         public final static class Instances {
-            public final static Component.Type MimeType = new alto.lang.component.Type.Numeric(Strings.MimeType);
-            public final static Component.Type Address = new alto.lang.component.Type.Numeric(Strings.Address);
-            public final static Component.Type Keys = new alto.lang.component.Type.Numeric(Strings.Keys);
-            public final static Component.Type Sio = new alto.lang.component.Type.Numeric(Strings.Sio);
-            public final static Component.Type Affinity = new alto.lang.component.Type.Numeric(Strings.Affinity);
-            public final static Component.Type Capabilities = new alto.lang.component.Type.Numeric(Strings.Capabilities);
-            public final static Component.Type Config = new alto.lang.component.Type.Numeric(Strings.Config);
-            public final static Component.Type Index = new alto.lang.component.Type.Numeric(Strings.Index);
-            public final static Component.Type Init = new alto.lang.component.Type.Numeric(Strings.Init);
+            public final static Component.Type MimeType = alto.lang.component.Type.Numeric.MimeType.Instance;
+            public final static Component.Type Address = alto.lang.component.Type.Numeric.Address.Instance;
+            public final static Component.Type Keys = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Keys);
+            public final static Component.Type Sio = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Sio);
+            public final static Component.Type Affinity = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Affinity);
+            public final static Component.Type Capabilities = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Capabilities);
+            public final static Component.Type Config = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Config);
+            public final static Component.Type Index = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Index);
+            public final static Component.Type Init = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Init);
         }
 
         public final static int Position = 2;
