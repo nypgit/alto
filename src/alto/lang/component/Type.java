@@ -82,10 +82,7 @@ public interface Type
         {
             super(in);
         }
-        /**
-         * @see alto.lang.component.Type$MimeType
-         */
-        protected Numeric(Function function, java.lang.String path){
+        public Numeric(Function function, java.lang.String path){
             super(function,path);
         }
 
