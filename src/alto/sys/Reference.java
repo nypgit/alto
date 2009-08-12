@@ -247,7 +247,7 @@ public class Reference
 
     protected Address address;
 
-    protected HttpMessage container;
+    protected HttpMessage containerWrite;
 
     protected URL url;
 
@@ -535,12 +535,6 @@ public class Reference
         }
         return path;
     }
-    public boolean hasContainer(){
-        return (null != this.container);
-    }
-    public HttpMessage getContainer(){
-        return this.container;
-    }
 
     /**
      * Reference container from storage
@@ -571,7 +565,7 @@ public class Reference
             try {
                 HttpMessage container = storage.write();
                 container.setPathCompleteWithDefaults(this);
-                this.container = container;
+                this.containerWrite = container;
                 return container;
             }
             catch (alto.sys.UnauthorizedException exc){
@@ -585,8 +579,8 @@ public class Reference
     public void close()
         throws java.io.IOException
     {
-        HttpMessage container = this.container;
-        if (null != container){
+        HttpMessage containerWrite = this.containerWrite;
+        if (null != containerWrite){
             try {
                 URL url = this.url;
                 if (null != url){
@@ -597,7 +591,9 @@ public class Reference
 
                         nc.setReference(this);
 
-                        nc.write(container);
+                        nc.write(containerWrite);
+
+                        return;
                     }
                     else
                         throw new alto.sys.Error.Bug(this.toString());
@@ -605,16 +601,16 @@ public class Reference
                 File storage = this.getStorage();
                 if (null != storage){
 
-                    if (container.maySetAuthenticationMethodStore()){
+                    if (containerWrite.maySetAuthenticationMethodStore()){
                         Object content = this.getStorageContent();
                         if (content instanceof Principal.Authentic){
                             /*
                              * Defining init credentials
                              */
                             Principal.Authentic principal = (Principal.Authentic)content;
-                            if (container.maySetPrincipalToContext(principal)){
-                                if (container.authSign()){
-                                    if (storage.write(container))
+                            if (containerWrite.maySetPrincipalToContext(principal)){
+                                if (containerWrite.authSign()){
+                                    if (storage.write(containerWrite))
                                         return;
                                     else
                                         throw new alto.sys.Error.State("Invalid authentication");
@@ -628,9 +624,9 @@ public class Reference
                         /*
                          * Normal pull credentials
                          */
-                        else if (container.maySetPrincipalFromContext()){
-                            if (container.authSign()){
-                                if (storage.write(container))
+                        else if (containerWrite.maySetPrincipalFromContext()){
+                            if (containerWrite.authSign()){
+                                if (storage.write(containerWrite))
                                     return;
                                 else
                                     throw new alto.sys.Error.State("Invalid authentication");
@@ -648,7 +644,7 @@ public class Reference
                     throw new alto.sys.Error.Bug(this.toString());
             }
             finally {
-                this.container = null;
+                this.containerWrite = null;
             }
         }
     }
@@ -665,115 +661,6 @@ public class Reference
             return false;
         }
     }
-    /**
-     * If there is an open created container, and the current thread has no
-     * context, then set the current thread context to the created
-     * container.  This permits the container to authenticate and write, for
-     * client or bootstrap operations.
-     * 
-     * This method assumes neither client side nor server side.  
-     * 
-     * @see alto.sec.Keys#authenticate()
-     */
-    public boolean enterThreadContextFromContainerTry(){
-        HttpMessage container = this.container;
-        if (null != container)
-            return Thread.MaySetContext(container);
-        else
-            return false;
-    }
-    /**
-     * Authenticate the created method from the {@link Thread}
-     * context principal.
-     */
-    @Code(Check.Locking)
-    public void signContainer()
-        throws java.io.IOException
-    {
-        HttpMessage container = this.container;
-        if (null != container)
-            container.authSign();
-        else
-            throw new alto.sys.Error.Bug();
-    }
-    /**
-     * Authenticated the created container with the argument principal.
-     */
-    public void signContainer(Principal.Authentic principal)
-        throws java.io.IOException
-    {
-        HttpMessage container = this.container;
-        if (null != container)
-            container.authSign(principal);
-        else
-            throw new alto.sys.Error.Bug();
-    }
-    /**
-     * Authenticate the created method from the {@link Thread}
-     * context principal.
-     */
-    @Code(Check.Locking)
-    public void verifyContainer()
-        throws java.io.IOException
-    {
-        HttpMessage container = this.container;
-        if (null != container)
-            container.authVerify();
-        else
-            throw new alto.sys.Error.Bug();
-    }
-    /**
-     * Authenticated the created container with the argument principal.
-     */
-    public void verifyContainer(Principal.Authentic principal)
-        throws java.io.IOException
-    {
-        HttpMessage container = this.container;
-        if (null != container)
-            container.authVerify(principal);
-        else
-            throw new alto.sys.Error.Bug();
-    }
-    public boolean hasContainerAuthenticationMethod(){
-        HttpMessage container = this.container;
-        if (null != container)
-            return container.hasAuthenticationMethod();
-        else
-            throw new alto.sys.Error.Bug();
-    }
-    public Authentication getContainerAuthenticationMethod(){
-        HttpMessage container = this.container;
-        if (null != container)
-            return container.getAuthenticationMethod();
-        else
-            throw new alto.sys.Error.Bug();
-    }
-    public void setContainerAuthenticationMethod(Authentication auth){
-        HttpMessage container = this.container;
-        if (null != container)
-            container.setAuthenticationMethod(auth);
-        else
-            throw new alto.sys.Error.Bug();
-    }
-    public boolean maySetContainerAuthenticationMethod(Authentication auth){
-        HttpMessage container = this.container;
-        if (null != container)
-            return container.maySetAuthenticationMethod(auth);
-        else
-            throw new alto.sys.Error.Bug();
-    }
-    public boolean maySetContainerAuthenticationMethodStore(){
-        return this.maySetContainerAuthenticationMethodStore();
-    }
-    public boolean isContainerAuthVerifiable(){
-        HttpMessage container = this.container;
-        if (null != container)
-            return container.isAuthVerifiable();
-        else
-            throw new alto.sys.Error.Bug();
-    }
-
-
     public java.nio.channels.ReadableByteChannel openChannelReadable()
         throws java.io.IOException
     {
@@ -1094,26 +981,46 @@ public class Reference
     public void setCharContentAsClass(Class clas) throws java.io.IOException {
         this.setCharContent(clas.getName());
     }
+    /**
+     * Basic implementation of HTTP GET (this) Reference without
+     * Conditional GET semantics.
+     */
     public boolean get(HttpMessage response)
         throws java.io.IOException
     {
         return this.copyTo(response);
     }
+    /**
+     * Basic implementation of HTTP GET (this) Reference without
+     * Conditional GET semantics.
+     */
     public boolean get(Reference target)
         throws java.io.IOException
     {
         return this.copyTo(target);
     }
+    /**
+     * Basic implementation of HTTP HEAD (this) Reference without
+     * Conditional GET semantics.
+     */
     public boolean head(HttpMessage response)
         throws java.io.IOException
     {
         return this.headTo(response);
     }
+    /**
+     * Basic implementation of HTTP PUT (this) Reference without
+     * Conditional PUT semantics.
+     */
     public boolean put(HttpMessage request)
         throws java.io.IOException
     {
         return this.copyFrom(request);
     }
+    /**
+     * Basic implementation of HTTP PUT (this) Reference without
+     * Conditional PUT semantics.
+     */
     public boolean put(Reference source)
         throws java.io.IOException
     {
@@ -1145,7 +1052,7 @@ public class Reference
                 ((HttpRequest)request).setLocation();
             //
             try {
-                this.container = request;
+                this.containerWrite = request;
                 return true;
             }
             finally {
