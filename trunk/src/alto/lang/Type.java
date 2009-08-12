@@ -135,11 +135,14 @@ public interface Type
             else
                 throw new alto.sys.Error.State.Init("alto.io.Tools not initialized");
         }
-        public final static Reference ReferenceToMimetype(String identifier){
-            return new Reference(Component.Type.Tools.For(identifier));
+        public final static Reference ReferenceToMimeType(String identifier){
+            return Component.Type.Tools.ReferenceTo(identifier);
         }
         public final static Reference ReferenceToFext(String identifier){
-            return new Reference(Component.Type.Tools.ForR(identifier));
+            return Component.Type.Tools.ReferenceToR(identifier);
+        }
+        public final static Reference ReferenceToArg(String identifier){
+            return Component.Type.Tools.ReferenceToArg(identifier);
         }
 
         /**

@@ -946,6 +946,12 @@ public interface Component
             public final static Reference ReferenceTo(java.lang.String mimetype){
                 return new Reference(new Address(For(mimetype)));
             }
+            public final static Reference ReferenceToArg(java.lang.String string){
+                if (0 < string.indexOf('/'))
+                    return new Reference(new Address(For(string)));
+                else
+                    return new Reference(new Address(ForR(string)));
+            }
             public final static Reference ReferenceTo(Reference contentReference){
                 return contentReference.toAddressClass(alto.lang.component.Type.Numeric.MimeType.Instance);
             }
@@ -1069,11 +1075,31 @@ public interface Component
             public final static Component.Path Dereference(Reference reference)
                 throws java.io.IOException
             {
-                byte[] bits = reference.getBuffer();
-                if (null != bits)
-                    return new alto.lang.component.Path.Numeric(bits);
-                else
-                    return null;
+                Object content = reference.getStorageContent();
+                if (null != content){
+                    if (content instanceof Component.Path)
+                        return (Component.Path)content;
+                    else if (content instanceof Buffer){
+                        Buffer buf = (Buffer)content;
+                        return new alto.lang.component.Path.Numeric(buf.getBuffer());
+                    }
+                    else if (content instanceof java.math.BigInteger){
+                        java.math.BigInteger bint = (java.math.BigInteger)content;
+                        return new alto.lang.component.Path.Numeric(bint.toByteArray());
+                    }
+                    else
+                        throw new alto.sys.Error.State(content.getClass().getName());
+                }
+                else {
+                    byte[] bits = reference.getBuffer();
+                    if (null != bits){
+                        Component.Path value = new alto.lang.component.Path.Numeric(bits);
+                        reference.setStorageContent(value);
+                        return value;
+                    }
+                    else
+                        return null;
+                }
             }
         }
 
