@@ -30,7 +30,7 @@ import alto.sys.Reference;
  * This class includes a command line tool for debuging SIO files.
  */
 public abstract class File
-    extends SIOB
+    extends Abstract
     implements Sio.Type.TypeClass
 {
     public final static class Debug

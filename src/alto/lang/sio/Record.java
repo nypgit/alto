@@ -27,7 +27,7 @@ import alto.lang.Sio;
  * 
  */
 public abstract class Record 
-    extends SIOB
+    extends Abstract
     implements Sio.Type.Record
 {
     public final static byte Tag = Sio.Tag.Record;

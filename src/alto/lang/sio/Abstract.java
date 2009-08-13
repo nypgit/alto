@@ -27,7 +27,7 @@ import alto.lang.Sio;
  * The superclass {@link Buffer$IOB} buffer contains payload for
  * this object.
  */
-public abstract class SIOB
+public abstract class Abstract
     extends alto.lang.Buffer.IOB
     implements Sio
 {
@@ -79,10 +79,10 @@ public abstract class SIOB
     protected int sioTag;
 
 
-    public SIOB(){
+    public Abstract(){
         super();
     }
-    public SIOB(Input in)
+    public Abstract(Input in)
         throws java.io.IOException
     {
         this();
@@ -103,8 +103,8 @@ public abstract class SIOB
             out.push();
             for (int cc = 0, count = contents.length; cc < count; cc++){
                 Object content = contents[cc];
-                if (content instanceof SIOB)
-                    ((SIOB)content).debugPrint(out);
+                if (content instanceof Abstract)
+                    ((Abstract)content).debugPrint(out);
                 else if (content instanceof byte[]){
                     byte[] data = (byte[])content;
                     out.dataln(data);

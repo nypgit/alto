@@ -30,7 +30,7 @@ import alto.lang.sio.Field;
  * 
  */
 public abstract class Field 
-    extends SIOB
+    extends Abstract
     implements Sio.Type.Field
 {
     public final static byte Tag = Sio.Tag.Field;
