@@ -20,7 +20,6 @@ package alto.lang.sio;
 
 import alto.io.Input;
 import alto.io.Output;
-import alto.lang.Component;
 import alto.lang.Sio;
 
 /**
@@ -106,6 +105,7 @@ public abstract class Record
 
     public Record(){
         super();
+        this.sioTag = Tag;
     }
     public Record(Input in)
         throws java.io.IOException

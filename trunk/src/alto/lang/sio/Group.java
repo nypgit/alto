@@ -20,7 +20,6 @@ package alto.lang.sio;
 
 import alto.io.Input;
 import alto.io.Output;
-import alto.lang.Component;
 import alto.lang.Sio;
 
 /**
@@ -107,6 +106,7 @@ public abstract class Group
 
     public Group(){
         super();
+        this.sioTag = Tag;
     }
     public Group(Input in)
         throws java.io.IOException

@@ -177,6 +177,7 @@ public abstract class File
 
     public File(){
         super();
+        this.sioTag = Group.Tag;
     }
     public File(Input in)
         throws java.io.IOException
@@ -233,10 +234,13 @@ public abstract class File
         throws java.io.IOException
     {
         Component.Path type = this.getSioType();
-        if (null != type)
+        if (null != type){
+
             Sio.Head.Write(type,out);
+
+            super.sioWrite(out);
+        }
         else
             throw new alto.sys.Error.State("Missing Sio Type");
-        super.sioWrite(out);
     }
 }

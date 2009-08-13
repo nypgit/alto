@@ -24,8 +24,19 @@ import alto.lang.Component;
 import alto.lang.Sio;
 
 /**
- * The superclass {@link Buffer$IOB} buffer contains payload for
- * this object.
+ * The superclass {@link Buffer$IOB} buffer contains the payload
+ * content for this object.
+ * 
+ * <h3>In writing</h3>
+ * 
+ * An instance writes itself and its children into its buffer, and
+ * then writes its SIO formatted output with its Tag and Length prefix
+ * to the buffer content.
+ * 
+ * <h3>In Reading</h3>
+ * 
+ * An instance reads its tag and length many bytes into its buffer,
+ * and then decodes itself and its children from its buffer.
  */
 public abstract class Abstract
     extends alto.lang.Buffer.IOB
@@ -116,14 +127,14 @@ public abstract class Abstract
     }
 
     public final boolean hasSioTag(){
-        return Tag.IsValid(this.sioTag);
+        return Sio.Tag.IsValid(this.sioTag);
     }
     public final boolean hasNotSioTag(){
-        return (!Tag.IsValid(this.sioTag));
+        return (!Sio.Tag.IsValid(this.sioTag));
     }
     public final int getSioTag(){
         int sioTag = this.sioTag;
-        if (Tag.IsValid(sioTag))
+        if (Sio.Tag.IsValid(sioTag))
             return sioTag;
 
         else if (this instanceof Sio.Type.Field){
@@ -163,7 +174,7 @@ public abstract class Abstract
         throws java.io.IOException
     {
         int sioTag = in.read();
-        if (Tag.IsValid(sioTag)){
+        if (Sio.Tag.IsValid(sioTag)){
             this.sioTag = sioTag;
             int len = Sio.Length.Read(in);
             this.readFrom(in,len);
