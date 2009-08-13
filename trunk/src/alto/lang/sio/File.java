@@ -177,7 +177,6 @@ public abstract class File
 
     public File(){
         super();
-        this.sioTag = Group.Tag;
     }
     public File(Input in)
         throws java.io.IOException

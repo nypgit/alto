@@ -103,7 +103,7 @@ public abstract class PSioFile
             try {
                 this.readMessage();
             }
-            catch (java.io.IOException exc){
+            catch (Exception exc){
                 throw new alto.sys.Error.State(this.getReferenceString(),exc);
             }
         }
