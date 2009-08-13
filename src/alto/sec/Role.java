@@ -22,6 +22,7 @@ import alto.hash.SHA1;
 import alto.io.Input;
 import alto.io.Output;
 import alto.lang.Sio;
+import alto.lang.sio.Field;
 
 import java.util.Set;
 
@@ -139,15 +140,15 @@ public final class Role
          * protected ('in' is buf)
          */
         try {
-            this.uid = Sio.Field.ReadUtf8(in);
+            this.uid = Field.ReadUtf8(in);
 
             /*
              * [Review] Technically this should be done in authenticate
              */
             this.cacheRole = alto.io.Role.Lookup(this.uid);
 
-            this.nonce = Sio.Field.Read(in);
-            this.signature = Sio.Field.Read(in);
+            this.nonce = Field.Read(in);
+            this.signature = Field.Read(in);
         }
         finally {
             in.close();
@@ -163,9 +164,9 @@ public final class Role
          * protected ('out' is buf)
          */
         try {
-            Sio.Field.WriteUtf8(this.uid,out);
-            Sio.Field.Write(this.nonce,out);
-            Sio.Field.Write(this.signature,out);
+            Field.WriteUtf8(this.uid,out);
+            Field.Write(this.nonce,out);
+            Field.Write(this.signature,out);
 
             out.flush();
         }

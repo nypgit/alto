@@ -32,6 +32,7 @@ import alto.lang.Address;
 import alto.lang.Date;
 import alto.lang.Message;
 import alto.lang.Sio;
+import alto.lang.sio.Field;
 import alto.sec.pkcs.PKCS12;
 import alto.sec.x509.AlgorithmId;
 import alto.sec.x509.CertificateAlgorithmId;
@@ -70,7 +71,7 @@ import java.security.spec.X509EncodedKeySpec;
  * public key and private key.
  */
 public final class Key
-    extends Sio.Group
+    extends alto.lang.sio.Group
     implements alto.sys.Destroy
 {
     public final static KeyFactory KeyFactoryRSA ;
@@ -545,11 +546,11 @@ public final class Key
          */
         in = super.openInput();
         try {
-            this.setAlgorithm(Sio.Field.ReadUtf8(in));
+            this.setAlgorithm(Field.ReadUtf8(in));
             try {
                 KeyFactory keyFactory = this.getKeyFactory();
 
-                byte[] keyPublic = Sio.Field.Read(in);
+                byte[] keyPublic = Field.Read(in);
                 try {
                     X509EncodedKeySpec spec = new X509EncodedKeySpec(keyPublic);
                     this.keyPublic = this.keyFactory.generatePublic(spec);
@@ -564,7 +565,7 @@ public final class Key
                     }
                 }
 
-                byte[] keyPrivate = this.unprotectRSA(Sio.Field.Read(in));
+                byte[] keyPrivate = this.unprotectRSA(Field.Read(in));
                 try {
                     PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyPrivate);
                     this.keyPrivate = this.keyFactory.generatePrivate(spec);
@@ -579,9 +580,9 @@ public final class Key
                     }
                 }
 
-                this.sig = Sio.Field.ReadUtf8(in);
+                this.sig = Field.ReadUtf8(in);
 
-                byte[] certBits = Sio.Field.Read(in);
+                byte[] certBits = Field.Read(in);
                 try {
                     X509Certificate certificate = new X509Certificate(certBits);
                     this.certificate = certificate;
@@ -606,34 +607,34 @@ public final class Key
          */
         Output buf = super.openOutput();
         try {
-            Sio.Field.WriteUtf8(this.alg,buf);
+            Field.WriteUtf8(this.alg,buf);
 
             java.security.Key key;
 
             key = this.keyPublic;
             if (null != key)
-                Sio.Field.Write(key.getEncoded(),buf);
+                Field.Write(key.getEncoded(),buf);
             else
-                Sio.Field.Write(null,buf);
+                Field.Write(null,buf);
 
             key = this.keyPrivate;
             if (null != key)
-                Sio.Field.Write(this.protectRSA(key.getEncoded()),buf);
+                Field.Write(this.protectRSA(key.getEncoded()),buf);
             else
-                Sio.Field.Write(null,buf);
+                Field.Write(null,buf);
 
-            Sio.Field.WriteUtf8(this.sig,buf);
+            Field.WriteUtf8(this.sig,buf);
 
             X509Certificate certificate = this.certificate;
             if (null != key)
                 try {
-                    Sio.Field.Write(certificate.getEncodedInternal(),buf);
+                    Field.Write(certificate.getEncodedInternal(),buf);
                 }
                 catch (CertificateEncodingException exc){
                     throw new alto.sys.Error.State(this.toString(),exc);
                 }
             else
-                Sio.Field.Write(null,buf);
+                Field.Write(null,buf);
 
             buf.flush();
         }

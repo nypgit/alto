@@ -717,7 +717,7 @@ public class Address
             Component[] address = null;
             while (true){
                 try {
-                    byte[] cb = Sio.Field.Read(buf);
+                    byte[] cb = alto.lang.sio.Field.Read(buf);
                     if (null != cb){
                         address = Component.List.Add(address,cb);
                     }

@@ -25,6 +25,7 @@ import alto.io.u.Array;
 import alto.io.u.Bits;
 import alto.io.u.Chbuf;
 import alto.lang.Sio;
+import alto.lang.sio.Field;
 
 /**
  * Foreign authentication credentials associated with a principal.
@@ -194,15 +195,15 @@ public final class Auth
          * protected ('in' is buf)
          */
         try {
-            int authtype = Sio.Field.ReadInt(in);
+            int authtype = Field.ReadInt(in);
             this.type = Authentication.Lookup(authtype);
 
-            int count = Sio.Field.ReadInt(in);
+            int count = Field.ReadInt(in);
             this.nelements = count;
 
             java.lang.String elements[] = null, element;
             for (int cc = 0; cc < count; cc++){
-                element = Sio.Field.ReadUtf8(in);
+                element = Field.ReadUtf8(in);
                 elements = Array.add(elements,element);
             }
             this.elements = elements;
@@ -221,17 +222,17 @@ public final class Auth
          * protected ('out' is buf)
          */
         try {
-            Sio.Field.WriteInt(this.type.constant,out);
+            Field.WriteInt(this.type.constant,out);
 
             java.lang.String elements[] = this.elements, element;
             int count = ((null != elements)?(elements.length):(0));
             this.nelements = count;
 
-            Sio.Field.WriteInt(count,out);
+            Field.WriteInt(count,out);
 
             for (int cc = 0; cc < count; cc++){
                 element = elements[cc];
-                Sio.Field.WriteUtf8(element,out);
+                Field.WriteUtf8(element,out);
             }
             out.flush();
         }
