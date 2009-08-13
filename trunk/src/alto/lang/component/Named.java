@@ -21,6 +21,7 @@ package alto.lang.component;
 import alto.hash.Function;
 import alto.lang.Component;
 import alto.lang.Sio;
+import alto.lang.sio.Field;
 import alto.io.Input;
 import alto.io.Output;
 import alto.io.u.Utf8;
@@ -200,7 +201,7 @@ public abstract class Named
         throws IOException
     {
         byte[] content = this.toByteArray();
-        Sio.Field.Write(content,out);
+        Field.Write(content,out);
     }
     public boolean hasHashFunction(){
         return (null != this.hashFunction);

@@ -31,19 +31,15 @@ import alto.lang.Type;
  * 
  */
 public abstract class PSioFile
-    extends Sio.File
+    extends alto.lang.sio.File
     implements P,
-               Sio.Type.Group,
-               alto.sys.Lock.Advanced
+               Sio.Type.Group
 {
 
 
     protected boolean root;
 
     protected Reference reference;
-
-    private final alto.sys.Lock.Advanced lock = 
-        new alto.sys.lock.Light();
 
 
     /**
@@ -230,36 +226,6 @@ public abstract class PSioFile
     }
     public final long getStorageLength(){
         return this.reference.getStorageLength();
-    }
-    public int lockReadLockCount(){
-        return this.lock.lockReadLockCount();
-    }
-    public boolean lockReadEnterTry(){
-        return this.lock.lockReadEnterTry();
-    }
-    public boolean lockReadEnterTry(long millis) throws java.lang.InterruptedException {
-        return this.lock.lockReadEnterTry(millis);
-    }
-    public void lockReadEnter(){
-        this.lock.lockReadEnter();
-    }
-    public void lockReadExit(){
-        this.lock.lockReadExit();
-    }
-    public int lockWriteHoldCount(){
-        return this.lock.lockWriteHoldCount();
-    }
-    public boolean lockWriteEnterTry(){
-        return this.lock.lockWriteEnterTry();
-    }
-    public boolean lockWriteEnterTry(long millis) throws java.lang.InterruptedException {
-        return this.lock.lockWriteEnterTry(millis);
-    }
-    public void lockWriteEnter(){
-        this.lock.lockWriteEnter();
-    }
-    public void lockWriteExit(){
-        this.lock.lockWriteExit();
     }
 
     public java.lang.String toString(){

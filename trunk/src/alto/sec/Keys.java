@@ -29,6 +29,7 @@ import alto.io.Principal;
 import alto.lang.Address;
 import alto.lang.Component;
 import alto.lang.Sio;
+import alto.lang.sio.Field;
 import alto.sec.pkcs.PKCS12;
 import alto.sec.x509.X500Name;
 import alto.sec.x509.X500Signer;
@@ -521,44 +522,44 @@ public class Keys
         Key[] list = this.list;
         if (null != list){
             int cc = 0, count = list.length;
-            Sio.Field.WriteInt(count,out);
+            Field.WriteInt(count,out);
             for (; cc < count; cc++){
                 Key key = list[cc];
                 key.sioWrite(out);
             }
         }
         else
-            Sio.Field.WriteInt(0,out);
+            Field.WriteInt(0,out);
 
         Auth[] auths = this.auths;
         if (null != auths){
             int cc = 0, count = auths.length;
-            Sio.Field.WriteInt(count,out);
+            Field.WriteInt(count,out);
             for (; cc < count; cc++){
                 Auth auth = auths[cc];
                 auth.sioWrite(this,out);//(Protected)
             }
         }
         else
-            Sio.Field.WriteInt(0,out);
+            Field.WriteInt(0,out);
 
         Role[] roles = this.roles;
         if (null != roles){
             int cc = 0, count = roles.length;
-            Sio.Field.WriteInt(count,out);
+            Field.WriteInt(count,out);
             for (; cc < count; cc++){
                 Role role = roles[cc];
                 role.sioWrite(this,out);//(Protected)
             }
         }
         else
-            Sio.Field.WriteInt(0,out);
+            Field.WriteInt(0,out);
     }
     public void readMessage(Input in)
         throws java.io.IOException
     {
         int count;
-        count = Sio.Field.ReadInt(in);
+        count = Field.ReadInt(in);
         if (0 < count){
             Key[] list = new Key[count];
             for (int cc = 0; cc < count; cc++){
@@ -567,7 +568,7 @@ public class Keys
             }
             this.list = list;
         }
-        count = Sio.Field.ReadInt(in);
+        count = Field.ReadInt(in);
         if (0 < count){
             Auth[] list = new Auth[count];
             for (int cc = 0; cc < count; cc++){
@@ -576,7 +577,7 @@ public class Keys
             }
             this.auths = list;
         }
-        count = Sio.Field.ReadInt(in);
+        count = Field.ReadInt(in);
         if (0 < count){
             Role[] list = new Role[count];
             for (int cc = 0; cc < count; cc++){

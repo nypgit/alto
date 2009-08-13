@@ -31,7 +31,7 @@ import alto.lang.Sio;
  * @see Role
  */
 public abstract class Protected
-    extends Sio.Group
+    extends alto.lang.sio.Group
 {
 
 
