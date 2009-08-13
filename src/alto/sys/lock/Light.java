@@ -110,12 +110,12 @@ public class Light
                     long time = java.lang.System.currentTimeMillis();
                     long end = (time+millis);
                     while (time < end){
-                        synchronized(this){
-                            if (this.compareAndSet(true,true)){
-                                this.enterRead += 1;
-                                return true;
-                            }
-                            else {
+                        if (this.compareAndSet(true,true)){
+                            this.enterRead += 1;
+                            return true;
+                        }
+                        else {
+                            synchronized(this){
                                 this.wait(3);
                                 time = java.lang.System.currentTimeMillis();
                             }
@@ -143,13 +143,14 @@ public class Light
             else {
                 try {
                     while (true){
-                        synchronized(this){
-                            if (this.compareAndSet(true,true)){
-                                this.enterRead += 1;
-                                return ;
-                            }
-                            else
+                        if (this.compareAndSet(true,true)){
+                            this.enterRead += 1;
+                            return ;
+                        }
+                        else {
+                            synchronized(this){
                                 this.wait();
+                            }
                         }
                     }
                 }
@@ -179,7 +180,7 @@ public class Light
         }
         else if (this.compareAndSet(true,false)){
             /*
-             * exclude others, and then wait for readers to exit
+             * exclude others, wait for readers to exit
              */
             try {
                 synchronized(this){
@@ -212,11 +213,12 @@ public class Light
                 long time = java.lang.System.currentTimeMillis();
                 long end = (time+millis);
                 while (time < end){
-                    synchronized(this){
-                        if (this.lockWriteEnterTry()){
-                            return true;
-                        }
-                        else {
+                    if (this.lockWriteEnterTry()){
+
+                        return true;
+                    }
+                    else {
+                        synchronized(this){
                             this.wait(3);
                             time = java.lang.System.currentTimeMillis();
                         }
@@ -235,11 +237,12 @@ public class Light
         else {
             try {
                 while (true){
-                    synchronized(this){
-                        if (this.lockWriteEnterTry())
-                            return;
-                        else
+                    if (this.lockWriteEnterTry())
+                        return;
+                    else {
+                        synchronized(this){
                             this.wait();
+                        }
                     }
                 }
             }
