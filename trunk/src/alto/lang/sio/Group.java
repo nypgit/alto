@@ -27,7 +27,7 @@ import alto.lang.Sio;
  * 
  */
 public abstract class Group 
-    extends SIOB
+    extends Abstract
     implements Sio.Type.Group
 {
 

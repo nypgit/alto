@@ -412,24 +412,6 @@ public interface Sio {
         }
     }
 
-    public abstract static class Abstract 
-        extends java.lang.Object
-        implements Sio
-    {
-
-        public Abstract(){
-            super();
-        }
-
-
-        public final void sioRead(byte[] buf)
-            throws java.io.IOException
-        {
-            Input in = new Buffer.InStream(buf);
-            this.sioRead(in);
-        }
-    }
-
 
     public void sioRead(Input in) throws java.io.IOException;
 
