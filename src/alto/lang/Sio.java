@@ -209,17 +209,25 @@ public interface Sio {
                         int d = in.read();
                         if (d == Value[3])
                             return Sio.Type.Read(in);
-                        else
+                        else if (-1 < d)
                             throw new Error(new int[]{a,b,c,d},"Format error version is 0x"+Integer.toHexString(d));
+                        else
+                            throw new Error(new int[]{a,b,c,d},"Format error version is EOF");
                     }
-                    else
+                    else if (-1 < c)
                         throw new Error(new int[]{a,b,c},"Format error head identifier [2] is 0x"+Integer.toHexString(b));
+                    else
+                        throw new Error(new int[]{a,b,c},"Format error head identifier [2] is EOF");
                 }
-                else
+                else if (-1 < b)
                     throw new Error(new int[]{a,b},"Format error head identifier [1] is 0x"+Integer.toHexString(b));
+                else
+                    throw new Error(new int[]{a,b},"Format error head identifier [1] is EOF");
             }
-            else
+            else if (-1 < a)
                 throw new Error(a,"Format error head identifier [0] is 0x"+Integer.toHexString(a));
+            else
+                throw new Error(a,"Format error head identifier [0] is EOF");
         }
         public final static void Write(Component.Path type, Output out)
             throws java.io.IOException

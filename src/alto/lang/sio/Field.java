@@ -22,7 +22,6 @@ import alto.io.Input;
 import alto.io.Output;
 import alto.io.u.Bits;
 import alto.io.u.Utf8;
-import alto.lang.Component;
 import alto.lang.Sio;
 import alto.lang.sio.Field;
 
