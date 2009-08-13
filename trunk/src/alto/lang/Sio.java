@@ -308,7 +308,7 @@ public interface Sio {
         /**
          * A top level sio object has a sio type.
          * 
-         * @see Sio$File
+         * @see alto.lang.sio.File
          */
         public interface TypeClass
             extends Sio
