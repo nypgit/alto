@@ -210,16 +210,16 @@ public interface Sio {
                         if (d == Value[3])
                             return Sio.Type.Read(in);
                         else
-                            throw new Error(new int[]{a,b,c,d},"Format error version '0x"+Integer.toHexString(d)+"'.");
+                            throw new Error(new int[]{a,b,c,d},"Format error version is 0x"+Integer.toHexString(d));
                     }
                     else
-                        throw new Error(new int[]{a,b,c},"Format error head identifier [2]");
+                        throw new Error(new int[]{a,b,c},"Format error head identifier [2] is 0x"+Integer.toHexString(b));
                 }
                 else
-                    throw new Error(new int[]{a,b},"Format error head identifier [1]");
+                    throw new Error(new int[]{a,b},"Format error head identifier [1] is 0x"+Integer.toHexString(b));
             }
             else
-                throw new Error(a,"Format error head identifier [0]");
+                throw new Error(a,"Format error head identifier [0] is 0x"+Integer.toHexString(a));
         }
         public final static void Write(Component.Path type, Output out)
             throws java.io.IOException
