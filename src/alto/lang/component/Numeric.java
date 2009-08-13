@@ -132,8 +132,14 @@ public abstract class Numeric
     public void sioWrite(Output out) 
         throws IOException
     {
-        byte[] content = this.toByteArray();
-        Field.Write(content,out);
+        if (0 == this.intValue()){
+            byte[] content = new byte[]{0};
+            Field.Write(content,out);
+        }
+        else {
+            byte[] content = this.toByteArray();
+            Field.Write(content,out);
+        }
     }
     public boolean hasHashFunction(){
         return (null != this.hashFunction);

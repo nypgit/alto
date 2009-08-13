@@ -104,6 +104,13 @@ public class Bbuf
 
     private int gf = GF;
 
+    /** 
+     * If reopening a completed stream via unread is a problem, set
+     * this to false.  Otherwise, unread is accepted for all bytes,
+     * including the last.  For example, a stream of length one should
+     * be able to read and unread that byte.
+     */
+    protected boolean unwind_finished = true;
 
     /**
      * Input/ read constructor.
@@ -215,30 +222,41 @@ public class Bbuf
 
     public void unread(){
         int rc = this.rc;
-        /*
-         * test (wc > rc) to avoid unwinding a finished stream,
-         * because the "feature" is unintuitive -- therefore a "bug".
-         */
-        if (0 < rc && this.wc > rc)
-            this.rc -= 1;
+        if (this.unwind_finished){
+            if (0 < rc)
+                this.rc -= 1;
+        }
+        else {
+            if (0 < rc && this.wc > rc)
+                this.rc -= 1;
+        }
     }
     public void unread(int ch){
         int rc = this.rc;
-        /*
-         * avoid unwinding a finished stream
-         */
-        if (0 < rc && this.wc > rc)
-            this.buf[(--this.rc)] = (byte)(ch & 0xff);
-        else
-            throw new alto.sys.Error.State("Each 'unread' must follow a 'read'.");
+        if (this.unwind_finished){
+            if (0 < rc)
+                this.buf[(--this.rc)] = (byte)(ch & 0xff);
+            else
+                throw new alto.sys.Error.State("Each 'unread' must follow a 'read'.");
+        }
+        else {
+            if (0 < rc && this.wc > rc)
+                this.buf[(--this.rc)] = (byte)(ch & 0xff);
+            else
+                throw new alto.sys.Error.State("Each 'unread' must follow a 'read'.");
+        }
     }
     public void unreadn( int n){
         int rc = this.rc;
-        /*
-         * avoid unwinding a finished stream
-         */
-        if (0 < n && n <= rc && this.wc > rc)
-            this.rc -= n;
+        if (this.unwind_finished){
+
+            if (0 < n && n <= rc)
+                this.rc -= n;
+        }
+        else {
+            if (0 < n && n <= rc && this.wc > rc)
+                this.rc -= n;
+        }
     }
 
     /**
