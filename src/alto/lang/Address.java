@@ -129,22 +129,6 @@ public class Address
             else
                 return null;
         }
-        public final static long Hash(byte[] a, byte[] b, byte[] c){
-            byte[] value = Bbuf.cat(a,b,c);
-            return alto.hash.Function.Xor.Hash64(value);
-        }
-        public final static long Hash(byte[] a, byte[] b){
-            byte[] value = Bbuf.cat(a,b);
-            return alto.hash.Function.Xor.Hash64(value);
-        }
-        public final static long Hash(byte[] a){
-
-            return alto.hash.Function.Xor.Hash64(a);
-        }
-        public final static int HashCode(byte[] value){
-
-            return alto.hash.Function.Djb.Hash32(value);
-        }
         public final static java.lang.String Hex(byte[] value){
             if (null != value){
                 return alto.io.u.Hex.encode(value);
@@ -176,7 +160,6 @@ public class Address
     protected java.lang.String uri, host, path, reference, path_storage, path_storage_parent;
     protected Uri parser;
     protected Component[] address;
-    protected long hashAddress;
     protected int hashCode;
     protected boolean attributes, persistent, transactional;
 
@@ -358,9 +341,6 @@ public class Address
     }
     public final Uri getParser(){
         return this.parser;
-    }
-    public final long getHashAddress(){
-        return this.hashAddress;
     }
     /**
      * @return Concatenation of address component list bytes up to and
@@ -749,10 +729,8 @@ public class Address
         if (null != address){
             this.address = address;
             this.path_storage = Component.Tools.PathStorageFor(address);
-            byte[] addrbits = Component.Tools.Cat(address);
-            this.hashAddress = Ctor.Hash(addrbits);
             this.uri = PREFIX+this.path_storage;
-            this.hashCode = Ctor.HashCode(addrbits);
+            this.hashCode = alto.hash.Function.Djb.Hash32(Component.Tools.Cat(address));
         }
     }
     public final java.lang.String toString(){

@@ -516,13 +516,6 @@ public class Reference
         else
             return false;
     }
-    public long hashAddress(){
-        Address address = this.address;
-        if (null != address)
-            return address.getHashAddress();
-        else
-            throw new alto.sys.Error.State("Missing address");
-    }
     public String getRequestPath(){
         String path = this.path_request;
         if (null == path){
