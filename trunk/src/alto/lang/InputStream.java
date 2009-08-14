@@ -76,15 +76,15 @@ public class InputStream
     }
     /**
      * Normalizes input buffers ({@link java.io.ByteArrayInputStream})
-     * to instances of {@link Buffer$InStream}.  Non buffer streams are
+     * to instances of {@link alto.lang.buffer.InputStream}.  Non buffer streams are
      * returned verbatum.
      */
     public final static java.io.InputStream Ctor(java.io.InputStream in){
         if (in instanceof java.io.ByteArrayInputStream){
-            if (in instanceof Buffer.InStream)
+            if (in instanceof alto.lang.buffer.InputStream)
                 return in;
             else {
-                throw new IllegalArgumentException("Check: Use Buffer.InStream?");
+                throw new IllegalArgumentException("Check: Use alto.lang.buffer.InputStream?");
                 //TODO(replace with copy)
             }
         }
@@ -94,7 +94,7 @@ public class InputStream
     public final static java.io.InputStream Ctor(java.lang.String resource)
         throws java.io.IOException
     {
-        return new Buffer.InStream(resource);
+        return new alto.lang.buffer.InputStream(resource);
     }
     private final static java.io.InputStream Ctor(Socket socket)
         throws java.io.IOException
@@ -104,7 +104,7 @@ public class InputStream
         else if (socket.isShm())
             return socket.getInputStreamShm();
         else
-            return new Buffer.InStream();
+            return new alto.lang.buffer.InputStream();
     }
 
 
@@ -116,13 +116,13 @@ public class InputStream
      * Empty buffer
      */
     public InputStream (){
-        super(Buffer.InStream.EMPTY);
+        super(alto.lang.buffer.InputStream.EMPTY);
         this.socket = null;
         this.closeable = null;
         this.lock = null;
     }
     public InputStream (byte[] buf){
-        super(new Buffer.InStream(buf));
+        super(new alto.lang.buffer.InputStream(buf));
         this.socket = null;
         this.closeable = null;
         this.lock = null;
@@ -212,10 +212,10 @@ public class InputStream
      * @return Whether the underlying input stream is a buffer.
      */
     public final boolean isBuffer(){
-        return (this.in instanceof Buffer.InStream);
+        return (this.in instanceof alto.lang.buffer.InputStream);
     }
     public final boolean isNotBuffer(){
-        return (!(this.in instanceof Buffer.InStream));
+        return (!(this.in instanceof alto.lang.buffer.InputStream));
     }
     public final Closeable getCloseable(){
         return this.closeable;
@@ -228,7 +228,7 @@ public class InputStream
     public final void reset() throws java.io.IOException {
         this.trace.reset();
         if (this.isBuffer()){
-            Buffer.InStream in = (Buffer.InStream)this.in;
+            alto.lang.buffer.InputStream in = (alto.lang.buffer.InputStream)this.in;
             in.reset();
         }
         this.set(-1L);
@@ -303,7 +303,7 @@ public class InputStream
      */
     public final byte[] getBuffer(){
         if (this.isBuffer())
-            return ((Buffer.InStream)this.in).getBuffer();
+            return ((alto.lang.buffer.InputStream)this.in).getBuffer();
         else
             return this.trace.getBuffer();
     }
@@ -313,7 +313,7 @@ public class InputStream
      */
     public final int getBufferLength(){
         if (this.isBuffer())
-            return ((Buffer.InStream)this.in).getBufferLength();
+            return ((alto.lang.buffer.InputStream)this.in).getBufferLength();
         else
             return this.trace.length();
     }
