@@ -106,6 +106,6 @@ public interface Headers
     /**
      * Create new buffer, write, return.
      */
-    public Buffer.IOB copyMessage()
+    public alto.lang.buffer.Abstract copyMessage()
         throws java.io.IOException;
 }

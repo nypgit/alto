@@ -64,7 +64,7 @@ public class OutputStream
         else if (socket.isShm())
             return socket.getOutputStreamShm();
         else
-            return new Buffer.OutStream();
+            return new alto.lang.buffer.OutputStream();
     }
 
     private final Trace trace;
@@ -78,7 +78,7 @@ public class OutputStream
      * Buffer
      */
     public OutputStream(){
-        super(new Buffer.OutStream());
+        super(new alto.lang.buffer.OutputStream());
         this.trace = null;
         this.useTrace = false;
         this.socket = null;
@@ -185,8 +185,8 @@ public class OutputStream
         if (this.useTrace)
             this.trace.reset();
         //
-        if (this.out instanceof Buffer.OutStream){
-            ((Buffer.OutStream)this.out).reset();
+        if (this.out instanceof alto.lang.buffer.OutputStream){
+            ((alto.lang.buffer.OutputStream)this.out).reset();
         }
     }
     public void close() throws java.io.IOException {
@@ -338,14 +338,14 @@ public class OutputStream
             return this.getBufferLength();
     }
     public final boolean isNotBuffer(){
-        return (!(this.out instanceof Buffer.OutStream));
+        return (!(this.out instanceof alto.lang.buffer.OutputStream));
     }
     public final boolean isBuffer(){
-        return (this.out instanceof Buffer.OutStream);
+        return (this.out instanceof alto.lang.buffer.OutputStream);
     }
     public final byte[] getBuffer(){
-        if (this.out instanceof Buffer.OutStream){
-            Buffer.OutStream bout = (Buffer.OutStream)this.out;
+        if (this.out instanceof alto.lang.buffer.OutputStream){
+            alto.lang.buffer.OutputStream bout = (alto.lang.buffer.OutputStream)this.out;
             if (0 < bout.getBufferLength())
                 return bout.getBuffer();
         }
@@ -360,15 +360,15 @@ public class OutputStream
             return new String(cary,0,cary.length);
         }
     }
-    public final Buffer.OutStream getBufferOutStream(){
-        if (this.out instanceof Buffer.OutStream)
-            return (Buffer.OutStream)this.out;
+    public final alto.lang.buffer.OutputStream getBufferOutStream(){
+        if (this.out instanceof alto.lang.buffer.OutputStream)
+            return (alto.lang.buffer.OutputStream)this.out;
         else
             return null;
     }
     public final int getBufferLength(){
-        if (this.out instanceof Buffer.OutStream){
-            Buffer.OutStream bout = (Buffer.OutStream)this.out;
+        if (this.out instanceof alto.lang.buffer.OutputStream){
+            alto.lang.buffer.OutputStream bout = (alto.lang.buffer.OutputStream)this.out;
             return bout.getBufferLength();
         }
         else

@@ -59,7 +59,7 @@ public interface HttpMessage
      * Body buffer returned by get create buffer.
      */
     public static class Body
-        extends Buffer.IOB
+        extends alto.lang.buffer.Abstract
     {
         private final HttpMessage m;
 
@@ -170,7 +170,7 @@ public interface HttpMessage
 
     public void clearBody();
 
-    public Buffer.IOB getCreateBuffer();
+    public alto.lang.buffer.Abstract getCreateBuffer();
 
     public boolean isTransient();
 

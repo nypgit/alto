@@ -39,7 +39,7 @@ import alto.lang.Sio;
  * and then decodes itself and its children from its buffer.
  */
 public abstract class Abstract
-    extends alto.lang.Buffer.IOB
+    extends alto.lang.buffer.Abstract
     implements Sio
 {
     protected final static java.lang.Object[] Try(Input in)
@@ -167,7 +167,7 @@ public abstract class Abstract
     public final void sioRead(byte[] buf)
         throws java.io.IOException
     {
-        Input in = new alto.lang.Buffer.InStream(buf);
+        Input in = new alto.lang.buffer.InputStream(buf);
         this.sioRead(in);
     }
     public void sioRead(Input in)
