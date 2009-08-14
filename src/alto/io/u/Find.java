@@ -18,6 +18,8 @@
  */
 package alto.io.u ;
 
+import alto.sys.Options;
+
 /**
  * List all files, excluding those under a specific directory.  For
  * example, <code>"CVS"</code> or <code>".svn"</code>
@@ -270,9 +272,9 @@ public final class Find
         out.println();
     }
     public static void main(String[] argv){
-        Options opts = new Options(argv);
+        Options opts = Options.Instance.init(argv);
         if (opts.hasOption("-root")){
-            String exclude = opts.getOption("-exclude");
+            String exclude = opts.getProperty("-exclude");
             java.io.File root = opts.getOptionFile("-root");
             if (root.isDirectory()){
                 java.io.FileFilter filter = new ExpFilter(exclude);

@@ -163,7 +163,7 @@ public abstract class File
 
     protected volatile String statLastString, statLastTag;
 
-    protected volatile boolean cached, cachedInit, hasPolicy;
+    protected volatile boolean cached, cachedInit;
 
     protected volatile FileTransaction transaction;
 
@@ -378,9 +378,6 @@ public abstract class File
     public void flush(){
         this.dropBuffer();
     }
-    public boolean hasSubjectPolicy(){
-        return this.hasPolicy;
-    }
     public Object getContent(){
         return this.content;
     }
@@ -393,7 +390,6 @@ public abstract class File
     public Object dropContent(){
         Object content = this.content;
         this.content = null;
-        this.hasPolicy = false;
         return content;
     }
     public alto.io.Uri getUri(){
