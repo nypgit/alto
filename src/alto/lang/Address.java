@@ -23,6 +23,7 @@ import alto.io.Uri;
 import alto.io.u.Bbuf;
 import alto.io.u.Chbuf;
 import alto.io.u.Objmap;
+import alto.lang.sio.Field;
 
 
 /**
@@ -44,6 +45,7 @@ public class Address
 {
 
     public static class List {
+
         public final static Address[] Add(Address[] list, Address c){
             if (null == c)
                 return list;
@@ -165,14 +167,7 @@ public class Address
 
 
     /**
-     * Address reference "nil" constructor.
-     */
-    public Address(){
-        super();
-        this.setAddress(new Component[]{Component.Relation.Nil});
-    }
-    /**
-     * Address content constructor as for sio group.
+     * Sio address content constructor as for sio group.
      */
     public Address(alto.io.Input sio)
         throws java.io.IOException
@@ -180,7 +175,7 @@ public class Address
         super(sio);
     }
     /**
-     * Address content field constructor as for sio record.
+     * Sio address content field constructor as for sio record.
      * @see PSioFile
      * @see RType
      */
@@ -681,46 +676,29 @@ public class Address
     public final void readMessage(alto.io.Input in)
         throws java.io.IOException
     {
-        this.sioRead(in);
+        Component[] address = null;
+        while (true){
+            try {
+                byte[] cb = Field.Read(in);
+                if (null != cb){
+                    address = Component.List.Add(address,cb);
+                }
+            }
+            catch (Sio.Error end){
+                break;
+            }
+        }
+        this.setAddress(address);
     }
     public final void writeMessage(alto.io.Output out)
         throws java.io.IOException
     {
-        this.sioWrite(out);
-    }
-    public final void sioRead(alto.io.Input in) 
-        throws java.io.IOException 
-    {
-        super.sioRead(in);
-        {
-            alto.io.Input buf = super.openInput();
-            Component[] address = null;
-            while (true){
-                try {
-                    byte[] cb = alto.lang.sio.Field.Read(buf);
-                    if (null != cb){
-                        address = Component.List.Add(address,cb);
-                    }
-                }
-                catch (Sio.Error end){
-                    break;
-                }
-            }
-            this.setAddress(address);
-        }
-    }
-    public final void sioWrite(alto.io.Output out) 
-        throws java.io.IOException
-    {
-        super.sioTag = Sio.Tag.Record;
-        {
-            alto.io.Output buf = super.openOutput();
-            Component[] address = this.address;
+        Component[] address = this.address;
+        if (null != address){
             for (int cc = 0, count = address.length; cc < count; cc++){
-                address[cc].sioWrite(buf);
+                address[cc].sioWrite(out);
             }
         }
-        super.sioWrite(out);
     }
     protected void setAddress(Address address){
         this.setAddress(address.getAddressComponents());

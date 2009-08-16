@@ -363,7 +363,7 @@ public interface Sio {
         public final static Component.Path From(alto.lang.Type contentType){
             if (null != contentType){
                 Component.Type addr = contentType.getAddressComponent();
-                return new alto.lang.component.Path.Numeric(Function.Djb.Hash32(addr.toByteArray()));
+                return new alto.lang.component.Path(Function.Djb.Hash32(addr.toByteArray()));
             }
             else
                 throw new alto.sys.Error.Argument("Missing type.");

@@ -104,19 +104,19 @@ public interface Component
             int pos = ((null != addr)?(addr.length):(0));
             switch (pos){
             case Component.Relation.Position:
-                return Component.List.Add(addr,new alto.lang.component.Relation.Numeric(value));
+                return Component.List.Add(addr,new alto.lang.component.Relation(value));
 
             case Component.Host.Position:
-                return Component.List.Add(addr,new alto.lang.component.Host.Numeric(value));
+                return Component.List.Add(addr,new alto.lang.component.Host(value));
 
             case Component.Type.Position:
-                return Component.List.Add(addr,new alto.lang.component.Type.Numeric(value));
+                return Component.List.Add(addr,new alto.lang.component.Type(value));
 
             case Component.Path.Position:
-                return Component.List.Add(addr,new alto.lang.component.Path.Numeric(value));
+                return Component.List.Add(addr,new alto.lang.component.Path(value));
 
             case Component.Version.Position:
-                return Component.List.Add(addr,new alto.lang.component.Version.Numeric(value));
+                return Component.List.Add(addr,new alto.lang.component.Version(value));
 
             default:
                 throw new java.lang.IllegalArgumentException(java.lang.String.valueOf(pos));
@@ -125,22 +125,22 @@ public interface Component
         /**
          * Numeric address processing
          */
-        public final static Component.Numeric For(int pos, byte[] value){
+        public final static Component For(int pos, byte[] value){
             switch (pos){
             case Component.Relation.Position:
-                return (new alto.lang.component.Relation.Numeric(value));
+                return (new alto.lang.component.Relation(value));
 
             case Component.Host.Position:
-                return (new alto.lang.component.Host.Numeric(value));
+                return (new alto.lang.component.Host(value));
 
             case Component.Type.Position:
-                return (new alto.lang.component.Type.Numeric(value));
+                return (new alto.lang.component.Type(value));
 
             case Component.Path.Position:
-                return (new alto.lang.component.Path.Numeric(value));
+                return (new alto.lang.component.Path(value));
 
             case Component.Version.Position:
-                return (new alto.lang.component.Version.Numeric(value));
+                return (new alto.lang.component.Version(value));
 
             default:
                 throw new java.lang.IllegalArgumentException(java.lang.String.valueOf(pos));
@@ -181,7 +181,7 @@ public interface Component
                 return Component.List.Add(addr,Component.Relation.Tools.ValueOf(string));
 
             case Component.Host.Position:
-                return Component.List.Add(addr,Component.Host.Tools.ValueOf(type,string));
+                return Component.List.Add(addr,Component.Host.Tools.ValueOf(string));
 
             case Component.Type.Position:
                 return Component.List.Add(addr,Component.Type.Tools.ValueOf(type));
@@ -212,7 +212,7 @@ public interface Component
             case Component.Host.Position:{
                 java.lang.String string = parser.getHostName();
                 if (null != string)
-                    return Component.List.Add(addr,Component.Host.Tools.ValueOf(type,string));
+                    return Component.List.Add(addr,Component.Host.Tools.ValueOf(string));
                 else
                     return Component.List.Add(addr,Component.Host.Local);
             }
@@ -220,7 +220,7 @@ public interface Component
                 if (null != type)
                     return Component.List.Add(addr,Component.Type.Tools.ValueOf(type));
                 else 
-                    return Component.List.Add(addr,Component.Type.Nil);
+                    return Component.List.Add(addr,Component.Type.Instances.Nil);
             }
             case Component.Path.Position:{
                 java.lang.String path = parser.getPath();
@@ -634,48 +634,44 @@ public interface Component
         /**
          * SDFS node affinity in relation <code>'/a/'</code>.
          */
-        public final static Component.Relation A = new alto.lang.component.Relation.Named("a");
-        public final static Component.Relation B = new alto.lang.component.Relation.Named("b");
-        public final static Component.Relation C = new alto.lang.component.Relation.Named("c");
-        public final static Component.Relation D = new alto.lang.component.Relation.Named("d");
-        public final static Component.Relation E = new alto.lang.component.Relation.Named("e");
-        public final static Component.Relation F = new alto.lang.component.Relation.Named("f");
-        public final static Component.Relation G = new alto.lang.component.Relation.Named("g");
-        public final static Component.Relation H = new alto.lang.component.Relation.Named("h");
-        public final static Component.Relation I = new alto.lang.component.Relation.Named("i");
-        public final static Component.Relation J = new alto.lang.component.Relation.Named("j");
-        public final static Component.Relation K = new alto.lang.component.Relation.Named("k");
-        public final static Component.Relation L = new alto.lang.component.Relation.Named("l");
-        public final static Component.Relation M = new alto.lang.component.Relation.Named("m");
-        public final static Component.Relation N = new alto.lang.component.Relation.Named("n");
-        public final static Component.Relation O = new alto.lang.component.Relation.Named("o");
-        public final static Component.Relation P = new alto.lang.component.Relation.Named("p");
-        public final static Component.Relation Q = new alto.lang.component.Relation.Named("q");
-        public final static Component.Relation R = new alto.lang.component.Relation.Named("r");
-        public final static Component.Relation S = new alto.lang.component.Relation.Named("s");
-        public final static Component.Relation T = new alto.lang.component.Relation.Named("t");
+        public final static Component.Relation A = new alto.lang.component.Relation("a");
+        public final static Component.Relation B = new alto.lang.component.Relation("b");
+        public final static Component.Relation C = new alto.lang.component.Relation("c");
+        public final static Component.Relation D = new alto.lang.component.Relation("d");
+        public final static Component.Relation E = new alto.lang.component.Relation("e");
+        public final static Component.Relation F = new alto.lang.component.Relation("f");
+        public final static Component.Relation G = new alto.lang.component.Relation("g");
+        public final static Component.Relation H = new alto.lang.component.Relation("h");
+        public final static Component.Relation I = new alto.lang.component.Relation("i");
+        public final static Component.Relation J = new alto.lang.component.Relation("j");
+        public final static Component.Relation K = new alto.lang.component.Relation("k");
+        public final static Component.Relation L = new alto.lang.component.Relation("l");
+        public final static Component.Relation M = new alto.lang.component.Relation("m");
+        public final static Component.Relation N = new alto.lang.component.Relation("n");
+        public final static Component.Relation O = new alto.lang.component.Relation("o");
+        public final static Component.Relation P = new alto.lang.component.Relation("p");
+        public final static Component.Relation Q = new alto.lang.component.Relation("q");
+        public final static Component.Relation R = new alto.lang.component.Relation("r");
+        public final static Component.Relation S = new alto.lang.component.Relation("s");
+        public final static Component.Relation T = new alto.lang.component.Relation("t");
         /**
          * Normal user space content store is relation 'U' or
          * <code>'/u/'</code>.  Message objects under 'U' have Request
          * Line Path expressions in user space, not address space.  
          */
-        public final static Component.Relation U = new alto.lang.component.Relation.Named("u");
+        public final static Component.Relation U = new alto.lang.component.Relation("u");
         /**
          * Systemic relations on user space are put into 'V'.  For
          * example the Sio Type relation on Types has no
          * representation in user space, and is therefore in 'V'.
          */
-        public final static Component.Relation V = new alto.lang.component.Relation.Named("v");
-        public final static Component.Relation W = new alto.lang.component.Relation.Named("w");
-        public final static Component.Relation X = new alto.lang.component.Relation.Named("x");
-        public final static Component.Relation Y = new alto.lang.component.Relation.Named("y");
-        public final static Component.Relation Z = new alto.lang.component.Relation.Named("z");
+        public final static Component.Relation V = new alto.lang.component.Relation("v");
+        public final static Component.Relation W = new alto.lang.component.Relation("w");
+        public final static Component.Relation X = new alto.lang.component.Relation("x");
+        public final static Component.Relation Y = new alto.lang.component.Relation("y");
+        public final static Component.Relation Z = new alto.lang.component.Relation("z");
 
         public final static Component[] Base = new Component[]{U};
-
-        public final static Component.Relation Nil = new alto.lang.component.Relation.Numeric(0);
-        public final static Component.Relation ZERO = Nil;
-        public final static Component.Relation ONE = new alto.lang.component.Relation.Numeric(1);
 
         public final static class Tools 
             extends Component.Tools
@@ -698,7 +694,7 @@ public interface Component
                 name = Clean(name);
                 if (null != name){
                     if (IsName(name))
-                        return new alto.lang.component.Relation.Named(name);
+                        return new alto.lang.component.Relation(name);
                 }
                 return null;
             }
@@ -707,7 +703,7 @@ public interface Component
             {
                 byte[] bits = reference.getBuffer();
                 if (null != bits)
-                    return new alto.lang.component.Relation.Named(bits);
+                    return new alto.lang.component.Relation(bits);
                 else
                     return null;
             }
@@ -728,11 +724,11 @@ public interface Component
          * A host address component with no bits "on" is very special,
          * as in "do not route".
          */
-        public final static Component.Host Local = new alto.lang.component.Host.Numeric(0);
+        public final static Component.Host Local = new alto.lang.component.Host(0);
         /**
          * A host address component with the low bit on.
          */
-        public final static Component.Host Global = new alto.lang.component.Host.Numeric(1);
+        public final static Component.Host Global = new alto.lang.component.Host(1);
         /**
          * In (relation U) with (host Global).
          */
@@ -761,29 +757,14 @@ public interface Component
                     if (IsName(name))
                         return null;//.sys.Error.Bug("Numeric address processing.")//
                     else
-                        return new alto.lang.component.Host.Numeric(name);
-                }
-                else
-                    return Host.Local;
-            }
-            public final static Component.Host ValueOf(alto.lang.Type type, java.lang.String name){
-                name = Clean(name);
-                if (null != name){
-                    if (IsName(name)){
-                        if (null != type)
-                            return type.hostOf(name);
-                        else
-                            return new alto.lang.component.Host.Numeric(Function.Xor.Instance,name);
-                    }
-                    else
-                        return new alto.lang.component.Host.Numeric(name);
+                        return new alto.lang.component.Host(name);
                 }
                 else
                     return Host.Local;
             }
             public final static Component.Host ValueOf(byte[] value){
                 if (null != value)
-                    return new alto.lang.component.Host.Numeric(value);
+                    return new alto.lang.component.Host(value);
                 else
                     return null;
             }
@@ -792,7 +773,7 @@ public interface Component
             {
                 byte[] bits = reference.getBuffer();
                 if (null != bits)
-                    return new alto.lang.component.Host.Numeric(bits);
+                    return new alto.lang.component.Host(bits);
                 else
                     return null;
             }
@@ -818,32 +799,34 @@ public interface Component
             public final static String Config = "application/x-syntelos-config";
             public final static String Index = "application/x-syntelos-index-value";
             public final static String Init = "application/x-syntelos-config;x=init";
+            public final static String Nil = "";
         }
         public final static class Instances {
-            public final static Component.Type MimeType = alto.lang.component.Type.Numeric.MimeType.Instance;
-            public final static Component.Type Address = alto.lang.component.Type.Numeric.Address.Instance;
-            public final static Component.Type Keys = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Keys);
-            public final static Component.Type Sio = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Sio);
-            public final static Component.Type Affinity = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Affinity);
-            public final static Component.Type Capabilities = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Capabilities);
-            public final static Component.Type Config = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Config);
-            public final static Component.Type Index = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Index);
-            public final static Component.Type Init = new alto.lang.component.Type.Numeric(Function.Xor.Instance,Strings.Init);
+            public final static Component.Type MimeType = alto.lang.component.Type.MimeType.Instance;
+            public final static Component.Type Address = alto.lang.component.Type.Address.Instance;
+            public final static Component.Type Keys = new alto.lang.component.Type(Function.Xor.Instance,Strings.Keys);
+            public final static Component.Type Sio = new alto.lang.component.Type(Function.Xor.Instance,Strings.Sio);
+            public final static Component.Type Affinity = new alto.lang.component.Type(Function.Xor.Instance,Strings.Affinity);
+            public final static Component.Type Capabilities = new alto.lang.component.Type(Function.Xor.Instance,Strings.Capabilities);
+            public final static Component.Type Config = new alto.lang.component.Type(Function.Xor.Instance,Strings.Config);
+            public final static Component.Type Index = new alto.lang.component.Type(Function.Xor.Instance,Strings.Index);
+            public final static Component.Type Init = new alto.lang.component.Type(Function.Xor.Instance,Strings.Init);
+            
+            public final static Component.Type Nil = alto.lang.component.Type.Nil.Instance;
         }
 
         public final static int Position = 2;
         public final static int LengthWith = (Position+1);
 
-        public final static Component.Type Nil = new alto.lang.component.Type.Numeric(0);
 
         public final static class Tools
             extends Component.Tools
         {
             public final static Component.Type ForAddress(){
-                return alto.lang.component.Type.Numeric.Address.Instance;
+                return alto.lang.component.Type.Address.Instance;
             }
             public final static Component.Type ForMimeType(){
-                return alto.lang.component.Type.Numeric.MimeType.Instance;
+                return alto.lang.component.Type.MimeType.Instance;
             }
             public final static Component.Type From(Component[] addr){
                 if (null == addr)
@@ -864,22 +847,22 @@ public interface Component
                 return list;
             }
             public final static Component[] For(java.lang.String mimetype){
-                Component.Type atyp = alto.lang.component.Type.Numeric.MimeType.Instance;
+                Component.Type atyp = alto.lang.component.Type.MimeType.Instance;
                 return new Component[]{
                     Component.Relation.U,//(U)//(direct)
                     Component.Host.Global,
                     atyp,
-                    new alto.lang.component.Path.Numeric(atyp,mimetype),
+                    new alto.lang.component.Path(atyp,mimetype),
                     Component.Version.Current
                 };
             }
             public final static Component[] ForR(java.lang.String fext){
-                Component.Type atyp = alto.lang.component.Type.Numeric.Address.Instance;
+                Component.Type atyp = alto.lang.component.Type.Address.Instance;
                 return new Component[]{
                     Component.Relation.V,//(V)//(indirect)
                     Component.Host.Global,
                     atyp,
-                    new alto.lang.component.Path.Numeric(atyp,fext),
+                    new alto.lang.component.Path(atyp,fext),
                     Component.Version.Current
                 };
             }
@@ -891,12 +874,12 @@ public interface Component
                     throw new alto.sys.Error.State(type.toString());
             }
             public final static Component[] For(alto.lang.Component.Type addr){
-                Component.Type atyp = alto.lang.component.Type.Numeric.MimeType.Instance;
+                Component.Type atyp = alto.lang.component.Type.MimeType.Instance;
                 return new Component[]{
                     Component.Relation.U,//(U)//(direct)
                     Component.Host.Global,
                     atyp,
-                    new alto.lang.component.Path.Numeric(atyp,addr.toByteArray()),
+                    new alto.lang.component.Path(atyp,addr.toByteArray()),
                     Component.Version.Current
                 };
             }
@@ -915,13 +898,13 @@ public interface Component
             public final static Component.Type ValueOf(java.lang.String string){
                 string = Clean(string);
                 if (null != string)
-                    return new alto.lang.component.Type.Numeric(string);
+                    return new alto.lang.component.Type(string);
                 else
                     return null;
             }
             public final static Component.Type ValueOf(byte[] value){
                 if (null != value)
-                    return new alto.lang.component.Type.Numeric(value);
+                    return new alto.lang.component.Type(value);
                 else
                     return null;
             }
@@ -953,14 +936,14 @@ public interface Component
                     return new Reference(new Address(ForR(string)));
             }
             public final static Reference ReferenceTo(Reference contentReference){
-                return contentReference.toAddressClass(alto.lang.component.Type.Numeric.MimeType.Instance);
+                return contentReference.toAddressClass(alto.lang.component.Type.MimeType.Instance);
             }
             public final static Component.Type Dereference(Reference reference)
                 throws java.io.IOException
             {
                 byte[] bits = reference.getBuffer();
                 if (null != bits)
-                    return new alto.lang.component.Type.Numeric(bits);
+                    return new alto.lang.component.Type(bits);
                 else
                     return null;
             }
@@ -986,8 +969,8 @@ public interface Component
         public final static int Position = 3;
         public final static int LengthWith = (Position+1);
 
-        public final static Component.Path ZERO = new alto.lang.component.Path.Numeric(0);
-        public final static Component.Path ONE = new alto.lang.component.Path.Numeric(1);
+        public final static Component.Path ZERO = new alto.lang.component.Path(0);
+        public final static Component.Path ONE = new alto.lang.component.Path(1);
 
         public final static class Tools
             extends Component.Tools
@@ -1008,28 +991,28 @@ public interface Component
             }
             public final static Component.Path ValueOf(alto.lang.Type type, int value){
 
-                return new alto.lang.component.Path.Numeric(type,value);
+                return new alto.lang.component.Path(type,value);
             }
             public final static Component.Path ValueOf(alto.lang.Type type, long value){
 
-                return new alto.lang.component.Path.Numeric(type,value);
+                return new alto.lang.component.Path(type,value);
             }
             public final static Component.Path ValueOf(alto.lang.Type type, byte[] value){
 
-                return new alto.lang.component.Path.Numeric(type,value);
+                return new alto.lang.component.Path(type,value);
             }
             public final static Component.Path ValueOf(alto.lang.Type type, java.lang.String path){
                 path = Path(path);
                 if (null != path)
-                    return new alto.lang.component.Path.Numeric(type,path);
+                    return new alto.lang.component.Path(type,path);
                 else
                     throw new java.lang.IllegalArgumentException();
             }
             public final static Component.Path ValueOf(Component[] partial, java.lang.String path){
                 path = Path(path);
                 if (null != path){
-                    Component.Type type = Component.Type.Tools.From(partial);
-                    return new alto.lang.component.Path.Numeric(type,path);
+                    alto.lang.Type type = alto.lang.Type.Tools.For(Component.Type.Tools.From(partial));
+                    return new alto.lang.component.Path(type,path);
                 }
                 else
                     return Component.Path.ZERO;
@@ -1039,7 +1022,7 @@ public interface Component
                 if (null != string){
                     try {
                         byte[] value = alto.io.u.Hex.decode(string);
-                        return new alto.lang.component.Path.Numeric(value);
+                        return new alto.lang.component.Path(value);
                     }
                     catch (java.lang.RuntimeException notnumeric){
                         return null;
@@ -1081,11 +1064,11 @@ public interface Component
                         return (Component.Path)content;
                     else if (content instanceof Buffer){
                         Buffer buf = (Buffer)content;
-                        return new alto.lang.component.Path.Numeric(buf.getBuffer());
+                        return new alto.lang.component.Path(buf.getBuffer());
                     }
                     else if (content instanceof java.math.BigInteger){
                         java.math.BigInteger bint = (java.math.BigInteger)content;
-                        return new alto.lang.component.Path.Numeric(bint.toByteArray());
+                        return new alto.lang.component.Path(bint.toByteArray());
                     }
                     else
                         throw new alto.sys.Error.State(content.getClass().getName());
@@ -1093,7 +1076,7 @@ public interface Component
                 else {
                     byte[] bits = reference.getBuffer();
                     if (null != bits){
-                        Component.Path value = new alto.lang.component.Path.Numeric(bits);
+                        Component.Path value = new alto.lang.component.Path(bits);
                         reference.setStorageContent(value);
                         return value;
                     }
@@ -1119,22 +1102,19 @@ public interface Component
         public final static int Position = 4;
         public final static int LengthWith = (Position+1);
 
-        public final static Component.Version ZERO = new alto.lang.component.Version.Numeric(0);
-        public final static Component.Version ONE = new alto.lang.component.Version.Numeric(1);
-
         public final static java.lang.String CurrentName = "current";
         /**
          * Storage item version current file name
          * <code>"current"</code>.
          */
-        public final static Component.Version Current = new alto.lang.component.Version.Named(CurrentName);
+        public final static Component.Version Current = new alto.lang.component.Version(CurrentName);
             
         public final static java.lang.String TemporaryName = "temporary";
         /**
          * Storage item version transaction temporary file name
          * <code>"temporary"</code>.
          */
-        public final static Component.Version Temporary = new alto.lang.component.Version.Named(TemporaryName);
+        public final static Component.Version Temporary = new alto.lang.component.Version(TemporaryName);
 
         public final static class Tools
             extends Component.Tools
@@ -1155,29 +1135,26 @@ public interface Component
             }
             public final static Component.Version ValueOf(java.lang.String string){
                 string = Clean(string);
-                if (null != string){
-                    try {
-                        byte[] value = alto.io.u.Hex.decode(string);
-                        return new alto.lang.component.Version.Numeric(value);
-                    }
-                    catch (java.lang.RuntimeException notnumeric){
-
-                        return new alto.lang.component.Version.Named(string);
-                    }
-                }
+                if (null != string)
+                    return new alto.lang.component.Version(string);
                 else
-                    throw new java.lang.IllegalArgumentException(string);
+                    return Version.Current;
             }
             public final static Component.Version Dereference(Reference reference)
                 throws java.io.IOException
             {
                 byte[] bits = reference.getBuffer();
                 if (null != bits)
-                    return new alto.lang.component.Version.Numeric(bits);
+                    return new alto.lang.component.Version(bits);
                 else
                     return null;
             }
         }
+
+        public long numericValue();
+
+        public Version incrementValue();
+
     }
 
     public byte[] toByteArray();

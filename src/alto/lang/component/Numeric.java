@@ -48,7 +48,7 @@ public abstract class Numeric
         this.hashFunction = Function.Xor.Instance;
     }
     public Numeric(byte[] value){
-        super(value);
+        super((null != value)?(value):(new byte[]{0}));
         this.hashFunction = Function.Xor.Instance;
     }
     public Numeric(java.lang.String string, int radix){

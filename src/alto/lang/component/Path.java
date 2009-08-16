@@ -23,103 +23,93 @@ import alto.hash.Function;
 /**
  * 
  */
-public interface Path 
-    extends alto.lang.Component.Path
+public final class Path
+    extends alto.lang.component.Numeric
+    implements alto.lang.Component.Path
 {
+    private alto.lang.Type type;
+
+
+    public Path(String hex){
+        super(hex);
+    }
+    public Path(int bits){
+        super(bits);
+    }
+    public Path(alto.lang.Type type, int bits){
+        super(bits);
+        this.type = type;
+        this.hashFunction = type.getHashFunction();
+    }
+    public Path(alto.lang.Type type, long bits){
+        super(bits);
+        this.type = type;
+        this.hashFunction = type.getHashFunction();
+    }
+    public Path(byte[] bits){
+        super(bits);
+    }
+    public Path(alto.lang.Component.Type type, byte[] bits){
+        super(bits);
+        this.type = type.getType();
+        this.hashFunction = type.getHashFunction();
+    }
+    public Path(alto.lang.Type type, byte[] bits){
+        super(bits);
+        this.type = type;
+        this.hashFunction = type.getHashFunction();
+    }
+    public Path(alto.lang.Type type, java.lang.String path){
+        super(type.getHashFunction(),type.pathTo(path));
+        this.type = type;
+    }
     /**
-     * 
+     * Used only in the special case of Type addresses.
      */
-    public static class Numeric
-        extends alto.lang.component.Numeric
-        implements Path
+    public Path(alto.lang.Component.Type type, java.lang.String path){
+        super(type.getHashFunction(),path);
+    }
+    public Path(alto.io.Input in)
+        throws java.io.IOException
     {
-        private alto.lang.Type type;
+        super(in);
+    }
 
 
-        public Numeric(String hex){
-            super(hex);
+    @Override
+    protected alto.lang.component.Numeric newValue(byte[] value){
+        return new alto.lang.component.Path(value);
+    }
+    public boolean hasType(){
+        return (null != this.type);
+    }
+    public alto.lang.Type getType(){
+        return this.type;
+    }
+    public int getPosition(){
+        return Position;
+    }
+    public boolean hasHashFunction(){
+        if (null != this.hashFunction)
+            return true;
+        else {
+            alto.lang.Type type = this.type;
+            if (null != type)
+                return type.hasHashFunction();
+            else
+                return false;
         }
-        public Numeric(int bits){
-            super(bits);
-        }
-        public Numeric(alto.lang.Type type, int bits){
-            super(bits);
-            this.type = type;
-            this.hashFunction = type.getHashFunction();
-        }
-        public Numeric(alto.lang.Type type, long bits){
-            super(bits);
-            this.type = type;
-            this.hashFunction = type.getHashFunction();
-        }
-        public Numeric(byte[] bits){
-            super(bits);
-        }
-        public Numeric(alto.lang.Component.Type type, byte[] bits){
-            super(bits);
-            this.type = type.getType();
-            this.hashFunction = type.getHashFunction();
-        }
-        public Numeric(alto.lang.Type type, byte[] bits){
-            super(bits);
-            this.type = type;
-            this.hashFunction = type.getHashFunction();
-        }
-        public Numeric(alto.lang.Type type, java.lang.String path){
-            super(type.getHashFunction(),type.pathTo(path));
-            this.type = type;
-        }
-        public Numeric(alto.lang.Component.Type type, java.lang.String path){
-            this(type.getHashFunction(),path);
-        }
-        /**
-         * Used only in the special case of Type addresses.
-         */
-        public Numeric(Function function, java.lang.String path){
-            super(function,path);
-        }
-        public Numeric(alto.io.Input in)
-            throws java.io.IOException
-        {
-            super(in);
-        }
-
-
-        @Override
-        protected alto.lang.component.Path.Numeric newValue(byte[] value){
-            return new alto.lang.component.Path.Numeric(value);
-        }
-        public boolean hasType(){
-            return (null != this.type);
-        }
-        public alto.lang.Type getType(){
-            return this.type;
-        }
-        public int getPosition(){
-            return Position;
-        }
-        public boolean hasHashFunction(){
-            if (null != this.hashFunction)
-                return true;
-            else {
-                alto.lang.Type type = this.type;
-                if (null != type)
-                    return type.hasHashFunction();
-                else
-                    return false;
-            }
-        }
-        public Function getHashFunction(){
-            Function H = this.hashFunction;
-            if (null != H)
-                return H;
-            else {
-                alto.lang.Type type = this.type;
-                if (null != type)
-                    return type.getHashFunction();
-                else
-                    return null;
-            }
+    }
+    public Function getHashFunction(){
+        Function H = this.hashFunction;
+        if (null != H)
+            return H;
+        else {
+            alto.lang.Type type = this.type;
+            if (null != type)
+                return type.getHashFunction();
+            else
+                return null;
         }
     }
 }

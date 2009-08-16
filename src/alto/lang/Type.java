@@ -56,6 +56,9 @@ public interface Type
             public final static alto.lang.Type Sio(){
                 return alto.lang.Type.Tools.For(Component.Type.Instances.Sio);
             }
+            public final static alto.lang.Type Nil(){
+                return alto.lang.Type.Tools.For(Component.Type.Instances.Nil);
+            }
         }
 
         protected static Tools Instance;
@@ -514,8 +517,14 @@ public interface Type
     public boolean hasFext();
 
     public boolean hasNotFext();
-
+    /**
+     * @return Filename extension without dot prefix.
+     */
     public java.lang.String getFext();
+    /**
+     * @return Filename extension with dot prefix.
+     */
+    public java.lang.String getFextSuffix();
 
     public java.lang.String[] listFext();
 
@@ -635,39 +644,19 @@ public interface Type
     public int hash32(java.lang.String string);
 
     public long hash64(java.lang.String string);
-
     /**
-     * Path hash for address.
-     * @param item Path string
-     * @return Null for null input
+     * Synonym for <code>Component.Path.Tools.ValueOf(this,string)</code>
      */
     public Component.Path hash(java.lang.String item);
-
     /**
-     * Optional Type specific path transform
+     * Ensure filename extension on path.
      */
     public java.lang.String pathTo(java.lang.String path);
 
-    /**
-     * Optional Type specific host transform
-     */
-    public Component.Host hostOf(java.lang.String host);
-
-    /**
-     * Type specific reference transform
-     */
     public alto.sys.Reference referenceTo(alto.sys.Reference contentReference);
 
-    /**
-     * Type specific reference producer
-     */
     public alto.sys.Reference referenceTo(HttpRequest request);
 
-    /**
-     * Type specific reference producer for types with static hosts
-     * like {@link Component$Host#Local) or {@link
-     * Component$Host#Global}.
-     */
     public alto.sys.Reference referenceTo(java.lang.String path);
 
     public boolean hasFio();

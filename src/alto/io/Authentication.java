@@ -105,10 +105,6 @@ public final class Authentication
          */
         public boolean maySetAuthenticationMethodStore();
         /**
-         * @return Has an authentic principal on returning
-         */
-        public boolean maySetPrincipalFromContext();
-        /**
          * @param principal May be employed when the container and
          * thread context have no preexisting principal.  And in this
          * case attempt to define the Thread IO Context.

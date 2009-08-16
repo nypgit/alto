@@ -115,7 +115,7 @@ public abstract class PSioFile
         throws java.io.IOException
     {}
 
-    public void readMessage()
+    public final void readMessage()
         throws java.io.IOException
     {
         Input in = this.reference.openInput();
@@ -140,7 +140,7 @@ public abstract class PSioFile
             in.close();
         }
     }
-    public void writeMessage()
+    public final void writeMessage()
         throws java.io.IOException
     {
         this.resetall();

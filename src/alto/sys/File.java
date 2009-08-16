@@ -773,26 +773,21 @@ public abstract class File
         else
             throw new alto.sys.Error.Bug();
     }
-    public Component.Numeric lastVersion(){
+    public Component.Version lastVersion(){
         Address address = this.address;
         if (address.isAddressBasePath()){
             String[] flist = this.list();
             if (null != flist){
-                Component.Numeric last = null;
+                long last = 0;
                 for (int cc = 0, count = flist.length; cc < count; cc++){
                     String name = flist[cc];
                     Component.Version test = Component.Version.Tools.ValueOf(name);
-                    if (test instanceof Component.Numeric){
-                        if (null == last)
-                            last = (Component.Numeric)test;
-                        else if (1 == test.compareTo( (Component)last))
-                            last = (Component.Numeric)test;
-                    }
+                    last = Math.max(last,test.numericValue());
                 }
-                return last;
+                if (0 != last)
+                    return new alto.lang.component.Version(last);
             }
-            else
-                return null;
+            return null;
         }
         else if (address.hasComponentTerminal()){
             Address base = address.getAddressBasePath();
@@ -803,7 +798,7 @@ public abstract class File
             throw new alto.sys.Error.Bug();
     }
     public Address lastVersionAddress(){
-        Component.Numeric lastVersion = this.lastVersion();
+        Component.Version lastVersion = this.lastVersion();
         return new Address(this.address.getAddressPath(),lastVersion);
     }
     public File lastVersionFile(){
@@ -811,15 +806,15 @@ public abstract class File
         Address lastVersion = this.lastVersionAddress();
         return fm.getStorage(lastVersion);
     }
-    public Component.Numeric newVersion(){
-        Component.Numeric last = this.lastVersion();
+    public Component.Version newVersion(){
+        Component.Version last = this.lastVersion();
         if (null == last)
-            return (Component.Numeric)Component.Version.ONE;
+            return new alto.lang.component.Version(1);
         else
-            return last.add((Component.Numeric)Component.Version.ONE);
+            return last.incrementValue();
     }
     public Address newVersionAddress(){
-        Component.Numeric newVersion = this.newVersion();
+        Component.Version newVersion = this.newVersion();
         return new Address(this.address.getAddressPath(),newVersion);
     }
     public File newVersionFile(){
@@ -827,11 +822,11 @@ public abstract class File
         Address newVersion = this.newVersionAddress();
         return fm.getStorage(newVersion);
     }
-    public Component tempVersion(){
+    public Component.Version tempVersion(){
         return Component.Version.Temporary;
     }
     public Address tempVersionAddress(){
-        Component tempVersion = this.tempVersion();
+        Component.Version tempVersion = this.tempVersion();
         return new Address(this.address.getAddressPath(),tempVersion);
     }
     public File tempVersionFile(){

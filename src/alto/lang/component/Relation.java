@@ -23,75 +23,23 @@ import alto.hash.Function;
 /**
  * 
  */
-public interface Relation 
-    extends alto.lang.Component.Relation
+public final class Relation
+    extends alto.lang.component.Named
+    implements alto.lang.Component.Relation
 {
-    /**
-     * 
-     */
-    public static class Named
-        extends alto.lang.component.Named
-        implements Relation
-    {
 
-        public Named(byte[] bits){
-            super(bits);
-        }
-        public Named(java.lang.String string){
-            super(string);
-        }
-        public Named(Function H, java.lang.String string){
-            super(H,string);
-        }
-
-
-        public int getPosition(){
-            return Position;
-        }
+    public Relation(byte[] bits){
+        super(Function.Xor.Instance,bits);
     }
-    /**
-     * 
-     */
-    public static class Numeric
-        extends alto.lang.component.Numeric
-        implements Relation
-    {
-
-        public Numeric(int value){
-            super(value);
-        }
-        public Numeric(long value){
-            super(value);
-        }
-        public Numeric(byte[] bits){
-            super(bits);
-        }
-        public Numeric(java.lang.String string, int radix){
-            super(string,radix);
-        }
-        public Numeric(java.lang.String string){
-            super(string);
-        }
-        public Numeric(Function H, java.lang.String string){
-            super(H,string);
-        }
-        public Numeric(java.math.BigInteger bint){
-            super(bint.toByteArray());
-        }
-        public Numeric(alto.io.Input in)
-            throws java.io.IOException
-        {
-            super(in);
-        }
+    public Relation(java.lang.String string){
+        super(Function.Xor.Instance,string);
+    }
+    public Relation(Function H, java.lang.String string){
+        super(H,string);
+    }
 
 
-        @Override
-        protected alto.lang.component.Relation.Numeric newValue(byte[] value){
-            return new alto.lang.component.Relation.Numeric(value);
-        }
-        public int getPosition(){
-            return Position;
-        }
-
+    public int getPosition(){
+        return Position;
     }
 }

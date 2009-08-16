@@ -25,99 +25,105 @@ import alto.io.Check;
 /**
  * 
  */
-public interface Type 
-    extends alto.lang.Component.Type
+public class Type
+    extends alto.lang.component.Numeric
+    implements alto.lang.Component.Type
 {
     /**
-     * 
+     * Type of mimetype (a headers formatted object).
      */
-    public static class Numeric
-        extends alto.lang.component.Numeric
-        implements Type
+    public final static class MimeType
+        extends alto.lang.component.Type
     {
-        /**
-         * 
-         */
-        public final static class MimeType
-            extends alto.lang.component.Type.Numeric 
-        {
-            public final static MimeType Instance = new MimeType();
+        public final static MimeType Instance = new MimeType();
 
-            private MimeType(){
-                super(Function.Xor.Instance,Strings.MimeType);
-            }
+        private MimeType(){
+            super(Function.Xor.Instance,Strings.MimeType);
         }
-        /**
-         * 
-         */
-        public final static class Address
-            extends alto.lang.component.Type.Numeric 
-        {
-            public final static Address Instance = new Address();
+    }
+    /**
+     * Type of addresss (a sio formatted object).
+     */
+    public final static class Address
+        extends alto.lang.component.Type
+    {
+        public final static Address Instance = new Address();
 
-            private Address(){
-                super(Function.Xor.Instance,Strings.Address);
-            }
+        private Address(){
+            super(Function.Xor.Instance,Strings.Address);
         }
+    }
+    /**
+     * The empty type for references to runtime objects having no
+     * I/O representation.
+     */
+    public final static class Nil
+        extends alto.lang.component.Type
+    {
+        public final static Nil Instance = new Nil();
 
-
-        private alto.lang.Type type;
-
-        public Numeric(String hex){
-            super(hex);
+        private Nil(){
+            super(Function.Xor.Instance,Strings.Nil);
         }
-        public Numeric(int bits){
-            super(bits);
-        }
-        public Numeric(byte[] bits){
-            super(bits);
-        }
-        public Numeric(alto.lang.Type type){
-            super(type.getAddress().getComponentPath());
-            this.type = type;
-            this.hashFunction = type.getHashFunction();
-        }
-        public Numeric(alto.io.Input in)
-            throws java.io.IOException
-        {
-            super(in);
-        }
-        public Numeric(Function function, java.lang.String path){
-            super(function,path);
-        }
+    }
 
 
-        @Override
-        protected alto.lang.component.Type.Numeric newValue(byte[] value){
-            return new alto.lang.component.Type.Numeric(value);
-        }
-        public boolean hasType(){
-            return (null != this.type);
-        }
-        /**
-         * @see alto.lang.type.Type#MimeType
-         */
-        @Code(Check.Bootstrap)
-        public void setType(alto.lang.Type type){
-            this.type = type;
-        }
-        public alto.lang.Type getType(){
-            alto.lang.Type type = this.type;
-            if (null != type)
+    private alto.lang.Type type;
+
+    public Type(String hex){
+        super(hex);
+    }
+    public Type(int bits){
+        super(bits);
+    }
+    public Type(byte[] bits){
+        super(bits);
+    }
+    public Type(alto.lang.Type type){
+        super(type.getAddress().getComponentPath());
+        this.type = type;
+        this.hashFunction = type.getHashFunction();
+    }
+    public Type(alto.io.Input in)
+        throws java.io.IOException
+    {
+        super(in);
+    }
+    public Type(Function function, java.lang.String path){
+        super(function,path);
+    }
+
+
+    @Override
+    protected alto.lang.component.Numeric newValue(byte[] value){
+        return new alto.lang.component.Type(value);
+    }
+    public boolean hasType(){
+        return (null != this.type);
+    }
+    /**
+     * @see alto.lang.type.Type#MimeType
+     */
+    @Code(Check.Bootstrap)
+    public void setType(alto.lang.Type type){
+        this.type = type;
+    }
+    public alto.lang.Type getType(){
+        alto.lang.Type type = this.type;
+        if (null != type)
+            return type;
+        else {
+            try {
+                type = alto.lang.Type.Tools.For(this);
+                this.type = type;
                 return type;
-            else {
-                try {
-                    type = alto.lang.Type.Tools.For(this);
-                    this.type = type;
-                    return type;
-                }
-                catch (alto.sys.Error.State.Init bootstrap){
-                    return null;
-                }
+            }
+            catch (alto.sys.Error.State.Init bootstrap){
+                return null;
             }
         }
-        public int getPosition(){
-            return Position;
-        }
+    }
+    public int getPosition(){
+        return Position;
     }
 }
