@@ -59,10 +59,8 @@ public class Keys
     public final static class System {
         public final static alto.io.Role ROLE = alto.io.Role.SYSTEM;
         public final static String NAME = ROLE.name();
-        public final static String PATH = Keys.Tools.PathTo(NAME);
 
         private static Reference REF;
-
 
         public final static boolean IsReferenceTo(Reference ref){
 
@@ -123,26 +121,15 @@ public class Keys
         public final static Reference ReferenceTo(String identifier)
             throws java.io.IOException
         {
-            return new Reference(Component.Host.Local,TypeOf(),PathTo(identifier));
-        }
-        public final static Reference ReferenceTo(String host, String identifier)
-            throws java.io.IOException
-        {
-            return new Reference(host,TypeOf(),PathTo(identifier));
-        }
-        public final static Reference ReferenceTo(Component.Host host, String identifier)
-            throws java.io.IOException
-        {
-            return new Reference(host,TypeOf(),PathTo(identifier));
+            return TypeOf().referenceTo(identifier);
         }
         public final static Reference ReferenceTo(FileManager fm)
             throws java.io.IOException
         {
             if (fm.isDefault())
                 return Keys.System.ReferenceTo();
-            else {
-                return ReferenceTo(fm.getComponentDN(),fm.getDN());
-            }
+            else 
+                return ReferenceTo(fm.getDN());
         }
         public final static Keys GetCreate(java.lang.String identifier, X500Name name)
             throws java.io.IOException
@@ -218,30 +205,6 @@ public class Keys
             }
             else
                 return null;
-        }
-        public final static String PathTo(Reference reference){
-            if (null != reference)
-                return PathTo(IdentifierFrom(reference.getPath()));
-            else 
-                throw new alto.sys.Error.Argument();
-        }
-        public final static String PathTo(java.lang.String identifier){
-            if ("system".equalsIgnoreCase(identifier))
-                return SystemPathTo;
-            else if (null != identifier){
-                String path;
-                if (!identifier.startsWith("/s/"))
-                    path = alto.io.u.Chbuf.fcat("/s/",identifier);
-                else
-                    path = identifier;
-
-                if (!path.endsWith(".keys"))
-                    path += ".keys";
-
-                return path;
-            }
-            else 
-                throw new alto.sys.Error.Argument();
         }
     }
 

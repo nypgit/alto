@@ -140,26 +140,23 @@ public abstract class Named
 
 
 
-    private final java.lang.String string;
-    private final byte[] stringBits;
-    private final int stringHash32;
+    protected final java.lang.String string;
+    protected final byte[] stringBits;
+    protected final int stringHash32;
 
     private Function hashFunction;
 
 
-    public Named(byte[] bits){
+    public Named(Function H, byte[] bits){
         super();
-        if (null != bits){
+        if (null != H && null != bits){
             this.string = new java.lang.String(Utf8.decode(bits));
             this.stringBits = bits;
-            this.stringHash32 = Function.Xor.Hash32(bits);
-            this.hashFunction = Function.Xor.Instance;
+            this.stringHash32 = H.hash32(bits);
+            this.hashFunction = H;
         }
         else
-            throw new java.lang.IllegalArgumentException("Null argument 'byte[] bits'.");
-    }
-    public Named(java.lang.String string){
-        this(Function.Xor.Instance,string);
+            throw new alto.sys.Error.Argument();
     }
     public Named(Function H, java.lang.String string){
         super();
@@ -170,7 +167,7 @@ public abstract class Named
             this.hashFunction = H;
         }
         else
-            throw new java.lang.IllegalArgumentException("Null argument 'String string'.");
+            throw new alto.sys.Error.Argument();
     }
 
 

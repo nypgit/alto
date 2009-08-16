@@ -617,18 +617,14 @@ public class Reference
                         /*
                          * Normal pull credentials
                          */
-                        else if (containerWrite.maySetPrincipalFromContext()){
-                            if (containerWrite.authSign()){
-                                if (storage.write(containerWrite))
-                                    return;
-                                else
-                                    throw new alto.sys.Error.State("Invalid authentication");
-                            }
+                        else if (containerWrite.authSign()){
+                            if (storage.write(containerWrite))
+                                return;
                             else
-                                throw new alto.sys.Error.State("Failed authentication");
+                                throw new alto.sys.Error.State("Invalid authentication");
                         }
                         else
-                            throw new alto.sys.Error.State("Missing principal");
+                            throw new alto.sys.Error.State("Failed authentication");
                     }
                     else
                         throw new alto.sys.Error.State("Missing authentication method");

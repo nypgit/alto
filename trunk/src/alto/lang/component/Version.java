@@ -24,77 +24,47 @@ import alto.hash.Function;
 /**
  * 
  */
-public interface Version 
-    extends Component.Version
+public final class Version
+    extends alto.lang.component.Named
+    implements Component.Version
 {
-    /**
-     * 
-     */
-    public static class Named
-        extends alto.lang.component.Named
-        implements Version
-    {
-
-        public Named(byte[] bits){
-            super(bits);
-        }
-        public Named(java.lang.String string){
-            super(string);
-        }
-        public Named(Function H, java.lang.String string){
-            super(H,string);
-        }
+    private long numeric;
 
 
-        public int getPosition(){
-            return Position;
+    public Version(byte[] bits){
+        super(Function.Xor.Instance,bits);
+    }
+    public Version(long numeric){
+        super(Function.Xor.Instance,String.valueOf(numeric));
+        this.numeric = numeric;
+    }
+    public Version(java.lang.String string){
+        super(Function.Xor.Instance,string);
+    }
+    public Version(Function H, java.lang.String string){
+        super(H,string);
+    }
+
+
+    public int getPosition(){
+        return Position;
+    }
+    public long numericValue(){
+        long numeric = this.numeric;
+        if (0 != numeric)
+            return numeric;
+        else {
+            try {
+                numeric = Long.parseLong(this.string);
+                this.numeric = numeric;
+                return numeric;
+            }
+            catch (NumberFormatException exc){
+                return 0L;
+            }
         }
     }
-    /**
-     * 
-     */
-    public static class Numeric
-        extends alto.lang.component.Numeric
-        implements Version
-    {
-
-        public Numeric(int value){
-            super(value);
-        }
-        public Numeric(long value){
-            super(value);
-        }
-        public Numeric(byte[] bits){
-            super(bits);
-        }
-        public Numeric(java.lang.String string, int radix){
-            super(string,radix);
-        }
-        public Numeric(java.lang.String string){
-            super(string);
-        }
-        public Numeric(Function H, java.lang.String string){
-            super(H,string);
-        }
-        public Numeric(java.math.BigInteger bint){
-            super(bint.toByteArray());
-        }
-        public Numeric(alto.lang.Type type, java.lang.String path){
-            super(type.getHashFunction(),Component.Path.Tools.Normalize(path));
-        }
-        public Numeric(alto.io.Input in)
-            throws java.io.IOException
-        {
-            super(in);
-        }
-
-
-        @Override
-        protected alto.lang.component.Version.Numeric newValue(byte[] value){
-            return new alto.lang.component.Version.Numeric(value);
-        }
-        public int getPosition(){
-            return Position;
-        }
+    public Component.Version incrementValue(){
+        return new alto.lang.component.Version(this.numericValue()+1);
     }
 }

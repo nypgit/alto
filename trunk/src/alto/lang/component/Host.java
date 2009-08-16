@@ -23,51 +23,44 @@ import alto.hash.Function;
 /**
  * 
  */
-public interface Host 
-    extends alto.lang.Component.Host
+public final class Host
+    extends alto.lang.component.Numeric
+    implements alto.lang.Component.Host
 {
-    /**
-     * 
-     */
-    public static class Numeric
-        extends alto.lang.component.Numeric
-        implements Host
+
+    public Host(int value){
+        super(value);
+    }
+    public Host(long value){
+        super(value);
+    }
+    public Host(byte[] bits){
+        super(bits);
+    }
+    public Host(java.lang.String string, int radix){
+        super(string,radix);
+    }
+    public Host(java.lang.String string){
+        super(string);
+    }
+    public Host(Function H, java.lang.String string){
+        super(H,string);
+    }
+    public Host(java.math.BigInteger bint){
+        super(bint.toByteArray());
+    }
+    public Host(alto.io.Input in)
+        throws java.io.IOException
     {
-
-        public Numeric(int value){
-            super(value);
-        }
-        public Numeric(long value){
-            super(value);
-        }
-        public Numeric(byte[] bits){
-            super(bits);
-        }
-        public Numeric(java.lang.String string, int radix){
-            super(string,radix);
-        }
-        public Numeric(java.lang.String string){
-            super(string);
-        }
-        public Numeric(Function H, java.lang.String string){
-            super(H,string);
-        }
-        public Numeric(java.math.BigInteger bint){
-            super(bint.toByteArray());
-        }
-        public Numeric(alto.io.Input in)
-            throws java.io.IOException
-        {
-            super(in);
-        }
+        super(in);
+    }
 
 
-        @Override
-        protected alto.lang.component.Host.Numeric newValue(byte[] value){
-            return new alto.lang.component.Host.Numeric(value);
-        }
-        public int getPosition(){
-            return Position;
-        }
+    @Override
+    protected alto.lang.component.Numeric newValue(byte[] value){
+        return new alto.lang.component.Host(value);
+    }
+    public int getPosition(){
+        return Position;
     }
 }
