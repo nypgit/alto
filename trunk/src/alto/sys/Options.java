@@ -73,6 +73,7 @@ public final class Options
 
     public Options init(String[] options){
         if (null != options){
+            boolean args = false;
             for (int cc = 0, count = options.length, next; cc < count; cc++){
                 String name = options[cc];
                 if ('-' == name.charAt(0)){
@@ -89,17 +90,19 @@ public final class Options
                             continue;
                         }
                     }
-                    if (null != this.directive)
+                    if (args)
                         this.arguments = List.Add(this.arguments,name);
 
                     this.put(name,Boolean.TRUE);
                     continue;
                 }
                 else {
-                    if (null == directive)
-                        this.directive = name;
-                    else {
+                    if (args)
                         this.arguments = List.Add(this.arguments,name);
+
+                    else {
+                        args = true;
+                        this.directive = name;
                     }
 
                     this.put(name,Boolean.TRUE);
