@@ -124,7 +124,7 @@ public final class Options
         return this.hasOption(HELP);
     }
     public boolean hasDebug(){
-        return this.hasOption(HELP);
+        return this.hasOption(DEBUG);
     }
     /**
      * @param name Option name, including any hyphen prefix. 

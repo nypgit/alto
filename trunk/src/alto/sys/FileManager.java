@@ -322,7 +322,7 @@ public abstract class FileManager
     /**
      * Default constructor
      */
-    public FileManager(){
+    protected FileManager(){
         super();
         if (null == Default){
             Default = this;
