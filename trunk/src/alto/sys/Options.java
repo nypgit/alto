@@ -39,6 +39,9 @@ public final class Options
     private final static String[] DEBUG = {
         "-d", "-debug", "--d", "--debug"
     };
+    private final static String[] PORT = {
+        "-p", "-port", "--p", "--port"
+    };
     private final static String Server = "server";
     private final static String[] StraryEmpty = new java.lang.String[0];
 
@@ -125,6 +128,28 @@ public final class Options
     }
     public boolean hasDebug(){
         return this.hasOption(DEBUG);
+    }
+    public boolean hasPort(){
+        return this.hasOption(PORT);
+    }
+    public Integer getPort()
+        throws java.lang.NumberFormatException
+    {
+        return this.getOptionInteger(PORT);
+    }
+    public int getPort(int def)
+        throws java.lang.NumberFormatException
+    {
+        return this.getOptionInt(PORT,def);
+    }
+    public Integer getPort(Integer def)
+        throws java.lang.NumberFormatException
+    {
+        Integer value = this.getPort();
+        if (null != value)
+            return value;
+        else
+            return def;
     }
     /**
      * @param name Option name, including any hyphen prefix. 

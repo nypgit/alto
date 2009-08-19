@@ -112,6 +112,12 @@ public interface Message
     public void writeMessage()
         throws java.io.IOException;
 
+    public void readMessage(alto.io.Input in)
+        throws java.io.IOException;
+
+    public void writeMessage(alto.io.Output out)
+        throws java.io.IOException;
+
     /*
      * TODO: see lang/Headers
      * 

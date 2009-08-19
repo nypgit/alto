@@ -981,6 +981,18 @@ public class Reference
         source.copyTo(this);
         return true;
     }
+    public boolean put(alto.io.Message request)
+        throws java.io.IOException
+    {
+        alto.io.Output out = this.openOutput(request);
+        try {
+            request.writeMessage(out);
+            return true;
+        }
+        finally {
+            out.close();
+        }
+    }
     public boolean delete(){
 
         File storage = this.getStorage();
