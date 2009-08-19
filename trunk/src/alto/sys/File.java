@@ -217,6 +217,9 @@ public abstract class File
         else
             return null;
     }
+    /**
+     * Open write
+     */
     @Code(Check.Locking)
     public HttpMessage write()
         throws java.io.IOException
@@ -231,6 +234,9 @@ public abstract class File
             return message.cloneHttpMessage();
         }
     }
+    /**
+     * Close write
+     */
     @Code(Check.Locking)
     public boolean write(HttpMessage message)
         throws java.io.IOException
@@ -556,10 +562,39 @@ public abstract class File
      * authenticated message with required headers but not meeting the
      * access control assertion.
      */
-    public abstract boolean isValidForWrite(HttpMessage message)
+    public boolean isValidForWrite(HttpMessage message)
         throws java.io.IOException,
-               alto.sys.UnauthorizedException;
-
+               alto.sys.UnauthorizedException
+    {
+        if (message.isAuthenticated()){
+            if (message.hasLocation()){
+                if (message.hasContentType()){
+                    if (message.hasContentLength()){
+                        if (message.hasETag()){
+                            if (message.hasLastModified()){
+                                if (message.hasContentMD5())
+                                    return true;
+                                else
+                                    throw new alto.sys.Error.State("Message missing 'Content-MD5'.");
+                            }
+                            else
+                                throw new alto.sys.Error.State("Message missing 'Last-Modified'.");
+                        }
+                        else
+                            throw new alto.sys.Error.State("Message missing 'ETag'.");
+                    }
+                    else
+                        throw new alto.sys.Error.State("Message missing 'Content-Length'.");
+                }
+                else
+                    throw new alto.sys.Error.State("Message missing 'Content-Type'.");
+            }
+            else
+                throw new alto.sys.Error.State("Message missing 'Location'.");
+        }
+        else
+            throw new alto.sys.Error.State("Message is not authenticated.");
+    }
     /**
      * Used internally to drop the buffer on writing to the underlying
      * file.

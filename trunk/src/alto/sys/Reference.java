@@ -116,34 +116,7 @@ public class Reference
         }
     }
     public abstract static class Tools {
-        /**
-         * @param path A string
-         * @return A string with no leading or trailing '/'.
-         */
-        public final static String Clean(String path){
-            if (null == path)
-                return null;
-            else {
-                int term = path.length()-1;
-                if (0 < term){
-                    if ('/' == path.charAt(term)){
-                        path = path.substring(0,term);
-                        if (1 > path.length())
-                            return null;
-                    }
-                    if ('/' == path.charAt(0)){
-                        path = path.substring(1);
-                        if (1 > path.length())
-                            return null;
-                    }
-                    return path;
-                }
-                else if (0 > term || '/' == path.charAt(0))
-                    return null;
-                else
-                    return path;
-            }
-        }
+
         public final static String Parent(String path){
             if (null == path || 1 > path.length())
                 return null;
@@ -231,15 +204,6 @@ public class Reference
                 return -1;
             }
         }
-
-
-        public final static Reference Create(String hostname, Type type, String path){
-
-            String uri = "http://"+alto.io.u.Chbuf.fcat(hostname,path);
-            Address addr = new Address(Component.Host.Tools.ValueOf(hostname),Component.Type.Tools.ValueOf(type),Component.Path.Tools.ValueOf(path));
-            return new Reference(uri,addr);
-        }
-
     }
 
 
@@ -294,6 +258,9 @@ public class Reference
         }
         else
             throw new alto.sys.Error.Argument();
+    }
+    public Reference(String hostname, String path){
+        this("http://"+alto.io.u.Chbuf.fcat(hostname,path));
     }
     public Reference(String hostname, Type type, String path){
         this( ("http://"+alto.io.u.Chbuf.fcat(hostname,path)), (new Address(Component.Host.Tools.ValueOf(hostname),Component.Type.Tools.ValueOf(type),Component.Path.Tools.ValueOf(path))));
@@ -595,24 +562,18 @@ public class Reference
                 if (null != storage){
 
                     if (containerWrite.maySetAuthenticationMethodStore()){
-                        Object content = this.getStorageContent();
-                        if (content instanceof Principal.Authentic){
-                            /*
-                             * Defining init credentials
-                             */
-                            Principal.Authentic principal = (Principal.Authentic)content;
-                            if (containerWrite.maySetPrincipalToContext(principal)){
-                                if (containerWrite.authSign()){
-                                    if (storage.write(containerWrite))
-                                        return;
-                                    else
-                                        throw new alto.sys.Error.State("Invalid authentication");
-                                }
+                        /*
+                         * Defining credentials
+                         */
+                        if (containerWrite.maySetContext()){
+                            if (containerWrite.authSign()){
+                                if (storage.write(containerWrite))
+                                    return;
                                 else
-                                    throw new alto.sys.Error.State("Failed authentication");
+                                    throw new alto.sys.Error.State("Write failed");
                             }
-                            else 
-                                throw new alto.sys.Error.Bug();
+                            else
+                                throw new alto.sys.Error.State("Failed authentication");
                         }
                         /*
                          * Normal pull credentials
@@ -621,7 +582,7 @@ public class Reference
                             if (storage.write(containerWrite))
                                 return;
                             else
-                                throw new alto.sys.Error.State("Invalid authentication");
+                                throw new alto.sys.Error.State("Write failed");
                         }
                         else
                             throw new alto.sys.Error.State("Failed authentication");
@@ -821,11 +782,15 @@ public class Reference
     public Object setStorageContent(Object content)
         throws java.io.IOException
     {
+        HttpMessage containerWrite = this.containerWrite;
+        if (null != containerWrite)
+            containerWrite.setStorageContent(content);
+
         File storage = this.getStorage();
         if (null != storage)
-            return storage.setContent(content);
-        else
-            return null;
+            storage.setContent(content);
+
+        return content;
     }
     public Object dropStorageContent()
         throws java.io.IOException

@@ -688,4 +688,11 @@ public interface HttpMessage
 
     public void writeToBuffer(alto.sys.Reference reference)
         throws java.io.IOException;
+
+    /**
+     * Called from reference to copy the set storage content event
+     * into a write mode container.
+     * @return Has recognized and consumed value, for subclass overrides
+     */
+    public boolean setStorageContent(Object content);
 }
