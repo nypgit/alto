@@ -767,107 +767,111 @@ public class Uri
                 char ch = uri[idx];
                 if ('/' == ch){
                     idx += 1;
-                    ch = uri[idx];
-                    if ('/' == ch){
-                        int user = -1;
-                        int last = -1;
-                        parsel:
-                        for (idx += 1; idx < len; idx++){
-                            ch = uri[idx];
-                            switch (ch){
-                            case ':':
-                                super.append(':',idx);
-                                break;
-                            case '@':
-                                user = super.size();
-                                super.append('@',idx);
-                                break;
-                            case '/':
-                            case '!':
-                            case '?':
-                            case ';':
-                            case '#':
-                                last = (idx-1);
-                                break parsel;
-                            default:
-                                break;
+                    if (idx < len){
+                        ch = uri[idx];
+                        if ('/' == ch){
+                            int user = -1;
+                            int last = -1;
+                            parsel:
+                            for (idx += 1; idx < len; idx++){
+                                ch = uri[idx];
+                                switch (ch){
+                                case ':':
+                                    super.append(':',idx);
+                                    break;
+                                case '@':
+                                    user = super.size();
+                                    super.append('@',idx);
+                                    break;
+                                case '/':
+                                case '!':
+                                case '?':
+                                case ';':
+                                case '#':
+                                    last = (idx-1);
+                                    break parsel;
+                                default:
+                                    break;
+                                }
                             }
-                        }
-                        if (0 > last)
-                            last = (len-1);
-                        this.finish(uri,len,last);
-                        //
-                        if (-1 < user){
-                            switch(this.parserCountComponents()){
-                            case 0:
-                            case 1:
-                                throw new Parser.Exception.Bug();
-                            case 2:
-                                this.host_user_name =  0;
-                                this.host_user_pass = -1;
-                                this.host_host_name =  1;
-                                this.host_host_port = -1;
-                                break;
-                            case 3:
-                                switch (user){
+                            if (0 > last)
+                                last = (len-1);
+                            this.finish(uri,len,last);
+                            //
+                            if (-1 < user){
+                                switch(this.parserCountComponents()){
                                 case 0:
+                                case 1:
+                                    throw new Parser.Exception.Bug();
+                                case 2:
                                     this.host_user_name =  0;
                                     this.host_user_pass = -1;
                                     this.host_host_name =  1;
-                                    this.host_host_port =  2;
-                                    break;
-                                case 1:
-                                    this.host_user_name =  0;
-                                    this.host_user_pass =  1;
-                                    this.host_host_name =  2;
                                     this.host_host_port = -1;
                                     break;
+                                case 3:
+                                    switch (user){
+                                    case 0:
+                                        this.host_user_name =  0;
+                                        this.host_user_pass = -1;
+                                        this.host_host_name =  1;
+                                        this.host_host_port =  2;
+                                        break;
+                                    case 1:
+                                        this.host_user_name =  0;
+                                        this.host_user_pass =  1;
+                                        this.host_host_name =  2;
+                                        this.host_host_port = -1;
+                                        break;
+                                    default:
+                                        throw new Parser.Exception.Bug();
+                                    }
+                                    break;
+                                case 4:
+                                    switch (user){
+                                    case 0:
+                                        this.host_user_name =  0;
+                                        this.host_user_pass = -1;
+                                        this.host_host_name =  1;
+                                        this.host_host_port =  2;
+                                        break;
+                                    case 1:
+                                        this.host_user_name =  0;
+                                        this.host_user_pass =  1;
+                                        this.host_host_name =  2;
+                                        this.host_host_port =  3;
+                                        break;
+                                    default:
+                                        throw new Parser.Exception.Bug();
+                                    }
+                                    break;
                                 default:
                                     throw new Parser.Exception.Bug();
                                 }
-                                break;
-                            case 4:
-                                switch (user){
+                            }
+                            else {
+                                this.host_user_name = -1;
+                                this.host_user_pass = -1;
+                                switch(this.parserCountComponents()){
                                 case 0:
-                                    this.host_user_name =  0;
-                                    this.host_user_pass = -1;
-                                    this.host_host_name =  1;
-                                    this.host_host_port =  2;
+                                    this.host_host_name = -1;
+                                    this.host_host_port = -1;
                                     break;
                                 case 1:
-                                    this.host_user_name =  0;
-                                    this.host_user_pass =  1;
-                                    this.host_host_name =  2;
-                                    this.host_host_port =  3;
+                                    this.host_host_name =  0;
+                                    this.host_host_port = -1;
+                                    break;
+                                case 2:
+                                    this.host_host_name =  0;
+                                    this.host_host_port =  1;
                                     break;
                                 default:
                                     throw new Parser.Exception.Bug();
                                 }
-                                break;
-                            default:
-                                throw new Parser.Exception.Bug();
                             }
                         }
-                        else {
-                            this.host_user_name = -1;
-                            this.host_user_pass = -1;
-                            switch(this.parserCountComponents()){
-                            case 0:
-                                this.host_host_name = -1;
-                                this.host_host_port = -1;
-                                break;
-                            case 1:
-                                this.host_host_name =  0;
-                                this.host_host_port = -1;
-                                break;
-                            case 2:
-                                this.host_host_name =  0;
-                                this.host_host_port =  1;
-                                break;
-                            default:
-                                throw new Parser.Exception.Bug();
-                            }
-                        }
+                        else
+                            throw new Parser.Exception.Component();
                     }
                     else
                         throw new Parser.Exception.Component();
