@@ -357,7 +357,7 @@ public interface Component
             else
                 throw new IllegalArgumentException();
         }
-        public final static java.lang.String Clean(java.lang.String string){
+        public static java.lang.String Clean(java.lang.String string){
             if (null != string){
                 int term = (string.length()-1);
                 if (0 < term){
@@ -696,7 +696,7 @@ public interface Component
                     if (IsName(name))
                         return new alto.lang.component.Relation(name);
                 }
-                return null;
+                return Relation.U;
             }
             public final static Component.Relation Dereference(Reference reference)
                 throws java.io.IOException
@@ -737,6 +737,19 @@ public interface Component
         public final static class Tools
             extends Component.Tools
         {
+            public static String Clean(String hostname){
+                if (null == hostname)
+                    return null;
+                else {
+                    int idx = hostname.indexOf(':');
+                    if (-1 < idx){
+                        hostname = hostname.substring(0,idx);
+                        if (1 > hostname.length())
+                            return null;
+                    }
+                    return hostname;
+                }
+            }
             public final static Component.Host From(Component[] addr){
                 if (null == addr)
                     throw new java.lang.IllegalArgumentException();
@@ -755,12 +768,9 @@ public interface Component
                 name = Clean(name);
                 if (null != name){
                     if (IsName(name))
-                        return null;//.sys.Error.Bug("Numeric address processing.")//
-                    else
-                        return new alto.lang.component.Host(name);
+                        return new alto.lang.component.Host(Function.Xor.Instance,name);
                 }
-                else
-                    return Host.Local;
+                return Host.Local;
             }
             public final static Component.Host ValueOf(byte[] value){
                 if (null != value)
@@ -822,6 +832,17 @@ public interface Component
         public final static class Tools
             extends Component.Tools
         {
+            public static java.lang.String Clean(java.lang.String string){
+                if (null == string)
+                    return null;
+                else {
+                    string = string.trim();
+                    if (0 != string.length())
+                        return string;
+                    else
+                        return null;
+                }
+            }
             public final static Component.Type ForAddress(){
                 return alto.lang.component.Type.Address.Instance;
             }
