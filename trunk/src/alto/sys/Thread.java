@@ -133,11 +133,10 @@ public class Thread
     }
     @Code(Check.OnlyServer)
     public final IO.Context popContext(){
-        if (null != this.context){
+        if (null != this.context)
             return (this.context = this.context.popContext());
-        }
         else
-            throw new Error.Bug();
+            return null;
     }
     @Code(Check.OnlyClient)
     public final void resetContext(IO.Context context){
