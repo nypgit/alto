@@ -105,12 +105,10 @@ public final class Authentication
          */
         public boolean maySetAuthenticationMethodStore();
         /**
-         * @param principal May be employed when the container and
-         * thread context have no preexisting principal.  And in this
-         * case attempt to define the Thread IO Context.
+         * Attempt to define the Thread IO Context.
          * @return Has an authentic principal on returning
          */
-        public boolean maySetPrincipalToContext(Principal.Authentic principal);
+        public boolean maySetContext();
 
         public boolean isAuthVerifiable();
 

@@ -56,6 +56,9 @@ public interface Type
             public final static alto.lang.Type Sio(){
                 return alto.lang.Type.Tools.For(Component.Type.Instances.Sio);
             }
+            public final static alto.lang.Type Config(){
+                return alto.lang.Type.Tools.For(Component.Type.Instances.Config);
+            }
             public final static alto.lang.Type Nil(){
                 return alto.lang.Type.Tools.For(Component.Type.Instances.Nil);
             }

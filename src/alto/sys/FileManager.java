@@ -471,15 +471,36 @@ public abstract class FileManager
      * files and applets.
      */
     @Code(Check.Locking)
-    protected abstract java.lang.Class findClass(java.lang.String bname) 
-        throws java.lang.ClassNotFoundException;
-
+    protected java.lang.Class findClass(java.lang.String bname) 
+        throws java.lang.ClassNotFoundException 
+    {
+        if (this.isOutputLocation()){
+            /*
+             * If the location of this class loader is not over
+             * storage, then don't load classes here by reference.
+             */
+            String hostname = this.getName();
+            String pathname = '/'+bname.replace('.','/')+".class";
+            alto.sys.Reference hclass = new Reference(hostname,pathname);
+            if (hclass.isStorageFile()){
+                try {
+                    byte[] classfile = hclass.getBuffer();
+                    if (null != classfile)
+                        return this.defineClass(bname,classfile,0,classfile.length);
+                }
+                catch (java.io.IOException exc){
+                }
+            }
+        }
+        throw new java.lang.ClassNotFoundException(bname);
+    }
     /**
      * @param path A file path expression
      * @return A reference to a file in this application location
      */
-    public abstract Reference createReference(String path);
-
+    public final alto.sys.Reference createReference(String path){
+        return new Reference(this.getName(),path);
+    }
     public final JavaFileManager.Location getLocation(){
         return this.location;
     }
