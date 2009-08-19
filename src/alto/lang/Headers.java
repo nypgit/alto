@@ -98,11 +98,6 @@ public interface Headers
     /*
      * TODO: extend io/Message, mergeto;
      */
-    public void readMessage(alto.io.Input in)
-        throws java.io.IOException;
-
-    public void writeMessage(alto.io.Output out)
-        throws java.io.IOException;
     /**
      * Create new buffer, write, return.
      */
