@@ -107,8 +107,6 @@ public final class Options
                         args = true;
                         this.directive = name;
                     }
-
-                    this.put(name,Boolean.TRUE);
                     continue;
                 }
             }
