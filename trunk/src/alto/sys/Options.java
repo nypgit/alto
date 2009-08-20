@@ -183,6 +183,24 @@ public final class Options
         }
         return null;
     }
+    public String getOptionString(String name)
+        throws java.lang.NumberFormatException
+    {
+        Object object = this.getOption(name);
+        if (object instanceof String)
+            return (String)object;
+        else
+            return null;
+    }
+    public String getOptionString(String[] set)
+        throws java.lang.NumberFormatException
+    {
+        Object object = this.getOption(set);
+        if (object instanceof String)
+            return (String)object;
+        else
+            return null;
+    }
     public Boolean getOptionBoolean(String name)
         throws java.lang.NumberFormatException
     {
