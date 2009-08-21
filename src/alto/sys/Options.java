@@ -32,6 +32,22 @@ public final class Options
     extends java.util.Properties
 {
     public final static Options Instance = new Options();
+    static {
+        try {
+            java.util.Map<String,String> env = System.getenv();
+            for (String name : env.keySet()){
+                if (name.startsWith("SYNTELOS_")){
+                    String value = env.get(name);
+                    String suffix = name.substring("SYNTELOS_".length()).toLowerCase();
+                    if (0 != suffix.length())
+                        Instance.put("--"+suffix,value);
+                }
+            }
+        }
+        catch (Throwable t){
+            t.printStackTrace();
+        }
+    }
 
     private final static String[] HELP = {
         "-?", "-h", "-help", "--h", "--help"
@@ -41,6 +57,15 @@ public final class Options
     };
     private final static String[] PORT = {
         "-p", "-port", "--p", "--port"
+    };
+    private final static String[] PFX = {
+        "-pfx", "--pfx"
+    };
+    private final static String[] USERNAME = {
+        "-u", "-username", "--u", "--username"
+    };
+    private final static String[] PASSWORD = {
+        "-p", "-password", "--p", "--password"
     };
     private final static String Server = "server";
     private final static String[] StraryEmpty = new java.lang.String[0];
@@ -149,6 +174,25 @@ public final class Options
         else
             return def;
     }
+    public boolean hasUsername(){
+        return this.hasOption(USERNAME);
+    }
+    public String getUsername(){
+        return this.getOptionString(USERNAME);
+    }
+    public boolean hasPassword(){
+        return this.hasOption(PASSWORD);
+    }
+    public String getPassword(){
+        return this.getOptionString(PASSWORD);
+    }
+    public boolean hasPfx(){
+        return this.hasOption(PFX);
+    }
+    public java.io.File getPfx(){
+        return this.getOptionFile(PFX);
+    }
+
     /**
      * @param name Option name, including any hyphen prefix. 
      * @return True when present, otherwise false.
