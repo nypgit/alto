@@ -52,14 +52,20 @@ public abstract class Url {
         char ch;
         for (int cc = ofs, len = (ofs+many); cc < len; cc++){
             ch = source[cc];
-            if ( '%' == ch){
+	    switch(ch){
+	    case '+':
+		re.append(' ');
+		break;
+	    case '%':
                 cc += 1;
                 if (cc < len && (cc+1) < len)
                     re.append( char_decode( source, cc));
                 cc += 1;
-            }
-            else
+		break;
+	    default:
                 re.append(ch);
+		break;
+	    }
         }
         if (null != origin && re.length() == origin.length())
             return origin;
