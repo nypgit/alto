@@ -202,4 +202,25 @@ public abstract class Tools
                 break;
         }
     }
+    public final static boolean Empty(byte[] a){
+        return ((null == a)||(0 == a.length));
+    }
+    public final static boolean NotEmpty(byte[] a){
+        return ((null != a)&&(0 < a.length));
+    }
+    public final static boolean Equals(byte[] a, byte[] b){
+        if (null == a)
+            return (null == b);
+        else if (null == b)
+            return false;
+        else if (a.length == b.length){
+            for (int cc = 0, count = a.length; cc < count; cc++){
+                if (a[cc] != b[cc])
+                    return false;
+            }
+            return true;
+        }
+        else
+            return false;
+    }
 }

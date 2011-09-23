@@ -24,6 +24,8 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 
+import java.math.BigInteger;
+
 /**
  * <p> Rivest, Shamir and Adleman's 1978 asymmetric cipher from
  * Schneier, <i>Applied Cryptography</i>, 2nd Ed., pp 466-474, and the
@@ -125,10 +127,12 @@ public class RSA
     public final static int E_RANDOM = 3;
 
     /**
-     * Recommended public key "e" values [Schneier pg 469].
+     * Recommended public key "e" values [Schneier pg 469 "Software
+     * Speedups"].  Quite counterintuitively, there's no implication
+     * to using fixed values of 'e'.
      */
-    public final static java.math.BigInteger E[] = {
-        THREE, java.math.BigInteger.valueOf(17), java.math.BigInteger.valueOf(65537)
+    public final static BigInteger E[] = {
+        THREE, BigInteger.valueOf(17), BigInteger.valueOf(65537)
     };
 
     public final static int KEYS_PUB_N = 0;
@@ -155,8 +159,8 @@ public class RSA
      * accessed using the constants <tt>`KEYS_PUB_N'</tt>,
      * <tt>`KEYS_PUB_E'</tt> and <tt>`KEYS_PRI_D'</tt>, respectively.
      */
-    public final static java.math.BigInteger[] keys( int keysz, int ec, java.util.Random rng){
-        java.math.BigInteger p, q, n, e = null, d, P;
+    public final static BigInteger[] keys( int keysz, int ec, java.util.Random rng){
+        BigInteger p, q, n, e = null, d, P;
 
         switch(ec){
         case E_SMALL:
@@ -177,44 +181,49 @@ public class RSA
         int sz = (keysz>>1);
 
         while(true){
+            try {
+                p = new BigInteger(sz,PRIME_CERT_EXP,rng);
 
-            p = new java.math.BigInteger(sz,PRIME_CERT_EXP,rng);
+                q = new BigInteger(sz,PRIME_CERT_EXP,rng);
 
-            q = new java.math.BigInteger(sz,PRIME_CERT_EXP,rng);
+                n = p.multiply(q);
 
-            n = p.multiply(q);
+                P = p.subtract(ONE).multiply(q.subtract(ONE));
 
-            P = p.subtract(ONE).multiply(q.subtract(ONE));
+                if ( null == e){
 
-            if ( null == e){
+                    // 
+                    BigInteger n1 = n.subtract(ONE);
+                    int comp = BigInteger.valueOf(ec).compareTo(n1);
+                    if (/* ec >= (n-1) */ -1 != comp)
+                        ec = n1.intValue();
+                    //
 
-                // 
-                java.math.BigInteger n1 = n.subtract(ONE);
-                int comp = java.math.BigInteger.valueOf(ec).compareTo(n1);
-                if (/* ec >= (n-1) */ -1 != comp)
-                    ec = n1.intValue();
-                //
+                    BigInteger p1 = p.subtract(ONE);
 
-                java.math.BigInteger p1 = p.subtract(ONE);
+                    BigInteger q1 = q.subtract(ONE);
 
-                java.math.BigInteger q1 = q.subtract(ONE);
+                    while (true){
 
-                while (true){
+                        e = new BigInteger(ec,PRIME_CERT_EXP,rng);
 
-                    e = new java.math.BigInteger(ec,PRIME_CERT_EXP,rng);
-
-                    if ( 1 == p1.gcd(e).intValue() && 1 == q1.gcd(e).intValue())
-                        break;
+                        if ( 1 == p1.gcd(e).intValue() && 1 == q1.gcd(e).intValue())
+                            break;
+                    }
                 }
+
+                d = e.modInverse(P);
+
+                if ( 1 == d.gcd(n).intValue())
+                    break;
             }
+            catch (ArithmeticException modInverse){
 
-            d = e.modInverse(P);
-
-            if ( 1 == d.gcd(n).intValue())
-                break;
+                //(retry with new parameters)
+            }
         }
 
-        java.math.BigInteger keys[] = new java.math.BigInteger[3];
+        BigInteger keys[] = new BigInteger[3];
 
         keys[KEYS_PUB_N] = n;
 
@@ -227,7 +236,7 @@ public class RSA
 
 
 
-    private java.math.BigInteger n = null, e = null, d = null;//, _n1;
+    private BigInteger n = null, e = null, d = null;//, _n1;
 
     private int blklen_plain, blklen_crypt;
 
@@ -235,10 +244,21 @@ public class RSA
     private RSAPrivateKey keyPrivate;
 
 
+    /**
+     * Create a large 1024 bit key
+     */
     public RSA()
         throws java.security.NoSuchAlgorithmException
     {
         this(1024,E_LARGE,java.security.SecureRandom.getInstance("SHA1PRNG"));
+    }
+    /**
+     * Create a small key with the argument number of bits.
+     */
+    public RSA(int keysz)
+        throws java.security.NoSuchAlgorithmException
+    {
+        this(keysz,E_SMALL,java.security.SecureRandom.getInstance("SHA1PRNG"));
     }
     /**
      * Create new keys choosing an "e" public key component as small,
@@ -266,7 +286,7 @@ public class RSA
      * @param e Public key E component.
      * @param d Private key.
      */
-    public RSA( java.math.BigInteger n, java.math.BigInteger e, java.math.BigInteger d){
+    public RSA( BigInteger n, BigInteger e, BigInteger d){
         super();
 
         if ( null == n)
@@ -312,15 +332,15 @@ public class RSA
             if ( null == e && null == d)
                 throw new java.lang.IllegalArgumentException("Incomplete key.");
             else if ( null != e)
-                this.e = new java.math.BigInteger(1,e);
+                this.e = new BigInteger(1,e);
             else if ( null != d)
-                this.d = new java.math.BigInteger(1,d);
+                this.d = new BigInteger(1,d);
         }
         else {
-            this.e = new java.math.BigInteger(1,e);
-            this.d = new java.math.BigInteger(1,d);
+            this.e = new BigInteger(1,e);
+            this.d = new BigInteger(1,d);
         }
-        this.n = new java.math.BigInteger(1,n);
+        this.n = new BigInteger(1,n);
 
         this._init();
     }
@@ -329,7 +349,7 @@ public class RSA
      * components of the public key; if three, both the public and
      * private keys.
      */
-    public RSA( java.math.BigInteger[] keys){
+    public RSA( BigInteger[] keys){
         super();
         if ( null == keys)
             throw new java.lang.IllegalArgumentException("Null keys array argument.");
@@ -361,12 +381,31 @@ public class RSA
 
         int b = this.n.bitLength();
 
-        this.blklen_plain = ((b + 7) >> 3);
+        if (0 < b){
 
-        this.blklen_crypt = this.blklen_plain;
+            this.blklen_plain = ((b + 7) >> 3);
+
+            if (0 < this.blklen_plain){
+
+                this.blklen_crypt = this.blklen_plain;
+            }
+            else
+                throw new IllegalStateException("Zero-negative block length");
+        }
+        else
+            throw new IllegalStateException("Zero-negative modulus length");
     }
 
 
+    public BigInteger getModulus(){
+        return this.n;
+    }
+    public BigInteger getPublicExponent(){
+        return this.e;
+    }
+    public BigInteger getPrivateExponent(){
+        return this.d;
+    }
     public RSAPublicKey getPublicKey(){
         RSAPublicKey keyPublic = this.keyPublic;
         if (null == keyPublic){
@@ -476,16 +515,16 @@ public class RSA
      * 
      * @returns Number of bytes in output.
      */
-    protected final static int encipher ( java.math.BigInteger e, java.math.BigInteger n, byte[] plaintext, int offset, int length, byte[] output, int outofs){
+    protected final static int encipher ( BigInteger e, BigInteger n, byte[] plaintext, int offset, int length, byte[] output, int outofs){
 
         byte[] block = Trim(plaintext,offset,length);
 
-        java.math.BigInteger m = new java.math.BigInteger(1,block);
+        BigInteger m = new BigInteger(1,block);
 
         if (0 <= m.compareTo(n))
             throw new IllegalArgumentException("Plain text block too large");
         else {
-            java.math.BigInteger c = m.modPow( e, n);
+            BigInteger c = m.modPow( e, n);
 
             byte[] result = Trim(c);
 
@@ -521,15 +560,6 @@ public class RSA
         else
             return this.decipher( n, d, ciphertext, offset, len, output, outofs);
     }
-    public byte[] sign(SHA1 sha){
-        byte[] hash = sha.hash();
-        byte[] sig = new byte[this.decipherOutputLength(hash.length)];
-        int r = this.decipher(hash,0,hash.length,sig,0);
-        if (r < sig.length)
-            return Trim(sig,0,r);
-        else
-            return sig;
-    }
     /**
      * Decrypt the ciphertext block using the private key, starting at
      * the ciphertext buffer index "offset" and with "length" many
@@ -551,13 +581,13 @@ public class RSA
      *
      * @returns Number of bytes written to the output buffer.
      */
-    public final static int decipher ( java.math.BigInteger n, java.math.BigInteger d, byte[] ciphertext, int offset, int length, byte[] output, int outofs){
+    public final static int decipher ( BigInteger n, BigInteger d, byte[] ciphertext, int offset, int length, byte[] output, int outofs){
 
         byte[] block = Trim(ciphertext,offset,length);
 
-        java.math.BigInteger c = new java.math.BigInteger(1,block);
+        BigInteger c = new BigInteger(1,block);
 
-        java.math.BigInteger m = c.modPow( d, n);
+        BigInteger m = c.modPow( d, n);
 
         byte[] result = Trim(m);
 
@@ -570,6 +600,22 @@ public class RSA
             java.lang.System.arraycopy(result,0,output,outofs,reslen);
             return reslen;
         }
+    }
+    /**
+     * @param sha Digest
+     * @return Signature
+     */
+    public byte[] sign(SHA1 sha){
+
+        return Trim(sha.toInteger().modPow( this.d, this.n));
+    }
+    /**
+     * @param signature Signature 
+     * @return Digest
+     */
+    public SHA1 verify(byte[] signature){
+
+        return new SHA1(new BigInteger(1,signature).modPow( this.e, this.n));
     }
 
 

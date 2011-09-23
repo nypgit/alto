@@ -90,6 +90,24 @@ public final class SHA1 {
 
         reset();
     }
+    public SHA1(BigInteger b){
+        this(Tools.Trim(b));
+    }
+    public SHA1(byte[] hashBits){
+        super();
+        if (null != hashBits){
+            final int hl = hashBits.length;
+            if (hl <= SHA_LEN_BYTES){
+                final int x = (SHA_LEN_BYTES-hl);
+                System.arraycopy(hashBits,0,this.hashBits,x,hl);
+                this.hashValid = true;
+            }
+            else
+                throw new IllegalArgumentException(alto.io.u.Hex.encode(hashBits));
+        }
+        else
+            throw new IllegalArgumentException(alto.io.u.Hex.encode(hashBits));
+    }
 
 
     public int hashSize(){
@@ -338,27 +356,31 @@ public final class SHA1 {
      * Complete processing on the message digest.
      */
     private void finish() {
-        byte bits[] = new byte[8];
-        int i, j;
+        if (hashValid)
+            return;
+        else {
+            byte bits[] = new byte[8];
+            int i, j;
 
-        for (i = 0; i < 8; i++) {
-            bits[i] = (byte)((count >>> (((7 - i) * 8))) & 0xff);
-        }
+            for (i = 0; i < 8; i++) {
+                bits[i] = (byte)((count >>> (((7 - i) * 8))) & 0xff);
+            }
 
-        update((byte) 128);
-        while (blockIndex != 56)
-            update((byte) 0);
-        // This should cause a transform to happen.
-        update(bits);
-        for (i = 0; i < SHA_LEN_BYTES; i++) {
-            hashBits[i] = (byte)
-                ((state[i>>2] >> ((3-(i & 3)) * 8) ) & 0xff);
+            update((byte) 128);
+            while (blockIndex != 56)
+                update((byte) 0);
+            // This should cause a transform to happen.
+            update(bits);
+            for (i = 0; i < SHA_LEN_BYTES; i++) {
+                hashBits[i] = (byte)
+                    ((state[i>>2] >> ((3-(i & 3)) * 8) ) & 0xff);
+            }
+            hashValid = true;
         }
-        hashValid = true;
     }
 
     public byte[] hash(){
-        return hash(true,null,0);
+        return hash(false,null,0);
     }
     
     public byte[] hash(boolean reset, byte[] buffer, int offset){
@@ -382,6 +404,29 @@ public final class SHA1 {
     }
 
     public String hashKeyname() { return "SHA1"; }
+
+    public BigInteger toInteger(){
+
+        return new BigInteger(1,this.hash());
+    }
+    public boolean equals(Object that){
+        if (that instanceof SHA1)
+            return this.equals( (SHA1)that);
+        else
+            return false;
+    }
+    public boolean equals(SHA1 that){
+        if (this == that)
+            return true;
+        else if (null == that)
+            return false;
+        else {
+            byte[] ha = this.hash();
+            byte[] hb = that.hash();
+            return (Tools.NotEmpty(ha)
+                    && Tools.Equals(ha,hb));
+        }
+    }
 
     
 
